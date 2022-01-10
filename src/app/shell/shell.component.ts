@@ -2,7 +2,10 @@ import {
     Component,
     OnInit,
 } from "@angular/core";
-import {Shell} from "src/app/shell"
+
+interface Shell {
+    command: string;
+}
 
 @Component({
     selector: "app-shell",
@@ -10,15 +13,17 @@ import {Shell} from "src/app/shell"
     styleUrls: ["./shell.component.css"],
 })
 export class ShellComponent implements OnInit {
-    shell: Shell = {
-        id: 1,
-        name: "ash",
-    };
-
     constructor() {
     }
 
     ngOnInit(): void {
     }
 
+    onEnter(cmd: string) {
+        console.log(cmd);
+    }
+
+    onTab(cmd: string) {
+        console.log(cmd);
+    }
 }

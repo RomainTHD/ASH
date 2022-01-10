@@ -1,6 +1,4 @@
-<h2>{{shell.name | uppercase}} Details</h2>
-<div><span>id: </span>{{shell.id}}</div>
 <div>
-    <label for="name">Shell name: </label>
-    <input id="name" [(ngModel)]="shell.name" placeholder="name">
+    <label for="name">Type a command &gt; </label>
+    <input #prompt id="name" (keyup.enter)="onEnter(prompt.value)" (keydown.tab)="onTab(prompt.value)"/>
 </div>
