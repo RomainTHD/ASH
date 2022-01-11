@@ -8,11 +8,11 @@ interface Shell {
 }
 
 @Component({
-    selector: "app-shell",
-    templateUrl: "./shell.component.html",
-    styleUrls: ["./shell.component.css"],
+    selector: "app-prompt",
+    templateUrl: "./prompt.component.html",
+    styleUrls: ["./prompt.component.css"],
 })
-export class ShellComponent implements OnInit {
+export class PromptComponent implements OnInit {
     constructor() {
     }
 
