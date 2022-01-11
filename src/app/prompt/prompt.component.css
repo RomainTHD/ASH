@@ -1,0 +1,9 @@
+.prompt-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.prompt-input {
+    width: 100%;
+}

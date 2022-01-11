@@ -1,4 +1,7 @@
-<form>
-    <label for="prompt">Type a command &gt; </label>
-    <input [(ngModel)]="prompt.cmd" name="prompt" id="prompt" (keyup.enter)="onEnter()" (keydown.tab)="onTab()"/>
+<form class="prompt-form">
+    <mat-form-field class="prompt-input" appearance="fill">
+        <mat-label>Type a command</mat-label>
+        <input matInput placeholder="Command" [(ngModel)]="prompt.cmd" name="prompt" (keyup.enter)="onEnter()"
+               (keydown.tab)="onTab()"/>
+    </mat-form-field>
 </form>
