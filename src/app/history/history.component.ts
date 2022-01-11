@@ -9,6 +9,8 @@ import {
     styleUrls: ["./history.component.css"],
 })
 export class HistoryComponent implements OnInit {
+    commands: string[] = ["ls", "cat"];
+
     constructor() {
     }
 
