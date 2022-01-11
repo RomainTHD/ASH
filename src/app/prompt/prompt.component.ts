@@ -2,9 +2,10 @@ import {
     Component,
     OnInit,
 } from "@angular/core";
+import {RunnerService} from "runner/runner.service";
 
-interface Shell {
-    command: string;
+interface Prompt {
+    cmd: string;
 }
 
 @Component({
@@ -13,17 +14,25 @@ interface Shell {
     styleUrls: ["./prompt.component.css"],
 })
 export class PromptComponent implements OnInit {
-    constructor() {
+    public prompt: Prompt = {
+        cmd: "",
+    };
+
+    private runner: RunnerService;
+
+    constructor(runner: RunnerService) {
+        this.runner = runner;
     }
 
     ngOnInit(): void {
     }
 
-    onEnter(cmd: string) {
-        console.log(cmd);
+    onEnter() {
+        this.runner.run(this.prompt.cmd);
+        this.prompt.cmd = "";
     }
 
-    onTab(cmd: string) {
-        console.log(cmd);
+    onTab() {
+        this.runner.complete(this.prompt.cmd);
     }
 }

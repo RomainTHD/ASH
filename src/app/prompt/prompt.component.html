@@ -1,4 +1,4 @@
-<div>
-    <label for="name">Type a command &gt; </label>
-    <input #prompt id="name" (keyup.enter)="onEnter(prompt.value)" (keydown.tab)="onTab(prompt.value)"/>
-</div>
+<form>
+    <label for="prompt">Type a command &gt; </label>
+    <input [(ngModel)]="prompt.cmd" name="prompt" id="prompt" (keyup.enter)="onEnter()" (keydown.tab)="onTab()"/>
+</form>
