@@ -1,6 +1,17 @@
 {
     "name": "ash",
-    "version": "0.0.0",
+    "version": "0.0.1",
+    "description": "Angular shell",
+    "keywords": [
+        "angular",
+        "shell"
+    ],
+    "homepage": "https://github.com/RomainTHD/ASH",
+    "author": "Romain T",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/RomainTHD/ASH/issues"
+    },
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -29,7 +40,7 @@
         "@angular/cli": "~13.0.4",
         "@angular/compiler-cli": "~13.0.0",
         "@types/jasmine": "~3.10.0",
-        "@types/node": "^12.11.1",
+        "@types/node": "^12.20.41",
         "jasmine-core": "~3.10.0",
         "karma": "~6.3.0",
         "karma-chrome-launcher": "~3.1.0",
