@@ -1,10 +1,10 @@
-import {Directory} from "./directory";
-import {File} from "./file";
 import {
     Inode,
     InodeTemplate,
     InodeType,
 } from "./inode";
+import {Directory} from "./directory";
+import {File} from "./file";
 
 export {
     Inode,
