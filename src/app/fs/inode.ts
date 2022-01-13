@@ -1,42 +1,66 @@
-import {Entity} from "orm/entity";
-import {StorageORM} from "orm/storageORM";
+import {
+    Directory,
+    File,
+} from "app/fs";
+import {Entity} from "app/orm/entity";
+import {StorageORM} from "app/orm/storageORM";
 
-export interface InodeTemplate {
-    name: string;
-    parent: number;
-    owner: number;
+export enum InodeType {
+    File,
+    Directory,
+    Link,
+    Socket,
+    Device,
+    NamedPipe,
+    BlockDevice,
+    CharacterDevice,
+    FIFO,
+    Unknown,
 }
 
-export class Inode extends Entity {
-    protected static override category = "inode";
+export interface InodeTemplate {
+    id: string,
+    inodeType: InodeType;
+    name: string,
+    size: number,
+    created: Date,
+    modified: Date,
+    parent: string,
+    content: unknown,
+}
 
+export abstract class Inode extends Entity {
+    protected static override category = "inode";
+    private readonly _inodeType: InodeType;
     private _name: string;
     private _size: number;
     private readonly _created: Date;
     private _modified: Date;
-    private _parent: number;
+    private _parent: string;
+    private _content: unknown;
 
     protected constructor(
-        id: string,
-        name: string,
-        size: number,
-        created: Date,
-        modified: Date,
-        parent: number,
+        template: InodeTemplate,
     ) {
-        super(id);
-        this._name     = name;
-        this._size     = size;
-        this._created  = created;
-        this._modified = modified;
-        this._parent   = parent;
+        super(template.id);
+        this._inodeType = template.inodeType;
+        this._name      = template.name;
+        this._size      = template.size;
+        this._created   = template.created;
+        this._modified  = template.modified;
+        this._parent    = template.parent;
+        this._content   = template.content;
     }
 
-    public get parent(): number {
+    public get inodeType(): InodeType {
+        return this._inodeType;
+    }
+
+    public get parent(): string {
         return this._parent;
     }
 
-    public set parent(value: number) {
+    public set parent(value: string) {
         this._parent = value;
     }
 
@@ -68,19 +92,15 @@ export class Inode extends Entity {
         this._name = value;
     }
 
-    public static override create(template: InodeTemplate): Entity {
-        const now = new Date();
-        return new Inode(
-            StorageORM.getNewID(Inode.category),
-            template.name,
-            0,
-            now,
-            now,
-            template.parent,
-        );
+    protected get content(): unknown {
+        return this._content;
     }
 
-    public static override find(id: string): Entity | null {
+    protected set content(value: unknown) {
+        this._content = value;
+    }
+
+    public static override find(id: string): Inode | null {
         const json = StorageORM.read(Inode.category, id);
         if (json === null) {
             return null;
@@ -89,37 +109,41 @@ export class Inode extends Entity {
         return this.fromJSON(JSON.parse(json));
     }
 
+    public static override fromJSON(json: InodeTemplate): Inode {
+        switch (json.inodeType) {
+            case InodeType.File:
+                return File.fromJSON(json);
+
+            case InodeType.Directory:
+                return Directory.fromJSON(json);
+
+            default:
+                throw new Error("Unknown inode type");
+        }
+    }
+
     public static override findAll(): Entity[] {
         return StorageORM.readAll(Inode.category).map((json) => this.fromJSON(JSON.parse(json)));
     }
 
-    public static override fromJSON(json: Inode): Entity {
-        return new this(
-            json.id,
-            json.name,
-            json.size,
-            json.created,
-            json.modified,
-            json.parent,
-        );
-    }
-
-    public delete(): void {
+    public override delete(): void {
         StorageORM.delete(Inode.category, this.id);
     }
 
-    public save(): void {
+    public override save(): void {
         StorageORM.write(Inode.category, this.id, JSON.stringify(this));
     }
 
-    public toJSON(): object {
+    public override toJSON(): InodeTemplate {
         return {
+            inodeType: this.inodeType,
             id: this.id,
             name: this.name,
             size: this.size,
             created: this.created,
             modified: this.modified,
             parent: this.parent,
+            content: this._content,
         };
     }
 }
