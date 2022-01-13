@@ -17,8 +17,9 @@ export class RunnerService {
         let args   = cmd.split(" ");
         const path = args.shift() as string;
 
-        Command.execute(path, args, env).then(() => {
+        Command.execute(path, args, env).then((result) => {
             this._history.pushCommand(cmd);
+            console.log(result);
         });
     }
 
