@@ -3,7 +3,7 @@ import {
     TestBed,
 } from "@angular/core/testing";
 
-import {PromptComponent} from "prompt/prompt.component";
+import {PromptComponent} from "./prompt.component";
 
 describe("ShellComponent", () => {
     let component: PromptComponent;

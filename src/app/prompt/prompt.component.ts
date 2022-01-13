@@ -2,7 +2,7 @@ import {
     Component,
     OnInit,
 } from "@angular/core";
-import {RunnerService} from "runner/runner.service";
+import {RunnerService} from "app/runner/runner.service";
 
 interface Prompt {
     cmd: string;
@@ -18,21 +18,21 @@ export class PromptComponent implements OnInit {
         cmd: "",
     };
 
-    private runner: RunnerService;
+    private _runner: RunnerService;
 
     constructor(runner: RunnerService) {
-        this.runner = runner;
+        this._runner = runner;
     }
 
     ngOnInit(): void {
     }
 
     onEnter() {
-        this.runner.run(this.prompt.cmd);
+        this._runner.run(this.prompt.cmd);
         this.prompt.cmd = "";
     }
 
     onTab() {
-        this.runner.complete(this.prompt.cmd);
+        this._runner.complete(this.prompt.cmd);
     }
 }
