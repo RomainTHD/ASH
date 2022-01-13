@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Command} from "app/cmd";
+import {Env} from "app/env";
 import {HistoryService} from "app/history/history.service";
 
 @Injectable({
@@ -12,11 +13,11 @@ export class RunnerService {
         this._history = history;
     }
 
-    public run(cmd: string): void {
+    public run(cmd: string, env: Env): void {
         let args   = cmd.split(" ");
         const path = args.shift() as string;
 
-        Command.execute(path, args).then(() => {
+        Command.execute(path, args, env).then(() => {
             this._history.pushCommand(cmd);
         });
     }
