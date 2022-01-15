@@ -68,6 +68,10 @@ export class Directory extends Inode {
         const items = path.split("/");
         items.pop(); // Remove last item, which has to be empty
 
+        if (items[0] === "") {
+            items.shift(); // Remove root "/"
+        }
+
         let current: Directory | null = this.getRoot();
         for (const item of items) {
             if (current === null) {

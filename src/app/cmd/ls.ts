@@ -12,10 +12,17 @@ export class Ls extends Command {
             return "error";
         }
 
-        let output = "";
-        for (const child of cwd.content) {
-            output += `${child.name}\n`;
-        }
+        let output = "[ ";
+        cwd.content.forEach((child, idx) => {
+            output += `${child.name}`;
+            if (idx !== cwd.content.length - 1) {
+                output += ",";
+            }
+
+            output += " ";
+        });
+
+        output += "]";
 
         return output;
     }
