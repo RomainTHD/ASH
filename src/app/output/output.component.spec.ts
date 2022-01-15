@@ -3,21 +3,21 @@ import {
     TestBed,
 } from "@angular/core/testing";
 
-import {HistoryComponent} from "./history.component";
+import {OutputComponent} from "app/output/output.component";
 
 describe("HistoryComponent", () => {
-    let component: HistoryComponent;
-    let fixture: ComponentFixture<HistoryComponent>;
+    let component: OutputComponent;
+    let fixture: ComponentFixture<OutputComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [HistoryComponent],
+            declarations: [OutputComponent],
         })
             .compileComponents();
     });
 
     beforeEach(() => {
-        fixture   = TestBed.createComponent(HistoryComponent);
+        fixture   = TestBed.createComponent(OutputComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

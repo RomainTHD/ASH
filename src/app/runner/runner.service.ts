@@ -1,15 +1,15 @@
 import {Injectable} from "@angular/core";
 import {Command} from "app/cmd";
 import {Env} from "app/env";
-import {HistoryService} from "app/history/history.service";
+import {OutputService} from "app/output/output.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class RunnerService {
-    private _history: HistoryService;
+    private _history: OutputService;
 
-    constructor(history: HistoryService) {
+    constructor(history: OutputService) {
         this._history = history;
     }
 
@@ -18,8 +18,7 @@ export class RunnerService {
         const path = args.shift() as string;
 
         Command.execute(path, args, env).then((result) => {
-            this._history.pushCommand(cmd);
-            console.log(result);
+            this._history.pushCommand(cmd, result);
         });
     }
 

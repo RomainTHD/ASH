@@ -1,6 +1,8 @@
 <span><i>history</i></span>
 <mat-selection-list [multiple]="false">
     <mat-list-option *ngFor="let cmd of commands" [value]="cmd">
-        {{cmd}}
+        {{cmd.command}}
+        <br/>
+        {{cmd.output}}
     </mat-list-option>
 </mat-selection-list>
