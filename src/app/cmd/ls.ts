@@ -7,7 +7,7 @@ export class Ls extends Command {
     public override readonly usage       = "ls [options] [path]";
 
     public override async run(args: string[], env: Env): Promise<string> {
-        const cwd = Directory.findFromPath(env.path);
+        const cwd = Directory.findFromPath(args[0] || ".", env);
         if (!cwd) {
             return "error";
         }

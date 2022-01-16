@@ -1,3 +1,4 @@
+import {Env} from "app/env";
 import {
     Directory,
     Inode,
@@ -52,14 +53,14 @@ export class File extends Inode {
         return new this(json);
     }
 
-    public static findFromPath(path: string): File | null {
+    public static findFromPath(path: string, env: Env): File | null {
         const items = path.split("/");
         if (items.length === 0) {
             return null;
         }
 
         const fileName = items.pop() as string;
-        const parent   = Directory.findFromPath(items.join("/"));
+        const parent   = Directory.findFromPath(items.join("/"), env);
         if (!parent) {
             return null;
         }

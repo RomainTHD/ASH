@@ -12,7 +12,7 @@ export class Mkdir extends Command {
         const name  = pathArr.pop() as string;
         path        = pathArr.join("/");
 
-        const dir = Directory.findFromPath(path);
+        const dir = Directory.findFromPath(path, env);
         if (!dir) {
             return "No such directory";
         }
