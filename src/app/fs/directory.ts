@@ -30,17 +30,19 @@ export class Directory extends Inode {
         super.content = value;
     }
 
-    public static override create(template: DirectoryTemplate): Directory {
+    public static override create(template: DirectoryTemplate, id?: string): Directory {
         const now = new Date();
-        return new Directory({
+        const dir = new Directory({
             ...template,
             inodeType: InodeType.File,
-            id: StorageORM.getNewID(Inode.category),
+            id: id || StorageORM.getNewID(Inode.category),
             size: 0,
             created: now,
             modified: now,
             content: template.content,
         });
+        dir.save();
+        return dir;
     }
 
     public static override fromJSON(json: InodeTemplate): Directory {
@@ -56,7 +58,7 @@ export class Directory extends Inode {
                 parent: "",
                 owner: "root",
                 content: [],
-            });
+            }, "root");
         }
 
         return root;
@@ -95,5 +97,12 @@ export class Directory extends Inode {
             return null;
         }
         return Directory.find(child.id);
+    }
+
+    public addChild(node: Inode): void {
+        this.content.push({
+            id: node.id,
+            name: node.name,
+        });
     }
 }

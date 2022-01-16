@@ -1,4 +1,5 @@
 import {
+    Directory,
     Inode,
     InodeTemplate,
     InodeType,
@@ -27,7 +28,7 @@ export class File extends Inode {
 
     public static override create(template: FileTemplate): File {
         const now = new Date();
-        return new File({
+        const f   = new File({
             ...template,
             inodeType: InodeType.File,
             id: StorageORM.getNewID(Inode.category),
@@ -35,9 +36,39 @@ export class File extends Inode {
             created: now,
             modified: now,
         });
+        f.save();
+
+        const dir = Directory.find(f.parent) as Directory;
+        if (!dir) {
+            throw new Error("Parent directory not found");
+        }
+        dir.addChild(f);
+        dir.save();
+
+        return f;
     }
 
     public static override fromJSON(json: InodeTemplate): File {
         return new this(json);
+    }
+
+    public static findFromPath(path: string): File | null {
+        const items = path.split("/");
+        if (items.length === 0) {
+            return null;
+        }
+
+        const fileName = items.pop() as string;
+        const parent   = Directory.findFromPath(items.join("/"));
+        if (!parent) {
+            return null;
+        }
+
+        const node = parent.findChild(fileName);
+        if (!node || node.inodeType !== InodeType.File) {
+            return null;
+        }
+
+        return node as File;
     }
 }
