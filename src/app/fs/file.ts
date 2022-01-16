@@ -55,7 +55,7 @@ export class File extends Inode {
 
     public static findFromPath(path: string): File | null {
         const items = path.split("/");
-        if (items.length <= 2) {
+        if (items.length <= 1) {
             return null;
         }
 
