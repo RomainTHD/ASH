@@ -42,6 +42,14 @@ export class Directory extends Inode {
             content: template.content,
         });
         dir.save();
+
+        const parent = Directory.find(dir.parent) as Directory;
+        if (!parent) {
+            throw new Error("Parent directory not found");
+        }
+        parent.addChild(dir);
+        parent.save();
+
         return dir;
     }
 
