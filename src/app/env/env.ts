@@ -1,15 +1,32 @@
+import {Directory} from "app/fs";
+
 export class Env {
-    private _path: string;
+    private _cwd: string;
+    private _home: string;
 
     public constructor(path: string | null) {
-        this._path = path === null ? "/" : path;
+        this._cwd  = path === null ? "/" : path;
+        this._home = "/home";
     }
 
-    public get path(): string {
-        return this._path;
+    public get home(): string {
+        return this._home;
     }
 
-    public set path(value: string) {
-        this._path = value;
+    public get cwd(): string {
+        return this._cwd;
+    }
+
+    public set cwd(value: string) {
+        this._cwd = value;
+    }
+
+    public getPathDirectory(): Directory {
+        const dir = Directory.findFromPath(this.cwd, this);
+        if (dir === null) {
+            throw new Error("Directory not found");
+        }
+
+        return dir;
     }
 }

@@ -6,6 +6,6 @@ export class Pwd extends Command {
     public override readonly usage       = "pwd";
 
     public override async run(args: string[], env: Env): Promise<string> {
-        return env.path;
+        return env.cwd;
     }
 }
