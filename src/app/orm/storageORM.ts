@@ -1,6 +1,10 @@
 export abstract class StorageORM {
     private static readonly columnLastID = "_lastID";
 
+    public static resetAll() {
+        localStorage.clear();
+    }
+
     public static read(category: string, id: string): string | null {
         return localStorage.getItem(this.mergeID(category, id));
     }
