@@ -1,3 +1,4 @@
+import {Env} from "app/env";
 import {
     Inode,
     InodeTemplate,
@@ -18,6 +19,8 @@ export interface DirectoryTemplate {
 }
 
 export class Directory extends Inode {
+    private static readonly ROOT_DIRECTORY_ID = "root";
+
     public constructor(template: InodeTemplate) {
         super(template);
     }
@@ -34,7 +37,7 @@ export class Directory extends Inode {
         const now = new Date();
         const dir = new Directory({
             ...template,
-            inodeType: InodeType.File,
+            inodeType: InodeType.Directory,
             id: id || StorageORM.getNewID(Inode.category),
             size: 0,
             created: now,
@@ -43,12 +46,14 @@ export class Directory extends Inode {
         });
         dir.save();
 
-        const parent = Directory.find(dir.parent) as Directory;
-        if (!parent) {
-            throw new Error("Parent directory not found");
+        if (dir.id !== Directory.ROOT_DIRECTORY_ID) {
+            const parent = Directory.find(dir.parent) as Directory;
+            if (!parent) {
+                throw new Error("Parent directory not found");
+            }
+            parent.addChild(dir);
+            parent.save();
         }
-        parent.addChild(dir);
-        parent.save();
 
         return dir;
     }
@@ -58,21 +63,22 @@ export class Directory extends Inode {
     }
 
     public static getRoot(): Directory {
-        let root = this.find("root") as Directory;
+        let root = this.find(Directory.ROOT_DIRECTORY_ID) as Directory;
         if (root === null) {
             // throw new Error("Root directory not found");
             root = this.create({
                 name: "",
-                parent: "",
+                parent: Directory.ROOT_DIRECTORY_ID,
                 owner: "root",
                 content: [],
-            }, "root");
+            }, Directory.ROOT_DIRECTORY_ID);
         }
 
         return root;
     }
 
-    public static findFromPath(path: string): Directory | null {
+    public static findFromPath(path: string, env: Env): Directory | null {
+        path = this.absolutePath(path, env);
         path = path.endsWith("/") ? path : path + "/";
 
         const items = path.split("/");
