@@ -6,7 +6,7 @@ export class Env {
 
     public constructor(path: string | null) {
         this._cwd  = path === null ? "/" : path;
-        this._home = "/home/";
+        this._home = "/home/user/";
     }
 
     public get home(): string {
@@ -24,7 +24,7 @@ export class Env {
     public absolutePath(path: string): string {
         if (path.startsWith("~")) {
             // FIXME: What about files like "~foo" ?
-            path = this.home + path.substr(1);
+            path = this.home + path.substr(2);
         }
 
         let addSlash = false;
@@ -36,14 +36,20 @@ export class Env {
         }
 
         if (!path.startsWith("/")) {
-            path = this.cwd + "/" + path;
+            path = this.cwd + path;
         }
 
         let pathItems = path.split("/");
 
         if (pathItems[0] === ".") {
-            // TODO: Handle "./" with cwd equal to "/"
-            pathItems = this.cwd.split("/").concat(pathItems.slice(1));
+            let cwd = this.cwd.split("/");
+            if (cwd[0] === "") {
+                cwd.shift();
+            }
+
+            if (cwd.length !== 0) {
+                pathItems = cwd.concat(pathItems.slice(1));
+            }
         }
 
         if (pathItems[0] === "..") {
@@ -70,8 +76,7 @@ export class Env {
             pathItems.push("");
         }
 
-        path = pathItems.join("/");
-        return path;
+        return pathItems.join("/");
     }
 
     public getPathDirectory(): Directory {
