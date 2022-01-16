@@ -1,7 +1,4 @@
-import {File} from "./file";
+import {File} from ".";
 
 describe("File", () => {
-    it("should create an instance", () => {
-        expect(new File()).toBeTruthy();
-    });
 });

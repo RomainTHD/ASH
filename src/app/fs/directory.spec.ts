@@ -1,7 +1,4 @@
-import {Directory} from "./directory";
+import {Directory} from ".";
 
 describe("Directory", () => {
-    it("should create an instance", () => {
-        expect(new Directory()).toBeTruthy();
-    });
 });
