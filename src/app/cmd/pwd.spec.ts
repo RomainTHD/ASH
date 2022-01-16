@@ -1,4 +1,4 @@
-import {Pwd} from "./pwd";
+import {Pwd} from ".";
 
 describe("Pwd", () => {
     it("should create an instance", () => {

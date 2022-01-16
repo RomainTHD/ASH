@@ -1,4 +1,4 @@
-import {Cat} from "./cat";
+import {Cat} from ".";
 
 describe("Cat", () => {
     it("should create an instance", () => {

@@ -1,4 +1,4 @@
-import {Touch} from "./touch";
+import {Touch} from ".";
 
 describe("Touch", () => {
     it("should create an instance", () => {

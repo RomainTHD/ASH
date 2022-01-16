@@ -1,4 +1,4 @@
-import {Cd} from "./cd";
+import {Cd} from ".";
 
 describe("Cd", () => {
     it("should create an instance", () => {

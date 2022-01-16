@@ -1,4 +1,4 @@
-import {Ls} from "./ls";
+import {Ls} from ".";
 
 describe("Ls", () => {
     it("should create an instance", () => {

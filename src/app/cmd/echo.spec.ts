@@ -1,4 +1,4 @@
-import {Echo} from "./echo";
+import {Echo} from ".";
 
 describe("Echo", () => {
     it("should create an instance", () => {
