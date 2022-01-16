@@ -8,7 +8,7 @@ export class Cat extends Command {
     public override readonly usage       = "cat <file>";
 
     public override async run(args: string[], env: Env): Promise<string> {
-        const f = File.findFromPath(args[0], env);
+        const f = File.findFromPath(env.absolutePath(args[0]));
         if (!f) {
             return "";
         }

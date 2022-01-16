@@ -53,14 +53,14 @@ export class File extends Inode {
         return new this(json);
     }
 
-    public static findFromPath(path: string, env: Env): File | null {
+    public static findFromPath(path: string): File | null {
         const items = path.split("/");
-        if (items.length === 0) {
+        if (items.length <= 2) {
             return null;
         }
 
         const fileName = items.pop() as string;
-        const parent   = Directory.findFromPath(items.join("/"), env);
+        const parent   = Directory.findFromPath(items.join("/"));
         if (!parent) {
             return null;
         }

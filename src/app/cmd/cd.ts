@@ -8,7 +8,7 @@ export class Cd extends Command {
 
     public override async run(args: string[], env: Env): Promise<string> {
         const path = args[0] || "~";
-        const dir  = Directory.findFromPath(path, env);
+        const dir  = Directory.findFromPath(env.absolutePath(path));
         if (dir === null) {
             return "error";
         } else {

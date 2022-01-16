@@ -6,7 +6,7 @@ export class Env {
 
     public constructor(path: string | null) {
         this._cwd  = path === null ? "/" : path;
-        this._home = "/home";
+        this._home = "/home/";
     }
 
     public get home(): string {
@@ -21,8 +21,61 @@ export class Env {
         this._cwd = value;
     }
 
+    public absolutePath(path: string): string {
+        if (path.startsWith("~")) {
+            // FIXME: What about files like "~foo" ?
+            path = this.home + path.substr(1);
+        }
+
+        let addSlash = false;
+        if (path.endsWith("/")) {
+            if (path !== "/") {
+                path     = path.slice(0, -1);
+                addSlash = true;
+            }
+        }
+
+        if (!path.startsWith("/")) {
+            path = this.cwd + "/" + path;
+        }
+
+        let pathItems = path.split("/");
+
+        if (pathItems[0] === ".") {
+            // TODO: Handle "./" with cwd equal to "/"
+            pathItems = this.cwd.split("/").concat(pathItems.slice(1));
+        }
+
+        if (pathItems[0] === "..") {
+            pathItems = this.cwd.split("/").slice(0, -1).concat(pathItems.slice(1));
+        }
+
+        for (let i = 0; i < pathItems.length; ++i) {
+            if (pathItems[i] === "..") {
+                pathItems.splice(i - 1, 2);
+                i -= 2;
+                if (i == pathItems.length - 1) {
+                    pathItems.push("");
+                }
+            } else if (pathItems[i] === ".") {
+                pathItems.splice(i, 1);
+                --i;
+                if (i == pathItems.length - 1) {
+                    pathItems.push("");
+                }
+            }
+        }
+
+        if (addSlash) {
+            pathItems.push("");
+        }
+
+        path = pathItems.join("/");
+        return path;
+    }
+
     public getPathDirectory(): Directory {
-        const dir = Directory.findFromPath(this.cwd, this);
+        const dir = Directory.findFromPath(this.absolutePath(this.cwd));
         if (dir === null) {
             throw new Error("Directory not found");
         }

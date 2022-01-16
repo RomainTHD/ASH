@@ -1,7 +1,5 @@
-import {Inode} from "./inode";
+import {Env} from "app/env";
+import {Inode} from ".";
 
 describe("Inode", () => {
-    it("should create an instance", () => {
-        expect(new Inode()).toBeTruthy();
-    });
 });

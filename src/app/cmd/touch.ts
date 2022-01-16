@@ -15,7 +15,7 @@ export class Touch extends Command {
         const name  = pathArr.pop() as string;
         path        = pathArr.join("/");
 
-        const dir = Directory.findFromPath(path, env);
+        const dir = Directory.findFromPath(env.absolutePath(path));
         if (!dir) {
             return "No such directory";
         }

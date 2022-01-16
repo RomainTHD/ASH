@@ -1,4 +1,3 @@
-import {Env} from "app/env";
 import {
     Inode,
     InodeTemplate,
@@ -77,10 +76,7 @@ export class Directory extends Inode {
         return root;
     }
 
-    public static findFromPath(path: string, env: Env): Directory | null {
-        path = this.absolutePath(path, env);
-        path = path.endsWith("/") ? path : path + "/";
-
+    public static findFromPath(path: string): Directory | null {
         const items = path.split("/");
         items.pop(); // Remove last item, which has to be empty
 

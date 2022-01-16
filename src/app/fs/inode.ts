@@ -101,50 +101,6 @@ export abstract class Inode extends Entity {
         this._content = value;
     }
 
-    public static absolutePath(path: string, env: Env): string {
-        if (path.startsWith("~")) {
-            // FIXME: What about files like "~foo" ?
-            path = env.home + path.substr(1);
-        }
-
-        if (path.endsWith("/")) {
-            path = path.slice(0, -1);
-        }
-
-        if (!path.startsWith("/")) {
-            path = env.cwd + "/" + path;
-        }
-
-        let pathItems = path.split("/");
-
-        if (pathItems[0] === ".") {
-            // TODO: Handle "./" with cwd equal to "/"
-            pathItems = env.cwd.split("/").concat(pathItems.slice(1));
-        }
-
-        if (pathItems[0] === "..") {
-            pathItems = env.cwd.split("/").slice(0, -1).concat(pathItems.slice(1));
-        }
-
-        for (let i = 0; i < pathItems.length; ++i) {
-            if (pathItems[i] === "..") {
-                pathItems.splice(i - 1, 2);
-                i -= 2;
-            } else if (pathItems[i] === ".") {
-                pathItems.splice(i, 1);
-                --i;
-            }
-        }
-
-        path = pathItems.join("/");
-
-        if (path === "") {
-            path = "/";
-        }
-
-        return path;
-    }
-
     public static override find(id: string): Inode | null {
         const json = StorageORM.read(Inode.category, id);
         if (json === null) {
