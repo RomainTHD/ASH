@@ -1,15 +1,20 @@
 import {Env} from "app/env";
 import {Directory} from "app/fs";
+import {
+    ExecutableEmit,
+    ExitCode,
+} from "app/process";
 import {Command} from ".";
 
 export class Ls extends Command {
     public override readonly description = "List files in the current directory";
     public override readonly usage       = "ls [options] [path]";
 
-    public override async run(args: string[], env: Env): Promise<string> {
+    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
         const cwd = Directory.findFromPath(env.absolutePath(args[0] || "."));
         if (!cwd) {
-            return "error";
+            emit("error");
+            return ExitCode.NotFound;
         }
 
         let output = "[ ";
@@ -24,6 +29,7 @@ export class Ls extends Command {
 
         output += "]";
 
-        return output;
+        emit(output);
+        return ExitCode.Success;
     }
 }

@@ -1,12 +1,16 @@
 import {Command} from "app/cmd/command";
 import {Env} from "app/env";
 import {Directory} from "app/fs";
+import {
+    ExecutableEmit,
+    ExitCode,
+} from "app/process";
 
 export class Mkdir extends Command {
     public override readonly description = "Create a directory";
     public override readonly usage       = "mkdir <path>";
 
-    public override async run(args: string[], env: Env): Promise<string> {
+    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
         let path    = args[0];
         let pathArr = path.split("/");
         const name  = pathArr.pop() as string;
@@ -14,7 +18,8 @@ export class Mkdir extends Command {
 
         const dir = Directory.findFromPath(env.absolutePath(path));
         if (!dir) {
-            return "No such directory";
+            emit("No such directory");
+            return ExitCode.NotFound;
         }
 
         Directory.create({
@@ -24,6 +29,6 @@ export class Mkdir extends Command {
             content: [],
         });
 
-        return "Created";
+        return ExitCode.Success;
     }
 }

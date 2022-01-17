@@ -1,5 +1,10 @@
 import {Env} from "app/env";
 import {StorageORM} from "app/orm/storageORM";
+import {ExitCode} from "app/process";
+import {
+    Executable,
+    ExecutableEmit,
+} from "app/process/executable";
 import {
     Cat,
     Cd,
@@ -10,12 +15,12 @@ import {
     Touch,
 } from ".";
 
-export abstract class Command {
+export abstract class Command implements Executable {
     public description = "";
     public usage       = "";
 
-    public static async execute(cmd: string, args: string[], env: Env): Promise<string> {
-        let command = (() => {
+    public static fromString(cmd: string): Executable {
+        let command: Executable | null = (() => {
             switch (cmd) {
                 case "cat":
                     return new Cat();
@@ -44,20 +49,29 @@ export abstract class Command {
         })();
 
         if (!command) {
-            switch (cmd) {
-                case "__reset":
-                    StorageORM.resetAll();
-                    break;
+            command = ((): Executable => {
+                switch (cmd) {
+                    case "__reset":
+                        return {
+                            execute: async () => {
+                                StorageORM.resetAll();
+                                return 0;
+                            },
+                        };
 
-                default:
-                    return `${cmd}: command not found`;
-            }
-
-            return "__internal_command__";
+                    default:
+                        return {
+                            execute: async (args, env, emit) => {
+                                emit(`${cmd}: command not found`);
+                                return 1;
+                            },
+                        };
+                }
+            })();
         }
 
-        return command.run(args, env);
+        return command;
     }
 
-    public abstract run(args: string[], env: Env): Promise<string>;
+    public abstract execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode>;
 }

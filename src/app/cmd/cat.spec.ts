@@ -3,6 +3,7 @@ import {
     Directory,
     File,
 } from "app/fs";
+import {ExitCode} from "app/process";
 import {Cat} from ".";
 
 describe("Cat", () => {
@@ -17,14 +18,22 @@ describe("Cat", () => {
     });
 
     it("should read an existing file", async () => {
+        const f = File.findFromPath(path);
+        if (f) {
+            f.delete();
+        }
+
         File.create({
             name: fileName,
             content,
             parent: parent.id,
             owner: "",
-        });
+        }).save();
 
-        await expectAsync(new Cat().run([path], env)).toBeResolvedTo(content);
+        let output = "";
+        const emit = (msg: string) => output += msg;
+        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.Success);
+        expect(output).toBe(content);
     });
 
     it("should not read a nonexistent file", async () => {
@@ -33,7 +42,10 @@ describe("Cat", () => {
             f.delete();
         }
 
-        await expectAsync(new Cat().run([path], env)).toBeResolvedTo("No such file");
+        let output = "";
+        const emit = (msg: string) => output += msg;
+        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.NotFound);
+        expect(output).not.toBe(content);
     });
 
     it("should not read a directory", async () => {
@@ -42,7 +54,9 @@ describe("Cat", () => {
             f.delete();
         }
 
-        // TODO: Complete this test
-        await expectAsync(new Cat().run([path], env)).toBeResolvedTo("No such file");
+        let output = "";
+        const emit = (msg: string) => output += msg;
+        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.Unsupported);
+        expect(output).not.toBe(content);
     });
 });

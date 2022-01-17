@@ -4,12 +4,16 @@ import {
     Directory,
     File,
 } from "app/fs";
+import {
+    ExecutableEmit,
+    ExitCode,
+} from "app/process";
 
 export class Touch extends Command {
     public override readonly description = "Touch a file";
     public override readonly usage       = "touch <file>";
 
-    public override async run(args: string[], env: Env): Promise<string> {
+    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
         let path    = args[0];
         let pathArr = path.split("/");
         const name  = pathArr.pop() as string;
@@ -17,7 +21,8 @@ export class Touch extends Command {
 
         const dir = Directory.findFromPath(env.absolutePath(path));
         if (!dir) {
-            return "No such directory";
+            emit("No such directory");
+            return ExitCode.NotFound;
         }
 
         File.create({
@@ -27,6 +32,6 @@ export class Touch extends Command {
             content: "created",
         });
 
-        return "Created";
+        return ExitCode.Success;
     }
 }
