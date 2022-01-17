@@ -3,10 +3,8 @@ import {
     OnDestroy,
     OnInit,
 } from "@angular/core";
-import {
-    Entry,
-    OutputService,
-} from "app/output/output.service";
+import {OutputService} from "app/output/output.service";
+import * as DOMPurify from "dompurify";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -15,22 +13,32 @@ import {Subscription} from "rxjs";
     styleUrls: ["./output.component.css"],
 })
 export class OutputComponent implements OnInit, OnDestroy {
-    public commands: Entry[] = [];
+    public content: string = "";
 
     private _outputService: OutputService;
-    private _subscription: Subscription;
+    private _subscriptions: Subscription[];
 
     constructor(outputService: OutputService) {
         this._outputService = outputService;
-        this._subscription  = outputService.onNewCommand.subscribe((command) => {
-            this.commands.push(command);
-        });
+        this._subscriptions = [];
+
+        this._subscriptions.push(outputService.onNewCommand.subscribe((obj) => {
+            this.content += DOMPurify.sanitize(obj.command);
+            this.content += "<br/>";
+        }));
+
+        this._subscriptions.push(outputService.onNewOutput.subscribe((output) => {
+            this.content += DOMPurify.sanitize(output).replace("\n", "<br/>").replace("\r", "");
+            this.content += "<br/>";
+        }));
     }
 
     ngOnInit(): void {
     }
 
     ngOnDestroy() {
-        this._subscription.unsubscribe();
+        this._subscriptions.forEach((sub) => {
+            sub.unsubscribe();
+        });
     }
 }

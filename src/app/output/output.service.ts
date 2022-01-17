@@ -1,9 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs";
 
-export interface Entry {
+export interface CommandEntry {
     command: string;
     time: Date;
+}
+
+export interface OutputEntry {
     output: string,
 }
 
@@ -11,17 +14,22 @@ export interface Entry {
     providedIn: "root",
 })
 export class OutputService {
-    public onNewCommand: Subject<Entry>;
+    public onNewCommand: Subject<CommandEntry>;
+    public onNewOutput: Subject<string>;
 
     constructor() {
-        this.onNewCommand = new Subject<Entry>();
+        this.onNewCommand = new Subject<CommandEntry>();
+        this.onNewOutput  = new Subject<string>();
     }
 
-    public pushCommand(command: string, output: string): void {
+    public emitCommand(command: string): void {
         this.onNewCommand.next({
             command,
             time: new Date(),
-            output,
         });
+    }
+
+    public emitOutput(output: string) {
+        this.onNewOutput.next(output);
     }
 }
