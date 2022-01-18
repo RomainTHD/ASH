@@ -1,4 +1,4 @@
-import {Touch} from ".";
+import {Touch} from "app/cmd";
 
 describe("Touch", () => {
     it("should create an instance", () => {

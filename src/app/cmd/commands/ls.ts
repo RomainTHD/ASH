@@ -1,3 +1,4 @@
+import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {Directory} from "app/fs";
 import {
@@ -5,7 +6,6 @@ import {
     ExitCode,
     ProcessEmit,
 } from "app/process";
-import {Command} from ".";
 
 export class Ls extends Command {
     public override readonly description = "List files in the current directory";

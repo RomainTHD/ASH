@@ -1,4 +1,4 @@
-import {Echo} from ".";
+import {Echo} from "app/cmd";
 
 describe("Echo", () => {
     it("should create an instance", () => {

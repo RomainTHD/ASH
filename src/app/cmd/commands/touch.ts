@@ -1,4 +1,4 @@
-import {Command} from "app/cmd/command";
+import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {
     Directory,

@@ -1,3 +1,4 @@
+import {Cat} from "app/cmd";
 import {Env} from "app/env";
 import {
     Directory,
@@ -7,7 +8,6 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {Cat} from ".";
 
 describe("Cat", () => {
     const env      = new Env(null);
