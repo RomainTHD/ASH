@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
 @Component({
     selector: "app-output",
     templateUrl: "./output.component.html",
-    styleUrls: ["./output.component.css"],
+    styleUrls: ["./output.component.scss"],
 })
 export class OutputComponent implements OnInit, OnDestroy {
     public content: string = "";

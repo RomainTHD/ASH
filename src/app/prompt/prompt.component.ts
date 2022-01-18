@@ -13,7 +13,7 @@ interface Prompt {
 @Component({
     selector: "app-prompt",
     templateUrl: "./prompt.component.html",
-    styleUrls: ["./prompt.component.css"],
+    styleUrls: ["./prompt.component.scss"],
 })
 export class PromptComponent implements OnInit {
     public prompt: Prompt;
