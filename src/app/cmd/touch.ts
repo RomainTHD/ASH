@@ -19,12 +19,11 @@ export class Touch extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        let path    = args.others[0];
-        let pathArr = path.split("/");
-        const name  = pathArr.pop() as string;
-        path        = pathArr.join("/");
+        let pathArr   = args.others[0].split("/");
+        const name    = pathArr.pop() as string;
+        const absPath = env.absolutePath(pathArr.join("/"));
 
-        const dir = Directory.findFromPath(env.absolutePath(path));
+        const dir = Directory.findFromPath(absPath);
         if (!dir) {
             emit("No such directory");
             return ExitCode.NotFound;
@@ -37,6 +36,7 @@ export class Touch extends Command {
             content: "created",
         });
 
+        emit(absPath);
         return ExitCode.Success;
     }
 }
