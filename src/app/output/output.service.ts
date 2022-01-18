@@ -1,8 +1,10 @@
 import {Injectable} from "@angular/core";
+import {Env} from "app/env";
 import {Subject} from "rxjs";
 
 export interface CommandEntry {
     command: string;
+    env: Env;
     time: Date;
 }
 
@@ -22,9 +24,10 @@ export class OutputService {
         this.onNewOutput  = new Subject<string>();
     }
 
-    public emitCommand(command: string): void {
+    public emitCommand(command: string, env: Env): void {
         this.onNewCommand.next({
             command,
+            env,
             time: new Date(),
         });
     }

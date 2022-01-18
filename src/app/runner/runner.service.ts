@@ -19,7 +19,7 @@ export class RunnerService {
         const path  = argsArr.shift() as string;
         let args    = Process.processArgs(argsArr);
 
-        this._output.emitCommand(cmd);
+        this._output.emitCommand(cmd, env);
         Command.fromString(path).execute(args, env, (msg) => this._output.emitOutput(msg)).then();
     }
 
