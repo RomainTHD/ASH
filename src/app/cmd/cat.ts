@@ -5,16 +5,21 @@ import {
     InodeType,
 } from "app/fs";
 import {
-    ExecutableEmit,
+    Arguments,
     ExitCode,
+    ProcessEmit,
 } from "app/process";
 
 export class Cat extends Command {
     public override readonly description = "Prints the contents of a file";
     public override readonly usage       = "cat <file>";
 
-    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
-        const f = File.findFromPath(env.absolutePath(args[0]));
+    public override async execute(
+        args: Arguments,
+        env: Env,
+        emit: ProcessEmit,
+    ): Promise<ExitCode> {
+        const f = File.findFromPath(env.absolutePath(args.others[0]));
         if (!f) {
             emit("No such file");
             return ExitCode.NotFound;

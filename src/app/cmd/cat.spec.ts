@@ -3,15 +3,19 @@ import {
     Directory,
     File,
 } from "app/fs";
-import {ExitCode} from "app/process";
+import {
+    ExitCode,
+    Process,
+} from "app/process";
 import {Cat} from ".";
 
 describe("Cat", () => {
-    const env = new Env(null);
-    const content = "Hello World";
+    const env      = new Env(null);
+    const content  = "Hello World";
     const fileName = "test.txt";
-    const path = `/${fileName}`;
-    const parent = Directory.getRoot();
+    const path     = `/${fileName}`;
+    const parent   = Directory.getRoot();
+    const args     = Process.processArgs([path]);
 
     it("should create an instance", () => {
         expect(new Cat()).toBeTruthy();
@@ -32,7 +36,8 @@ describe("Cat", () => {
 
         let output = "";
         const emit = (msg: string) => output += msg;
-        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.Success);
+        await expectAsync(new Cat().execute(args, env, emit))
+            .toBeResolvedTo(ExitCode.Success);
         expect(output).toBe(content);
     });
 
@@ -44,7 +49,8 @@ describe("Cat", () => {
 
         let output = "";
         const emit = (msg: string) => output += msg;
-        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.NotFound);
+        await expectAsync(new Cat().execute(args, env, emit))
+            .toBeResolvedTo(ExitCode.NotFound);
         expect(output).not.toBe(content);
     });
 
@@ -56,7 +62,8 @@ describe("Cat", () => {
 
         let output = "";
         const emit = (msg: string) => output += msg;
-        await expectAsync(new Cat().execute([path], env, emit)).toBeResolvedTo(ExitCode.Unsupported);
+        await expectAsync(new Cat().execute(args, env, emit))
+            .toBeResolvedTo(ExitCode.Unsupported);
         expect(output).not.toBe(content);
     });
 });

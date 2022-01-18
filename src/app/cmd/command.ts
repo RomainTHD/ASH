@@ -1,26 +1,22 @@
-import {Env} from "app/env";
-import {StorageORM} from "app/orm/storageORM";
-import {ExitCode} from "app/process";
-import {
-    Executable,
-    ExecutableEmit,
-} from "app/process/executable";
+import {Process} from "app/process";
 import {
     Cat,
     Cd,
     Echo,
     Ls,
     Mkdir,
+    NotFound,
     Pwd,
+    Reset,
     Touch,
 } from ".";
 
-export abstract class Command implements Executable {
+export abstract class Command extends Process {
     public description = "";
     public usage       = "";
 
-    public static fromString(cmd: string): Executable {
-        let command: Executable | null = (() => {
+    public static fromString(cmd: string): Command {
+        return (() => {
             switch (cmd) {
                 case "cat":
                     return new Cat();
@@ -43,35 +39,12 @@ export abstract class Command implements Executable {
                 case "touch":
                     return new Touch();
 
+                case "__reset":
+                    return new Reset();
+
                 default:
-                    return null;
+                    return new NotFound(cmd);
             }
         })();
-
-        if (!command) {
-            command = ((): Executable => {
-                switch (cmd) {
-                    case "__reset":
-                        return {
-                            execute: async () => {
-                                StorageORM.resetAll();
-                                return 0;
-                            },
-                        };
-
-                    default:
-                        return {
-                            execute: async (args, env, emit) => {
-                                emit(`${cmd}: command not found`);
-                                return 1;
-                            },
-                        };
-                }
-            })();
-        }
-
-        return command;
     }
-
-    public abstract execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode>;
 }

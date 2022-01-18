@@ -15,11 +15,12 @@ export class RunnerService {
     }
 
     public run(cmd: string, env: Env): void {
-        let args   = cmd.split(" ");
-        const path = args.shift() as string;
+        let argsArr = cmd.split(" ");
+        const path  = argsArr.shift() as string;
+        let args    = Process.processArgs(argsArr);
 
         this._output.emitCommand(cmd);
-        new Process(Command.fromString(path)).execute(args, env, (msg) => this._output.emitOutput(msg)).then();
+        Command.fromString(path).execute(args, env, (msg) => this._output.emitOutput(msg)).then();
     }
 
     public complete(cmd: string) {

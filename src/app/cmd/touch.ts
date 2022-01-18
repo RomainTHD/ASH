@@ -5,16 +5,21 @@ import {
     File,
 } from "app/fs";
 import {
-    ExecutableEmit,
+    Arguments,
     ExitCode,
+    ProcessEmit,
 } from "app/process";
 
 export class Touch extends Command {
     public override readonly description = "Touch a file";
     public override readonly usage       = "touch <file>";
 
-    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
-        let path    = args[0];
+    public override async execute(
+        args: Arguments,
+        env: Env,
+        emit: ProcessEmit,
+    ): Promise<ExitCode> {
+        let path    = args.others[0];
         let pathArr = path.split("/");
         const name  = pathArr.pop() as string;
         path        = pathArr.join("/");

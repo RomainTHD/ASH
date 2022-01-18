@@ -1,8 +1,9 @@
 import {Env} from "app/env";
 import {Directory} from "app/fs";
 import {
-    ExecutableEmit,
+    Arguments,
     ExitCode,
+    ProcessEmit,
 } from "app/process";
 import {Command} from ".";
 
@@ -10,8 +11,13 @@ export class Ls extends Command {
     public override readonly description = "List files in the current directory";
     public override readonly usage       = "ls [options] [path]";
 
-    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
-        const cwd = Directory.findFromPath(env.absolutePath(args[0] || "."));
+    public override async execute(
+        args: Arguments,
+        env: Env,
+        emit: ProcessEmit,
+    ): Promise<ExitCode> {
+        const path = env.absolutePath(args.others[0] || ".");
+        const cwd  = Directory.findFromPath(path);
         if (!cwd) {
             emit("error");
             return ExitCode.NotFound;

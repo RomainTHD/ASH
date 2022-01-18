@@ -2,16 +2,21 @@ import {Command} from "app/cmd/command";
 import {Env} from "app/env";
 import {Directory} from "app/fs";
 import {
-    ExecutableEmit,
+    Arguments,
     ExitCode,
+    ProcessEmit,
 } from "app/process";
 
 export class Mkdir extends Command {
     public override readonly description = "Create a directory";
     public override readonly usage       = "mkdir <path>";
 
-    public override async execute(args: string[], env: Env, emit: ExecutableEmit): Promise<ExitCode> {
-        let path    = args[0];
+    public override async execute(
+        args: Arguments,
+        env: Env,
+        emit: ProcessEmit,
+    ): Promise<ExitCode> {
+        let path    = args.others[0];
         let pathArr = path.split("/");
         const name  = pathArr.pop() as string;
         path        = pathArr.join("/");

@@ -1,16 +1,13 @@
+import {ExitCode} from "./exit-code";
 import {
-    Executable,
-    ExecutableEmit,
-} from "./executable";
-
-import {
-    ExitCode,
+    Arguments,
     Process,
+    ProcessEmit,
 } from "./process";
 
 export {
-    Executable,
-    ExecutableEmit,
+    Arguments,
+    ProcessEmit,
     Process,
     ExitCode,
 };
