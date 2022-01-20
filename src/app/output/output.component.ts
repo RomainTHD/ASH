@@ -2,6 +2,7 @@ import {
     Component,
     OnDestroy,
     OnInit,
+    ViewEncapsulation,
 } from "@angular/core";
 import {AnsiColor} from "app/output/ansi-color";
 import {OutputService} from "app/output/output.service";
@@ -12,6 +13,7 @@ import {Subscription} from "rxjs";
     selector: "app-output",
     templateUrl: "./output.component.html",
     styleUrls: ["./output.component.scss"],
+    encapsulation: ViewEncapsulation.None, // Because we use raw HTML / CSS tags
 })
 export class OutputComponent implements OnInit, OnDestroy {
     public content: string = "";
@@ -29,9 +31,8 @@ export class OutputComponent implements OnInit, OnDestroy {
             let base = `${AnsiColor.FG.GREEN}root${AnsiColor.RESET}:` +
                 `${AnsiColor.FG.MAGENTA}${time}${AnsiColor.RESET}:` +
                 `${AnsiColor.FG.BLUE}${obj.env.cwd}${AnsiColor.RESET}$ `;
-            base = `root:${time}:${obj.env.cwd}$ `;
 
-            this.content += base;
+            this.content += AnsiColor.parse(DOMPurify.sanitize(base));
             this.content += DOMPurify.sanitize(obj.command);
             this.content += "<br/>";
         }));

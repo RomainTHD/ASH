@@ -4,4 +4,90 @@
     code {
 
     }
+
+    span {
+        &.bold {
+            font-weight: bold;
+        }
+
+        &.italic {
+            font-style: italic;
+        }
+
+        &.underline {
+            text-decoration: underline;
+        }
+
+        &.strikethrough {
+            text-decoration: line-through;
+        }
+
+        &.fg {
+            &--black {
+                color: black;
+            }
+
+            &--red {
+                color: red;
+            }
+
+            &--green {
+                color: green;
+            }
+
+            &--yellow {
+                color: yellow;
+            }
+
+            &--blue {
+                color: blue;
+            }
+
+            &--magenta {
+                color: magenta;
+            }
+
+            &--cyan {
+                color: cyan;
+            }
+
+            &--white {
+                color: white;
+            }
+        }
+
+        &.bg {
+            &--black {
+                background-color: black;
+            }
+
+            &--red {
+                background-color: red;
+            }
+
+            &--green {
+                background-color: green;
+            }
+
+            &--yellow {
+                background-color: yellow;
+            }
+
+            &--blue {
+                background-color: blue;
+            }
+
+            &--magenta {
+                background-color: magenta;
+            }
+
+            &--cyan {
+                background-color: cyan;
+            }
+
+            &--white {
+                background-color: white;
+            }
+        }
+    }
 }
