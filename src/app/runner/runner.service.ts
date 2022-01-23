@@ -3,6 +3,7 @@ import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {OutputService} from "app/output/output.service";
 import {Process} from "app/process";
+import {strings} from "app/utils";
 
 @Injectable({
     providedIn: "root",
@@ -15,7 +16,7 @@ export class RunnerService {
     }
 
     public run(cmd: string, env: Env): void {
-        let argsArr = cmd.split(" ");
+        let argsArr = strings.splitSpace(cmd);
         const path  = argsArr.shift() as string;
         let args    = Process.processArgs(argsArr);
 
