@@ -6,6 +6,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Echo extends Command {
     public override readonly description = "Echo a message";
     public override readonly usage       = "echo [text]";

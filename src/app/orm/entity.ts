@@ -1,3 +1,6 @@
+/**
+ * An entity used by the storage handler
+ */
 export abstract class Entity {
     protected static category: string = "TDB";
     protected _id: string;

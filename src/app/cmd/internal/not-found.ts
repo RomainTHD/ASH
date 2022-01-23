@@ -6,6 +6,11 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * Internal command to handle not found commands
+ * @see description
+ * @see usage
+ */
 export class NotFound extends Command {
     public override readonly description = "Reset the app and erase all filesystem";
     public override readonly usage       = "__reset";

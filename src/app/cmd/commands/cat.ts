@@ -10,6 +10,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Cat extends Command {
     public override readonly description = "Prints the contents of a file";
     public override readonly usage       = "cat <file>";

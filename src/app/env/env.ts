@@ -1,12 +1,34 @@
 import {Directory} from "app/fs";
 
+/**
+ * Environment
+ */
 export class Env {
+    /**
+     * Default home
+     * @private
+     */
+    private static readonly DEFAULT_HOME = "/home/user";
+
+    /**
+     * Current working directory
+     * @private
+     */
     private _cwd: string;
+
+    /**
+     * Home directory
+     * @private
+     */
     private _home: string;
 
+    /**
+     * Constructor
+     * @param path Current working directory
+     */
     public constructor(path: string | null) {
         this._cwd  = path === null ? "/" : path;
-        this._home = "/home/user/";
+        this._home = Env.DEFAULT_HOME;
     }
 
     public get home(): string {
@@ -21,6 +43,10 @@ export class Env {
         this._cwd = value;
     }
 
+    /**
+     * @param path Relative path
+     * @returns Absolute path
+     */
     public absolutePath(path: string): string {
         if (path.startsWith("~")) {
             // FIXME: What about files like "~foo" ?
@@ -79,6 +105,11 @@ export class Env {
         return pathItems.join("/");
     }
 
+    /**
+     * @returns Directory Current working directory
+     * @throws {Error} If current working directory doesn't exist.
+     * This shouldn't happen, as it shows an inconsistency in the environment.
+     */
     public getPathDirectory(): Directory {
         const dir = Directory.findFromPath(this.absolutePath(this.cwd));
         if (dir === null) {

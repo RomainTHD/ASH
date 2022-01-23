@@ -13,6 +13,9 @@ export interface FileTemplate {
     content: string;
 }
 
+/**
+ * A file in the file system
+ */
 export class File extends Inode {
     public constructor(template: InodeTemplate) {
         super(template);

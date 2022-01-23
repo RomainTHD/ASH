@@ -1,3 +1,6 @@
+/**
+ * Storage handler
+ */
 export abstract class StorageORM {
     private static readonly columnLastID = "_lastID";
 

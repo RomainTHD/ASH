@@ -7,6 +7,11 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * Internal command to reset the database
+ * @see description
+ * @see usage
+ */
 export class Reset extends Command {
     public override readonly description = "Reset the app and erase all filesystem";
     public override readonly usage       = "__reset";

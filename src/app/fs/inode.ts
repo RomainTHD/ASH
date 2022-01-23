@@ -1,4 +1,3 @@
-import {Env} from "app/env";
 import {
     Directory,
     File,
@@ -30,8 +29,16 @@ export interface InodeTemplate {
     content: unknown,
 }
 
+/**
+ * An inode in the file system
+ */
 export abstract class Inode extends Entity {
+    /**
+     * The inode category for the ORM
+     * @protected
+     */
     protected static override category = "inode";
+
     private readonly _inodeType: InodeType;
     private _name: string;
     private _size: number;

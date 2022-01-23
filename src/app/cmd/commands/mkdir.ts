@@ -7,6 +7,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Mkdir extends Command {
     public override readonly description = "Create a directory";
     public override readonly usage       = "mkdir <path>";

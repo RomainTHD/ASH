@@ -6,6 +6,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Pwd extends Command {
     public override readonly description = "Prints the current working directory";
     public override readonly usage       = "pwd";

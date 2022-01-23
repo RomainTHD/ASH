@@ -17,7 +17,14 @@ export interface DirectoryTemplate {
     content: DirectoryChild[];
 }
 
+/**
+ * A directory in the file system
+ */
 export class Directory extends Inode {
+    /**
+     * Root directory ID
+     * @private
+     */
     private static readonly ROOT_DIRECTORY_ID = "root";
 
     public constructor(template: InodeTemplate) {
@@ -61,6 +68,10 @@ export class Directory extends Inode {
         return new this(json);
     }
 
+    /**
+     * Get the directory root, aka "/"
+     * @returns Root directory
+     */
     public static getRoot(): Directory {
         let root = this.find(Directory.ROOT_DIRECTORY_ID) as Directory;
         if (root === null) {
@@ -76,6 +87,11 @@ export class Directory extends Inode {
         return root;
     }
 
+    /**
+     * Finds a directory by its path
+     * @param path Directory path
+     * @returns Directory or null if not found
+     */
     public static findFromPath(path: string): Directory | null {
         const items = path.split("/");
         items.pop(); // Remove last item, which has to be empty
@@ -101,6 +117,11 @@ export class Directory extends Inode {
         return current;
     }
 
+    /**
+     * Finds a child by name
+     * @param name Child name
+     * @returns Child or null if not found
+     */
     public findChild(name: string): Inode | null {
         const child = this.content.find((child) => child.name === name);
         if (!child) {
@@ -109,6 +130,10 @@ export class Directory extends Inode {
         return Directory.find(child.id);
     }
 
+    /**
+     * Adds a child to the directory
+     * @param node Child inode to add
+     */
     public addChild(node: Inode): void {
         this.content.push({
             id: node.id,

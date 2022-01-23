@@ -7,6 +7,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Cd extends Command {
     public override readonly description = "Change directory";
     public override readonly usage       = "cd [path]";

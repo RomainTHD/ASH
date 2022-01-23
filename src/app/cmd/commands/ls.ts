@@ -7,6 +7,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Ls extends Command {
     public override readonly description = "List files in the current directory";
     public override readonly usage       = "ls [options] [path]";

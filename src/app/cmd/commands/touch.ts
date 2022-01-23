@@ -10,6 +10,10 @@ import {
     ProcessEmit,
 } from "app/process";
 
+/**
+ * @see description
+ * @see usage
+ */
 export class Touch extends Command {
     public override readonly description = "Touch a file";
     public override readonly usage       = "touch <file>";

@@ -11,10 +11,25 @@ import {
     Touch,
 } from ".";
 
+/**
+ * Generic command
+ */
 export abstract class Command extends Process {
-    public description = "";
-    public usage       = "";
+    /**
+     * Command description
+     */
+    public abstract description: string;
 
+    /**
+     * Command usage
+     */
+    public abstract usage: string;
+
+    /**
+     * String to command map
+     * @param cmd Command
+     * @returns Command instance
+     */
     public static fromString(cmd: string): Command {
         return (() => {
             switch (cmd) {

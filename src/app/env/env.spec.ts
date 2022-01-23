@@ -6,10 +6,10 @@ describe("Env", () => {
     });
 
     it("should return the right absolute path", () => {
-        const home = "/home/user/";
-        const parent = "/a/b/"
-        const cwd = `${parent}c/`;
-        const env = new Env(cwd);
+        const home   = Env["DEFAULT_HOME"];
+        const parent = "/a/b/";
+        const cwd    = `${parent}c/`;
+        const env    = new Env(cwd);
 
         // Root
         expect(env.absolutePath("/")).toBe("/");
