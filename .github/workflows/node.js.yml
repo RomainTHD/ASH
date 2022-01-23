@@ -4,30 +4,30 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ master, dev/* ]
-  pull_request:
-    branches: [ master, dev/* ]
+    push:
+        branches: [ master, dev/* ]
+    pull_request:
+        branches: [ master, dev/* ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ng-toolkit 
-        
-    strategy:
-      matrix:
-        node-version: [16.x]
+        defaults:
+            run:
+                working-directory: src
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test:prod
-    # - run: npm run lint
+        strategy:
+            matrix:
+                node-version: [ 16.x ]
+
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Use Node.js ${{ matrix.node-version }}
+                uses: actions/setup-node@v2
+                with:
+                    node-version: ${{ matrix.node-version }}
+                    cache: 'npm'
+            -   run: npm ci
+            -   run: npm run test:prod
+        # - run: npm run lint
