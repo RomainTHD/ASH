@@ -70,7 +70,7 @@ export class AnsiColor {
     /**
      * Parse some text with ANSI color codes
      * @param text Text to parse
-     * @return Parsed text
+     * @returns Parsed text
      */
     public static parse(text: string): string {
         // Split on each reset, and will add for each part the right amount of
