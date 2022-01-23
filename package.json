@@ -13,12 +13,15 @@
         "url": "https://github.com/RomainTHD/ASH/issues"
     },
     "scripts": {
+        "build": "ng build",
+        "build:prod": "ng build --prod",
+        "lint": "ng lint",
         "ng": "ng",
         "start": "ng serve",
-        "build": "ng build",
-        "watch": "ng build --watch --configuration development",
-        "test-firefox": "ng test --browsers Firefox",
-        "test": "ng test"
+        "test": "ng test",
+        "test:firefox": "ng test --browsers Firefox",
+        "test:prod": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
+        "watch": "ng build --watch --configuration development"
     },
     "private": true,
     "dependencies": {
