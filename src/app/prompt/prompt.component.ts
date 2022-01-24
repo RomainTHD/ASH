@@ -2,11 +2,10 @@ import {
     Component,
     OnInit,
 } from "@angular/core";
-import {Env} from "app/env";
+import {EnvService} from "app/env";
 import {RunnerService} from "app/runner/runner.service";
 
 interface Prompt {
-    env: Env,
     cmd: string;
 }
 
@@ -19,12 +18,13 @@ export class PromptComponent implements OnInit {
     public prompt: Prompt;
 
     private _runner: RunnerService;
+    private _env: EnvService;
 
-    constructor(runner: RunnerService) {
+    constructor(runner: RunnerService, env: EnvService) {
         this._runner = runner;
+        this._env    = env;
         this.prompt  = {
             cmd: "",
-            env: new Env(null),
         };
     }
 
@@ -38,7 +38,7 @@ export class PromptComponent implements OnInit {
 
     onEnter(targetRaw: Event) {
         const target = (targetRaw.target) as HTMLDivElement;
-        this._runner.run(this.prompt.cmd, this.prompt.env);
+        this._runner.run(this.prompt.cmd, this._env.getEnv());
         this.prompt.cmd  = "";
         target.innerText = "";
     }
