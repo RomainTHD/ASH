@@ -1,8 +1,22 @@
 .output {
+    font-family: "Courier New", monospace;
+    font-size: 16px;
     margin: 1rem;
+    overflow-x: scroll;
+    white-space: nowrap;
 
-    code {
+    /*
+    > * {
+        display: inline-block;
+        width: 600px;
+        white-space: normal;
+    }*/
 
+    &__content {
+
+    }
+
+    &__prompt {
     }
 
     span {
