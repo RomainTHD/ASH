@@ -31,9 +31,16 @@ export class PromptComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    onEnter() {
+    onInput(targetRaw: Event): void {
+        const target    = (targetRaw.target) as HTMLDivElement;
+        this.prompt.cmd = target.innerText;
+    }
+
+    onEnter(targetRaw: Event) {
+        const target = (targetRaw.target) as HTMLDivElement;
         this._runner.run(this.prompt.cmd, this.prompt.env);
-        this.prompt.cmd = "";
+        this.prompt.cmd  = "";
+        target.innerText = "";
     }
 
     onTab() {

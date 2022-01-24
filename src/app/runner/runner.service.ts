@@ -16,6 +16,10 @@ export class RunnerService {
     }
 
     public run(cmd: string, env: Env): void {
+        while (cmd.endsWith("\n")) {
+            cmd = cmd.slice(0, -1);
+        }
+
         let argsArr = strings.splitSpace(cmd);
         const path  = argsArr.shift() as string;
         let args    = Process.processArgs(argsArr);
