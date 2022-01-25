@@ -1,3 +1,4 @@
+import {Noop} from "app/cmd/internal/noop";
 import {Command} from "./command";
 
 import {Cat} from "./commands/cat";
@@ -29,6 +30,7 @@ export {
 };
 
 export {
-    Reset,
+    Noop,
     NotFound,
+    Reset,
 };
