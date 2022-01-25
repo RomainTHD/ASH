@@ -1,7 +1,7 @@
 import {Env} from "app/env";
 import {ExitCode} from "app/process";
 
-export type ProcessEmit = (msg: string) => void;
+export type ProcessEmit = (msg: string, newLine?: boolean) => void;
 
 export interface Parameter {
     name: string,
