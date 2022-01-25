@@ -103,6 +103,15 @@
                         ],
                         "scripts": []
                     }
+                },
+                "deploy": {
+                    "builder": "angular-cli-ghpages:deploy",
+                    "options": {
+                        "baseHref": "/ASH/",
+                        "branch": "gh-pages",
+                        "message": "ci: Auto-deploy to GitHub Pages",
+                        "noSilent": true
+                    }
                 }
             }
         }
