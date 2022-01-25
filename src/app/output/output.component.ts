@@ -38,7 +38,9 @@ export class OutputComponent implements OnInit, OnDestroy {
             this.content += DOMPurify.sanitize(output)
                 .replace("\n", "<br/>")
                 .replace("\r", "");
-            this.content += "<br/>";
+        }));
+
+        this._subscriptions.push(outputService.onCommandEnd.subscribe(() => {
             this.content += OutputComponent.getPromptText(envService.getEnv());
         }));
 

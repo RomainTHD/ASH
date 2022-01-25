@@ -21,11 +21,17 @@ export class RunnerService {
         }
 
         let argsArr = strings.splitSpace(cmd);
-        const path  = argsArr.shift() as string;
+        const path  = (argsArr.shift() as string) || "";
         let args    = Process.processArgs(argsArr);
 
         this._output.emitCommand(cmd, env);
-        Command.fromString(path).execute(args, env, (msg) => this._output.emitOutput(msg)).then();
+        Command.fromString(path).execute(
+            args,
+            env,
+            (msg) => this._output.emitOutput(msg),
+        ).then(() => {
+            this._output.emitCommandEnd();
+        });
     }
 
     public complete(cmd: string) {
