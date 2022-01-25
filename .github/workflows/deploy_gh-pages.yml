@@ -6,11 +6,9 @@ name: Node.js deployment on GitHub pages
 on:
     push:
         branches: [ master ]
-    pull_request:
-        branches: [ master ]
 
 jobs:
-    build:
+    deploy:
         runs-on: ubuntu-latest
 
         defaults:
