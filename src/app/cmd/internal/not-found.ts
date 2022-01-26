@@ -12,12 +12,12 @@ import {
  * @see usage
  */
 export class NotFound extends Command {
-    public override readonly description = "Reset the app and erase all filesystem";
-    public override readonly usage       = "__reset";
+    public override readonly description = "Command not found";
+    public override readonly usage       = "__unknown";
 
     private readonly _cmd: string;
 
-    public constructor(cmd: string) {
+    public constructor(cmd = "__unknown") {
         super();
         this._cmd = cmd;
     }
