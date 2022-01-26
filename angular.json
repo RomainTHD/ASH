@@ -20,6 +20,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+                        "optimization": false,
                         "outputPath": "dist/ASH",
                         "index": "src/index.html",
                         "main": "src/main.ts",
@@ -41,7 +42,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
+                                    "maximumError": "10mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",

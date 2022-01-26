@@ -4,8 +4,14 @@ import {
     OnInit,
     ViewEncapsulation,
 } from "@angular/core";
-import {AnsiColor} from "app/output/ansi-color";
-import {OutputService} from "app/output/output.service";
+import {
+    Env,
+    EnvService,
+} from "app/env";
+import {
+    AnsiColor,
+    OutputService,
+} from "app/output";
 import * as DOMPurify from "dompurify";
 import {Subscription} from "rxjs";
 
@@ -16,23 +22,16 @@ import {Subscription} from "rxjs";
     encapsulation: ViewEncapsulation.None, // Because we use raw HTML / CSS tags
 })
 export class OutputComponent implements OnInit, OnDestroy {
-    public content: string = "";
+    public content: string;
 
     private _outputService: OutputService;
     private _subscriptions: Subscription[];
 
-    constructor(outputService: OutputService) {
+    constructor(outputService: OutputService, envService: EnvService) {
         this._outputService = outputService;
         this._subscriptions = [];
 
         this._subscriptions.push(outputService.onNewCommand.subscribe((obj) => {
-            const time = obj.time.toISOString().split("T")[1].split(".")[0];
-
-            let base = `${AnsiColor.FG.GREEN}root${AnsiColor.RESET}:` +
-                `${AnsiColor.FG.MAGENTA}${time}${AnsiColor.RESET}:` +
-                `${AnsiColor.FG.BLUE}${obj.env.cwd}${AnsiColor.RESET}$ `;
-
-            this.content += AnsiColor.parse(DOMPurify.sanitize(base));
             this.content += DOMPurify.sanitize(obj.command);
             this.content += "<br/>";
         }));
@@ -41,8 +40,22 @@ export class OutputComponent implements OnInit, OnDestroy {
             this.content += DOMPurify.sanitize(output)
                 .replace("\n", "<br/>")
                 .replace("\r", "");
-            this.content += "<br/>";
         }));
+
+        this._subscriptions.push(outputService.onCommandEnd.subscribe(() => {
+            this.content += OutputComponent.getPromptText(envService.getEnv());
+        }));
+
+        this.content = OutputComponent.getPromptText(envService.getEnv());
+    }
+
+    private static getPromptText(env: Env): string {
+        const time = new Date().toISOString().split("T")[1].split(".")[0];
+        let base   = `${AnsiColor.FG.GREEN}root${AnsiColor.RESET}:` +
+            `${AnsiColor.FG.MAGENTA}${time}${AnsiColor.RESET}:` +
+            `${AnsiColor.FG.BLUE}${env.cwd}${AnsiColor.RESET}$ `;
+
+        return AnsiColor.parse(DOMPurify.sanitize(base));
     }
 
     ngOnInit(): void {

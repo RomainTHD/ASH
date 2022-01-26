@@ -1,5 +1,4 @@
-import {strings} from "app/utils";
-import {UnterminatedStringError} from "app/utils/strings";
+import {strings} from ".";
 
 describe("Strings", () => {
     it("should split at the right place", () => {
@@ -35,7 +34,12 @@ describe("Strings", () => {
     });
 
     it("should throw on unterminated strings", () => {
-        expect(() => strings.splitSpace(`foo"bar`)).toThrow(new UnterminatedStringError(3, 7));
-        expect(() => strings.splitSpace(`"foo\\"`)).toThrow(new UnterminatedStringError(0, 5));
+        expect(
+            () => strings.splitSpace(`foo"bar`),
+        ).toThrow(new strings.UnterminatedStringError(3, 7));
+
+        expect(
+            () => strings.splitSpace(`"foo\\"`),
+        ).toThrow(new strings.UnterminatedStringError(0, 5));
     });
 });

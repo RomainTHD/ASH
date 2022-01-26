@@ -2,8 +2,10 @@ import {
     Directory,
     File,
 } from "app/fs";
-import {Entity} from "app/orm/entity";
-import {StorageORM} from "app/orm/storageORM";
+import {
+    Entity,
+    StorageORM,
+} from "app/orm";
 
 export enum InodeType {
     File,

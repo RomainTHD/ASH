@@ -1,4 +1,4 @@
-import {Pwd} from "app/cmd";
+import {Pwd} from ".";
 
 describe("Pwd", () => {
     it("should create an instance", () => {

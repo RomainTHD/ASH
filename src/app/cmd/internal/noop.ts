@@ -1,6 +1,5 @@
 import {Command} from "app/cmd";
 import {Env} from "app/env";
-import {StorageORM} from "app/orm";
 import {
     Arguments,
     ExitCode,
@@ -8,21 +7,19 @@ import {
 } from "app/process";
 
 /**
- * Internal command to reset the database
+ * No-op command
  * @see description
  * @see usage
  */
-export class Reset extends Command {
-    public override readonly description = "Reset the app and erase all filesystem";
-    public override readonly usage       = "__reset";
+export class Noop extends Command {
+    public override readonly description = "No-op command";
+    public override readonly usage       = "";
 
     public override async execute(
         args: Arguments,
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        StorageORM.resetAll();
-        emit("OK");
         return ExitCode.Success;
     }
 }

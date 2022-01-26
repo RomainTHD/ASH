@@ -3,7 +3,7 @@ import {
     TestBed,
 } from "@angular/core/testing";
 
-import {OutputComponent} from "app/output/output.component";
+import {OutputComponent} from ".";
 
 describe("HistoryComponent", () => {
     let component: OutputComponent;

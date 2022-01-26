@@ -5,6 +5,7 @@ import {
     Echo,
     Ls,
     Mkdir,
+    Noop,
     NotFound,
     Pwd,
     Reset,
@@ -32,7 +33,7 @@ export abstract class Command extends Process {
      */
     public static fromString(cmd: string): Command {
         return (() => {
-            switch (cmd) {
+            switch (cmd.trim()) {
                 case "cat":
                     return new Cat();
 
@@ -56,6 +57,9 @@ export abstract class Command extends Process {
 
                 case "__reset":
                     return new Reset();
+
+                case "":
+                    return new Noop();
 
                 default:
                     return new NotFound(cmd);

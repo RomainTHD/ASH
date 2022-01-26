@@ -1,9 +1,19 @@
-.prompt-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-}
+.prompt {
+    &__container {
+        &__child {
+            &--fst {
+                width: auto;
+                float: left;
+            }
 
-.prompt-input {
-    width: 100%;
+            &--snd {
+                display: block;
+                margin-left: 1.5ch;
+           }
+        }
+    }
+
+    &__input {
+        outline: 0 solid transparent;
+    }
 }

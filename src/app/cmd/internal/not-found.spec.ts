@@ -1,4 +1,4 @@
-import {NotFound} from "./not-found";
+import {NotFound} from ".";
 
 describe("NotFound", () => {
     it("should create an instance", () => {

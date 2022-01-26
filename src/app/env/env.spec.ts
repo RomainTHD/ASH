@@ -1,8 +1,8 @@
-import {Env} from "app/env";
+import {Env} from ".";
 
 describe("Env", () => {
     it("should create an instance", () => {
-        expect(new Env(null)).toBeTruthy();
+        expect(new Env()).toBeTruthy();
     });
 
     it("should return the right absolute path", () => {

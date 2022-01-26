@@ -1,4 +1,4 @@
-import {Ls} from "app/cmd";
+import {Ls} from ".";
 
 describe("Ls", () => {
     it("should create an instance", () => {

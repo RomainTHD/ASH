@@ -1,13 +1,13 @@
 import {TestBed} from "@angular/core/testing";
 
-import {RunnerService} from ".";
+import {EnvService} from ".";
 
-describe("RunnerService", () => {
-    let service: RunnerService;
+describe("EnvServiceService", () => {
+    let service: EnvService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(RunnerService);
+        service = TestBed.inject(EnvService);
     });
 
     it("should be created", () => {

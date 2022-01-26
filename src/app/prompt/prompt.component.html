@@ -1,7 +1,12 @@
-<form class="prompt-form">
-    <mat-form-field class="prompt-input" appearance="fill">
-        <mat-label>Type a command</mat-label>
-        <input matInput placeholder="Command" [(ngModel)]="prompt.cmd" name="prompt" (keyup.enter)="onEnter()"
-               (keydown.tab)="onTab()"/>
-    </mat-form-field>
-</form>
+<div class="prompt__container">
+    <div class="prompt__container__child--fst">
+        &gt;
+    </div>
+    <div class="prompt__container__child--snd prompt__input"
+         contenteditable="true"
+         #promptElement
+         (input)="onInput($event)"
+         (keyup.enter)="onEnter($event)"
+         (keydown.tab)="onTab()"
+    ></div>
+</div>

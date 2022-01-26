@@ -4,7 +4,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {Reset} from "./reset";
+import {Reset} from ".";
 
 describe("Reset", () => {
     it("should create an instance", () => {
@@ -19,10 +19,12 @@ describe("Reset", () => {
             content: [],
         });
 
-        const emit = (msg: string) => undefined;
-        const args = Process.processArgs([]);
-        await expectAsync(new Reset().execute(args, new Env(null), emit))
-            .toBeResolvedTo(ExitCode.Success);
+        const emit = () => undefined;
+
+        await expectAsync(
+            new Reset().execute(Process.processArgs([]), new Env(), emit),
+        ).toBeResolvedTo(ExitCode.Success);
+
         expect(Directory.find(dir.id)).toBe(null);
     });
 });
