@@ -1,5 +1,5 @@
-import {AnsiColor} from "app/output/ansi-color";
 import {front} from "app/utils";
+import {AnsiColor} from ".";
 
 describe("AnsiColor", () => {
     const msg = "Hello world";

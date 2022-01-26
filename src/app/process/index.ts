@@ -1,16 +1,7 @@
-import {ExitCode} from "./exit-code";
-import {
+export {
     Arguments,
     Process,
     ProcessEmit,
 } from "./process";
 
-export {
-    Arguments,
-    Process,
-    ProcessEmit,
-};
-
-export {
-    ExitCode,
-};
+export {ExitCode} from "./exit-code";

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Command} from "app/cmd";
 import {Env} from "app/env";
-import {OutputService} from "app/output/output.service";
+import {OutputService} from "app/output";
 import {Process} from "app/process";
 import {strings} from "app/utils";
 

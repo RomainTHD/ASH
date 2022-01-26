@@ -1,9 +1,2 @@
-import * as front from "./front";
-import * as strings from "./strings";
-
-export {
-    front,
-    strings,
-};
-
-export * as utils from ".";
+export * as front from "./front";
+export * as strings from "./strings";

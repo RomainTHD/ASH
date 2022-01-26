@@ -3,7 +3,7 @@ import {
     OnInit,
 } from "@angular/core";
 import {EnvService} from "app/env";
-import {RunnerService} from "app/runner/runner.service";
+import {RunnerService} from "app/runner";
 
 interface Prompt {
     cmd: string;

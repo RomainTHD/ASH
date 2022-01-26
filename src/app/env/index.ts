@@ -1,7 +1,2 @@
-import {Env} from "./env";
-import {EnvService} from "./env.service";
-
-export {
-    Env,
-    EnvService,
-};
+export {Env} from "./env";
+export {EnvService} from "./env.service";

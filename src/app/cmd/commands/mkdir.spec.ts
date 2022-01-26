@@ -1,4 +1,4 @@
-import {Mkdir} from "app/cmd";
+import {Mkdir} from ".";
 
 describe("Mkdir", () => {
     it("should create an instance", () => {

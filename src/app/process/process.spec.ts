@@ -1,4 +1,4 @@
-import {Process} from "./process";
+import {Process} from ".";
 
 describe("Process", () => {
 });

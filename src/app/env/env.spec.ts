@@ -1,4 +1,4 @@
-import {Env} from "app/env";
+import {Env} from ".";
 
 describe("Env", () => {
     it("should create an instance", () => {

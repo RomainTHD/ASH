@@ -3,7 +3,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {Noop} from "./noop";
+import {Noop} from ".";
 
 describe("No-op", () => {
     it("should create an instance", () => {

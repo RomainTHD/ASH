@@ -4,7 +4,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {Reset} from "./reset";
+import {Reset} from ".";
 
 describe("Reset", () => {
     it("should create an instance", () => {

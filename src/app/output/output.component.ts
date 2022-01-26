@@ -8,8 +8,10 @@ import {
     Env,
     EnvService,
 } from "app/env";
-import {AnsiColor} from "app/output/ansi-color";
-import {OutputService} from "app/output/output.service";
+import {
+    AnsiColor,
+    OutputService,
+} from "app/output";
 import * as DOMPurify from "dompurify";
 import {Subscription} from "rxjs";
 

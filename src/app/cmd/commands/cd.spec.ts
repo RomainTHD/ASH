@@ -1,4 +1,4 @@
-import {Cd} from "app/cmd";
+import {Cd} from ".";
 
 describe("Cd", () => {
     it("should create an instance", () => {
