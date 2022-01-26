@@ -7,7 +7,10 @@ import {
 
 export {
     Arguments,
-    ProcessEmit,
     Process,
+    ProcessEmit,
+};
+
+export {
     ExitCode,
 };

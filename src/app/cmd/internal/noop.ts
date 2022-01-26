@@ -1,6 +1,5 @@
 import {Command} from "app/cmd/command";
 import {Env} from "app/env";
-import {StorageORM} from "app/orm/storageORM";
 import {
     Arguments,
     ExitCode,
