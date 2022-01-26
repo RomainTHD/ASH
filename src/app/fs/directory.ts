@@ -3,7 +3,7 @@ import {
     InodeTemplate,
     InodeType,
 } from "app/fs";
-import {StorageORM} from "app/orm/storageORM";
+import {StorageORM} from "app/orm";
 
 export interface DirectoryChild {
     id: string,

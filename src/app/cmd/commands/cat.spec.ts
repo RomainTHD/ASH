@@ -1,14 +1,14 @@
-import {Cat} from "app/cmd";
 import {Env} from "app/env";
 import {
     Directory,
     File,
 } from "app/fs";
-import {StorageORM} from "app/orm/storageORM";
+import {StorageORM} from "app/orm";
 import {
     ExitCode,
     Process,
 } from "app/process";
+import {Cat} from ".";
 
 describe("Cat", () => {
     const env      = new Env();
