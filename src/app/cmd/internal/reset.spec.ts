@@ -22,7 +22,7 @@ describe("Reset", () => {
         const emit = () => undefined;
 
         await expectAsync(
-            new Reset().execute(Process.processArgs([]), new Env(null), emit),
+            new Reset().execute(Process.processArgs([]), new Env(), emit),
         ).toBeResolvedTo(ExitCode.Success);
 
         expect(Directory.find(dir.id)).toBe(null);

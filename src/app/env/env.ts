@@ -26,7 +26,7 @@ export class Env {
      * Constructor
      * @param path Current working directory
      */
-    public constructor(path: string | null) {
+    public constructor(path: string | null = null) {
         this._cwd  = path === null ? "/" : path;
         this._home = Env.DEFAULT_HOME;
     }

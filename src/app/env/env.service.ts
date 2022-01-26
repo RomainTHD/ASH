@@ -8,7 +8,7 @@ export class EnvService {
     private static _env: Env;
 
     constructor() {
-        EnvService._env = new Env(null);
+        EnvService._env = new Env();
     }
 
     public getEnv(): Env {

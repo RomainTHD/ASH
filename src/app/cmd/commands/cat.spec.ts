@@ -11,7 +11,7 @@ import {
 } from "app/process";
 
 describe("Cat", () => {
-    const env      = new Env(null);
+    const env      = new Env();
     const content  = "Hello World";
     const fileName = "test.txt";
     const path     = `/${fileName}`;
