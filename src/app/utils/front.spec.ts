@@ -1,7 +1,7 @@
 import {front} from ".";
 
 describe("Front", () => {
-    const msg     = "Hello World";
+    const msg = "Hello World";
 
     it("should return an HTML element", () => {
         const element = front.stringToHTML(`<span>${msg}</span>`, true);
