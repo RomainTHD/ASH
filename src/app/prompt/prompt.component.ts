@@ -1,6 +1,9 @@
 import {
+    AfterViewInit,
     Component,
+    ElementRef,
     OnInit,
+    ViewChild,
 } from "@angular/core";
 import {EnvService} from "app/env";
 import {RunnerService} from "app/runner";
@@ -14,9 +17,11 @@ interface Prompt {
     templateUrl: "./prompt.component.html",
     styleUrls: ["./prompt.component.scss"],
 })
-export class PromptComponent implements OnInit {
-    public prompt: Prompt;
+export class PromptComponent implements OnInit, AfterViewInit {
+    @ViewChild("promptElement")
+    public promptElement?: ElementRef;
 
+    public prompt: Prompt;
     private _runner: RunnerService;
     private _env: EnvService;
 
@@ -29,6 +34,10 @@ export class PromptComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+
+    ngAfterViewInit(): void {
+        (this.promptElement as ElementRef).nativeElement.focus();
     }
 
     onInput(targetRaw: Event): void {

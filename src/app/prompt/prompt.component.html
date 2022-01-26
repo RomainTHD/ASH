@@ -1,6 +1,12 @@
-<div contenteditable="true"
-     class="prompt"
-     (input)="onInput($event)"
-     (keyup.enter)="onEnter($event)"
-     (keydown.tab)="onTab()"
-></div>
+<div class="prompt__container">
+    <div class="prompt__container__child--fst">
+        &gt;
+    </div>
+    <div class="prompt__container__child--snd prompt__input"
+         contenteditable="true"
+         #promptElement
+         (input)="onInput($event)"
+         (keyup.enter)="onEnter($event)"
+         (keydown.tab)="onTab()"
+    ></div>
+</div>

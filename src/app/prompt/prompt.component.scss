@@ -1,3 +1,19 @@
 .prompt {
-    outline: 0 solid transparent;
+    &__container {
+        &__child {
+            &--fst {
+                width: auto;
+                float: left;
+            }
+
+            &--snd {
+                display: block;
+                margin-left: 1.5ch;
+           }
+        }
+    }
+
+    &__input {
+        outline: 0 solid transparent;
+    }
 }
