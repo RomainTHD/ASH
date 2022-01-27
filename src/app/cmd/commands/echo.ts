@@ -21,7 +21,7 @@ export class Echo extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        emit(args.others.join(" "));
+        emit(args.others.join(" "), !args.flags["n"]);
         return ExitCode.Success;
     }
 }
