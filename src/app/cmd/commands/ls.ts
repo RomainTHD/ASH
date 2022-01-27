@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class Ls extends Command {
+    public static override readonly command = "ls";
+
     public override readonly description = "List files in the current directory";
     public override readonly usage       = "ls [options] [path]";
 

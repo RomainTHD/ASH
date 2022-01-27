@@ -11,6 +11,8 @@ import {
  * @see usage
  */
 export class Pwd extends Command {
+    public static override readonly command = "pwd";
+
     public override readonly description = "Prints the current working directory";
     public override readonly usage       = "pwd";
 

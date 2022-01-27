@@ -15,6 +15,8 @@ import {
  * @see usage
  */
 export class Touch extends Command {
+    public static override readonly command = "touch";
+
     public override readonly description = "Touch a file";
     public override readonly usage       = "touch <file>";
 

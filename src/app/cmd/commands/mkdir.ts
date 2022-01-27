@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class Mkdir extends Command {
+    public static override readonly command = "mkdir";
+
     public override readonly description = "Create a directory";
     public override readonly usage       = "mkdir <path>";
 

@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class Noop extends Command {
+    public static override readonly command = "";
+
     public override readonly description = "No-op command";
     public override readonly usage       = "";
 

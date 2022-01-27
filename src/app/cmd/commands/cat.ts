@@ -15,6 +15,8 @@ import {
  * @see usage
  */
 export class Cat extends Command {
+    public static override readonly command = "cat";
+
     public override readonly description = "Prints the contents of a file";
     public override readonly usage       = "cat <file>";
 

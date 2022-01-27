@@ -11,6 +11,8 @@ import {
  * @see usage
  */
 export class Echo extends Command {
+    public static override readonly command = "echo";
+
     public override readonly description = "Echo a message";
     public override readonly usage       = "echo [text]";
 

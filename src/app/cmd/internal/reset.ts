@@ -13,6 +13,8 @@ import {
  * @see usage
  */
 export class Reset extends Command {
+    public static override readonly command = "__reset";
+
     public override readonly description = "Reset the app and erase all filesystem";
     public override readonly usage       = "__reset";
 

@@ -2,6 +2,8 @@ import {Command} from "app/cmd/command";
 import {ExitCode} from "app/process";
 
 export class False extends Command {
+    public static override readonly command = "false";
+
     public override readonly description = "false";
     public override readonly usage       = "false";
 

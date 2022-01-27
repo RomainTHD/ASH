@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class Cd extends Command {
+    public static override readonly command = "cd";
+
     public override readonly description = "Change directory";
     public override readonly usage       = "cd [path]";
 

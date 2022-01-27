@@ -1,21 +1,15 @@
 import {Process} from "app/process";
-import {
-    Cat,
-    Cd,
-    Echo,
-    Ls,
-    Mkdir,
-    Noop,
-    NotFound,
-    Pwd,
-    Reset,
-    Touch,
-} from ".";
+import {commands} from ".";
 
 /**
  * Generic command
  */
 export abstract class Command extends Process {
+    /**
+     * Command name, like `cat` or `ls`
+     */
+    public static readonly command: string | null = null;
+
     /**
      * Command description
      */
@@ -32,38 +26,28 @@ export abstract class Command extends Process {
      * @returns Command instance
      */
     public static fromString(cmd: string): Command {
-        return (() => {
-            switch (cmd.trim()) {
-                case "cat":
-                    return new Cat();
+        cmd = cmd.trim();
 
-                case "cd":
-                    return new Cd();
+        // To stop TS complaining
+        const assoc: Record<string, typeof Command> = commands;
+        let classCommand: typeof Command | null     = null;
 
-                case "echo":
-                    return new Echo();
-
-                case "ls":
-                    return new Ls();
-
-                case "mkdir":
-                    return new Mkdir();
-
-                case "pwd":
-                    return new Pwd();
-
-                case "touch":
-                    return new Touch();
-
-                case "__reset":
-                    return new Reset();
-
-                case "":
-                    return new Noop();
-
-                default:
-                    return new NotFound(cmd);
+        Object.entries(assoc).forEach(([_, currentClass]) => {
+            // For each command child class, if its command name is the same
+            //  as the command string, then we found the command
+            if (cmd === currentClass.command) {
+                classCommand = currentClass;
             }
-        })();
+        });
+
+        if (classCommand !== null) {
+            // @ts-ignore
+            // Weird TS error, the variable type is marked as `never`, which is
+            //  clearly wrong, and then the `new` doesn't work since `Command`
+            //  is abstract
+            return new classCommand();
+        } else {
+            return new commands.NotFound(cmd);
+        }
     }
 }

@@ -1,45 +1,16 @@
 import {
-    Cat,
-    Cd,
     Command,
-    Echo,
-    Ls,
-    Mkdir,
-    Noop,
-    NotFound,
-    Pwd,
-    Reset,
-    Touch,
+    commands,
 } from ".";
 
 describe("Command", () => {
     it("should return the right command", () => {
-        const assoc: Record<string, typeof Command> = {
-            "cat": Cat,
-            "cd": Cd,
-            "echo": Echo,
-            "ls": Ls,
-            "mkdir": Mkdir,
-            "pwd": Pwd,
-            "touch": Touch,
-        };
-
+        const assoc: Record<string, typeof Command> = commands;
         Object.keys(assoc).forEach((key) => {
-            const cmd = Command.fromString(key);
-            expect(cmd).toBeInstanceOf(assoc[key]);
-        });
-    });
-
-    it("should return the right internal command", () => {
-        const assoc: Record<string, typeof Command> = {
-            "__reset": Reset,
-            "": Noop,
-            "__unknown": NotFound,
-        };
-
-        Object.keys(assoc).forEach((key) => {
-            const cmd = Command.fromString(key);
-            expect(cmd).toBeInstanceOf(assoc[key]);
+            const currentClass = assoc[key];
+            expect(currentClass.command).not.toBeNull();
+            const cmd = Command.fromString(currentClass.command as string);
+            expect(cmd).toBeInstanceOf(currentClass);
         });
     });
 });
