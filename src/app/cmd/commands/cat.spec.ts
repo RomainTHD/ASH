@@ -51,4 +51,10 @@ describe("Cat", () => {
         // TODO: Fix this test, it should be `Unsupported` but it's `NotFound`
         //       because the directory is not a file.
     });
+
+    it("should not read anything", async () => {
+        const out = await tests.executeCommand("cat");
+        expect(out.exitCode).toBe(ExitCode.MissingArgument);
+        expect(out.output).not.toBe("");
+    });
 });

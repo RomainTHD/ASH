@@ -25,7 +25,13 @@ export class Cat extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        const f = File.findFromPath(env.absolutePath(args.others[0]));
+        const filePathArg = args.others[0];
+        if (!filePathArg) {
+            emit("cat: missing file path");
+            return ExitCode.MissingArgument;
+        }
+
+        const f = File.findFromPath(env.absolutePath(filePathArg));
         if (!f) {
             emit("No such file");
             return ExitCode.NotFound;

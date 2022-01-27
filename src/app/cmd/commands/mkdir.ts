@@ -22,7 +22,13 @@ export class Mkdir extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        let pathArr   = args.others[0].split("/");
+        const dirPathArg = args.others[0];
+        if (!dirPathArg) {
+            emit("mkdir: missing directory path");
+            return ExitCode.MissingArgument;
+        }
+
+        let pathArr   = dirPathArg.split("/");
         const name    = pathArr.pop() as string;
         const absPath = env.absolutePath(pathArr.join("/"));
 

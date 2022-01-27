@@ -25,7 +25,13 @@ export class Touch extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        let pathArr   = args.others[0].split("/");
+        const filePathArg = args.others[0];
+        if (!filePathArg) {
+            emit("touch: missing file path");
+            return ExitCode.MissingArgument;
+        }
+
+        let pathArr   = filePathArg.split("/");
         const name    = pathArr.pop() as string;
         const absPath = env.absolutePath(pathArr.join("/"));
 

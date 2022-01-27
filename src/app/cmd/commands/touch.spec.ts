@@ -1,7 +1,10 @@
-import {Touch} from ".";
+import {ExitCode} from "app/process";
+import {tests} from "app/utils";
 
 describe("Touch", () => {
-    it("should create an instance", () => {
-        expect(new Touch()).toBeTruthy();
+    it("should not create anything", async () => {
+        const out = await tests.executeCommand("touch");
+        expect(out.exitCode).toBe(ExitCode.MissingArgument);
+        expect(out.output).not.toBe("");
     });
 });
