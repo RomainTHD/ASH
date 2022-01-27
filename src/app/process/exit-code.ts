@@ -1,6 +1,6 @@
 export enum ExitCode {
     Success      = 0,
-    Error        = 1,
+    Failure      = 1,
     Cancelled    = 2,
     Timeout      = 3,
     Unknown      = 4,
