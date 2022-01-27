@@ -18,8 +18,8 @@ export class Man extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        const cmd = args.others[0] || null;
-        if (cmd === null || cmd === "") {
+        const cmd = args.others[0];
+        if (!cmd) {
             emit("man: missing command name");
             return ExitCode.MissingArgument;
         }
