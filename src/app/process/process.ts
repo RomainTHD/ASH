@@ -22,23 +22,23 @@ export abstract class Process {
         let others: Arguments["others"]   = [];
 
         for (let i = 0; i < args.length; ++i) {
-            let arg = args[i];
+            let arg = args[i].trim();
             if (arg.startsWith("--")) {
-                let name = arg.slice(2);
+                let name = arg.slice(2).trim();
                 if (name === "") {
                     continue;
                 }
 
                 options[name] = {
                     name,
-                    next: args[i + 1] || null,
+                    next: args[i + 1] ? args[i + 1].trim() : null,
                 };
             } else if (arg.startsWith("-")) {
-                let name = arg.slice(1);
+                let name = arg.slice(1).trim();
                 name.split("").forEach((flag) => {
                     flags[flag] = {
                         name: flag,
-                        next: args[i + 1] || null,
+                        next: args[i + 1] ? args[i + 1].trim() : null,
                     };
                 });
             } else {
