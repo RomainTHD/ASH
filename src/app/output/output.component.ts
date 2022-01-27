@@ -37,9 +37,9 @@ export class OutputComponent implements OnInit, OnDestroy {
         }));
 
         this._subscriptions.push(outputService.onNewOutput.subscribe((output) => {
-            this.content += DOMPurify.sanitize(output)
+            this.content += AnsiColor.parse(DOMPurify.sanitize(output)
                 .replace("\n", "<br/>")
-                .replace("\r", "");
+                .replace("\r", ""));
         }));
 
         this._subscriptions.push(outputService.onCommandEnd.subscribe(() => {
