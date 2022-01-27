@@ -1,12 +1,10 @@
 import {ExitCode} from "app/process";
-import {False} from ".";
+import {tests} from "app/utils";
 
 describe("False", () => {
-    it("should create an instance", () => {
-        expect(new False()).toBeTruthy();
-    });
-
     it("should return false", async () => {
-        await expectAsync(new False().execute()).toBeResolvedTo(ExitCode.Failure);
+        const out = await tests.executeCommand("false");
+        expect(out.exitCode).toBe(ExitCode.Failure);
+        expect(out.output).toBe("");
     });
 });

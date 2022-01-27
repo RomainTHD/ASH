@@ -1,23 +1,10 @@
-import {Env} from "app/env";
-import {
-    ExitCode,
-    Process,
-} from "app/process";
-import {Noop} from ".";
+import {ExitCode} from "app/process";
+import {tests} from "app/utils";
 
 describe("No-op", () => {
-    it("should create an instance", () => {
-        expect(new Noop()).toBeTruthy();
-    });
-
     it("should not do anything", async () => {
-        let content = "";
-        const emit  = (msg: string) => content += msg;
-
-        await expectAsync(
-            new Noop().execute(Process.processArgs([]), new Env(), emit),
-        ).toBeResolvedTo(ExitCode.Success);
-
-        expect(content).toBe("");
+        const out = await tests.executeCommand("");
+        expect(out.exitCode).toBe(ExitCode.Success);
+        expect(out.output).toBe("");
     });
 });

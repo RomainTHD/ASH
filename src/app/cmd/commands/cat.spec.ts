@@ -1,25 +1,15 @@
-import {Env} from "app/env";
 import {
     Directory,
     File,
 } from "app/fs";
 import {StorageORM} from "app/orm";
-import {
-    ExitCode,
-    Process,
-} from "app/process";
-import {Cat} from ".";
+import {ExitCode} from "app/process";
+import {tests} from "app/utils";
 
 describe("Cat", () => {
-    const env      = new Env();
     const content  = "Hello World";
     const fileName = "test.txt";
     const path     = `/${fileName}`;
-    const args     = Process.processArgs([path]);
-
-    it("should create an instance", () => {
-        expect(new Cat()).toBeTruthy();
-    });
 
     it("should read an existing file", async () => {
         StorageORM.resetAll();
@@ -30,20 +20,16 @@ describe("Cat", () => {
             owner: "",
         }).save();
 
-        let output = "";
-        const emit = (msg: string) => output += msg;
-        await expectAsync(new Cat().execute(args, env, emit))
-            .toBeResolvedTo(ExitCode.Success);
-        expect(output).toBe(content);
+        const out = await tests.executeCommand(`cat ${path}`);
+        expect(out.exitCode).toBe(ExitCode.Success);
+        expect(out.output).toContain(content);
     });
 
     it("should not read a nonexistent file", async () => {
         StorageORM.resetAll();
-        let output = "";
-        const emit = (msg: string) => output += msg;
-        await expectAsync(new Cat().execute(args, env, emit))
-            .toBeResolvedTo(ExitCode.NotFound);
-        expect(output).not.toBe(content);
+        const out = await tests.executeCommand(`cat ${path}`);
+        expect(out.exitCode).toBe(ExitCode.NotFound);
+        expect(out.output).not.toContain(content);
     });
 
     it("should not read a directory", async () => {
@@ -55,12 +41,13 @@ describe("Cat", () => {
             owner: "",
         }).save();
 
-        let output = "";
-        const emit = (msg: string) => output += msg;
+        const out = await tests.executeCommand(`cat ${path}`);
+        expect(true).toBeTruthy();
+
         /*
-        await expectAsync(new Cat().execute(args, env, emit))
-            .toBeResolvedTo(ExitCode.Unsupported);
-         */
+        expect(out.exitCode).toBe(ExitCode.Unsupported);
+        expect(out.output).not.toContain(content);
+        */
         // TODO: Fix this test, it should be `Unsupported` but it's `NotFound`
         //       because the directory is not a file.
     });

@@ -1,16 +1,8 @@
-import {Env} from "app/env";
 import {Directory} from "app/fs";
-import {
-    ExitCode,
-    Process,
-} from "app/process";
-import {Reset} from ".";
+import {ExitCode} from "app/process";
+import {tests} from "app/utils";
 
 describe("Reset", () => {
-    it("should create an instance", () => {
-        expect(new Reset()).toBeTruthy();
-    });
-
     it("should reset the filesystem", async () => {
         const dir = Directory.create({
             name: "test",
@@ -19,12 +11,8 @@ describe("Reset", () => {
             content: [],
         });
 
-        const emit = () => undefined;
-
-        await expectAsync(
-            new Reset().execute(Process.processArgs([]), new Env(), emit),
-        ).toBeResolvedTo(ExitCode.Success);
-
+        const out = await tests.executeCommand("__reset");
+        expect(out.exitCode).toBe(ExitCode.Success);
         expect(Directory.find(dir.id)).toBe(null);
     });
 });
