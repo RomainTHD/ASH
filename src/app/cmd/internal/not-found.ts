@@ -30,6 +30,6 @@ export class NotFound extends Command {
         emit: ProcessEmit,
     ): Promise<ExitCode> {
         emit(`${this._cmd}: command not found`);
-        return ExitCode.Success;
+        return ExitCode.Failure;
     }
 }
