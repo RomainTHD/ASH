@@ -25,12 +25,12 @@ export class Cd extends Command {
         const path = args.others[0] || "~";
         const dir  = Directory.findFromPath(env.absolutePath(path));
         if (dir === null) {
-            emit("error");
+            emit("cd: no such directory");
             return ExitCode.NotFound;
-        } else {
-            env.setCwd(path);
         }
 
+        env.setCwd(path);
+        emit(env.getCwd());
         return ExitCode.Success;
     }
 }
