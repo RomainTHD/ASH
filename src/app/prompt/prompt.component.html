@@ -1,7 +1,7 @@
 <div class="prompt__container">
-    <div class="prompt__container__child--fst">
-        &gt;
-    </div>
+    <div class="prompt__container__child--fst"
+         [innerHTML]=prompt.message
+    ></div>
     <div class="prompt__container__child--snd prompt__input"
          contenteditable="true"
          #promptElement

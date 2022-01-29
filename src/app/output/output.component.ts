@@ -4,14 +4,8 @@ import {
     OnInit,
     ViewEncapsulation,
 } from "@angular/core";
-import {
-    Env,
-    EnvService,
-} from "app/env";
-import {
-    AnsiColor,
-    OutputService,
-} from "app/output";
+import {EnvService} from "app/env";
+import {OutputService} from "app/output";
 import * as DOMPurify from "dompurify";
 import {Subscription} from "rxjs";
 
@@ -31,31 +25,25 @@ export class OutputComponent implements OnInit, OnDestroy {
         this._outputService = outputService;
         this._subscriptions = [];
 
-        this._subscriptions.push(outputService.onNewCommand.subscribe((obj) => {
+        this._subscriptions.push(outputService.subscribePromptMessage((msg) => {
+            this.content += msg;
+        }));
+
+        this._subscriptions.push(outputService.subscribeNewCommand((obj) => {
             this.content += DOMPurify.sanitize(obj.command);
             this.content += "<br/>";
         }));
 
-        this._subscriptions.push(outputService.onNewOutput.subscribe((output) => {
+        this._subscriptions.push(outputService.subscribeOutput((output) => {
             this.content += DOMPurify.sanitize(output)
                 .replace("\n", "<br/>")
                 .replace("\r", "");
         }));
 
-        this._subscriptions.push(outputService.onCommandEnd.subscribe(() => {
-            this.content += OutputComponent.getPromptText(envService.getEnv());
+        this._subscriptions.push(outputService.subscribeCommandEnd(() => {
         }));
 
-        this.content = OutputComponent.getPromptText(envService.getEnv());
-    }
-
-    private static getPromptText(env: Env): string {
-        const time = new Date().toISOString().split("T")[1].split(".")[0];
-        let base   = `${AnsiColor.FG.GREEN}root${AnsiColor.RESET}:` +
-            `${AnsiColor.FG.MAGENTA}${time}${AnsiColor.RESET}:` +
-            `${AnsiColor.FG.BLUE}${env.cwd}${AnsiColor.RESET}$ `;
-
-        return AnsiColor.parse(DOMPurify.sanitize(base));
+        this.content = "";
     }
 
     ngOnInit(): void {

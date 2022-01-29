@@ -2,14 +2,16 @@
     &__container {
         &__child {
             &--fst {
-                width: auto;
                 float: left;
+                width: auto;
             }
 
             &--snd {
                 display: block;
-                margin-left: 1.5ch;
-           }
+                // FIXME: This is a hack to make the prompt look good, but it
+                //        will break if the prompt text length is changed
+                margin-left: 17ch;
+            }
         }
     }
 
