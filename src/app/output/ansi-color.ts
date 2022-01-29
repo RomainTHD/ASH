@@ -44,27 +44,25 @@ export class AnsiColor {
     };
 
     /**
+     * Ansi color code
+     */
+    public readonly ansiCode: string;
+
+    /**
+     * CSS class name
+     */
+    public readonly className: string;
+
+    /**
      * Nasty hack to create pseudo-reflection and avoid iterating over all
      * static properties of the class.
      * @private
      */
-    private __flag_is_ansi = true;
-
-    /**
-     * Ansi color code
-     * @private
-     */
-    private readonly _ansi: string;
-
-    /**
-     * CSS class name
-     * @private
-     */
-    private readonly _class: string;
+    private readonly __flag_is_ansi = true;
 
     private constructor(ansi: string, cls: string) {
-        this._ansi  = ansi;
-        this._class = cls;
+        this.ansiCode  = ansi;
+        this.className = cls;
     }
 
     /**
@@ -75,7 +73,7 @@ export class AnsiColor {
     public static parse(text: string): string {
         // Split on each reset, and will add for each part the right amount of
         //  closing tags
-        let parts = text.split(this.RESET._ansi).map((part) => {
+        let parts = text.split(this.RESET.ansiCode).map((part) => {
             let count = 0;
 
             const processPart = (obj: { 1: AnsiColor }, classModifier: string | null) => {
@@ -87,11 +85,11 @@ export class AnsiColor {
                 }
 
                 // FIXME: Only replaced once ?
-                const ansi = color._ansi.replace("\[", "\\\[");
+                const ansi = color.ansiCode.replace("\[", "\\\[");
                 count += (part.match(new RegExp(ansi, "gm")) || []).length;
 
-                const cls = (classModifier ? classModifier + "--" : "") + color._class;
-                part      = part.replace(color._ansi, `<span class="${cls}">`);
+                const cls = (classModifier ? classModifier + "--" : "") + color.className;
+                part      = part.replace(color.ansiCode, `<span class="${cls}">`);
             };
 
             // Process all basic tags
@@ -117,6 +115,6 @@ export class AnsiColor {
     }
 
     public toString(): string {
-        return this._ansi;
+        return this.ansiCode;
     }
 }
