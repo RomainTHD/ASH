@@ -1,4 +1,7 @@
-import {Command} from "app/cmd/command";
+import {
+    Command,
+    NotFound,
+} from "app/cmd";
 import {Env} from "app/env";
 import {AnsiColor} from "app/output";
 import {
@@ -24,8 +27,13 @@ export class Man extends Command {
             return ExitCode.MissingArgument;
         }
 
-        emit(`${AnsiColor.BOLD}Manual for \`${cmd}\`${AnsiColor.RESET}`);
         const commandObject = Command.fromString(cmd);
+        if (!commandObject || commandObject instanceof NotFound) {
+            emit(`man: no manual entry for '${cmd}'`);
+            return ExitCode.NotFound;
+        }
+
+        emit(`${AnsiColor.BOLD}Manual for \`${cmd}\`${AnsiColor.RESET}`);
         emit(`${AnsiColor.UNDERLINE}Usage:${AnsiColor.RESET}`);
         emit(commandObject.usage);
         emit(`${AnsiColor.UNDERLINE}Description:${AnsiColor.RESET}`);
