@@ -16,8 +16,11 @@ export class RunnerService {
     }
 
     public run(cmd: string, env: Env): void {
-        while (cmd.endsWith("\n")) {
-            cmd = cmd.slice(0, -1);
+        cmd = cmd.trim();
+        if (cmd === "") {
+            this._output.emitCommand("", env);
+            this._output.emitCommandEnd();
+            return;
         }
 
         let argsArr = strings.splitSpace(cmd);
