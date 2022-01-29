@@ -17,7 +17,6 @@ describe("Cat", () => {
             name: fileName,
             content,
             parent: Directory.getRoot().id,
-            owner: "",
         });
 
         const out = await tests.executeCommand(`cat ${path}`);
@@ -36,9 +35,7 @@ describe("Cat", () => {
         StorageORM.resetAll();
         Directory.create({
             name: fileName,
-            content: [],
             parent: Directory.getRoot().id,
-            owner: "",
         });
 
         const out = await tests.executeCommand(`cat ${path}`);

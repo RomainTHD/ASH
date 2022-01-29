@@ -7,8 +7,6 @@ describe("Reset", () => {
         const dir = Directory.create({
             name: "test",
             parent: Directory.getRoot().id,
-            owner: "root",
-            content: [],
         });
 
         const out = await tests.executeCommand("__reset");

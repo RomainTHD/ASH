@@ -18,16 +18,12 @@ describe("Cd", () => {
 
         child = Directory.create({
             name: "foo",
-            content: [],
             parent: Directory.getRoot().id,
-            owner: "",
         });
 
         child2 = Directory.create({
             name: "bar",
-            content: [],
             parent: child.id,
-            owner: "",
         });
 
         child.addChild(child2);
@@ -67,9 +63,7 @@ describe("Cd", () => {
     it("should not move in a file", async () => {
         const file = File.create({
             name: "foo",
-            content: "",
             parent: child.id,
-            owner: "",
         });
 
         const out = await tests.executeCommand(`cd /${child.name}/${file.name}`, null, env);

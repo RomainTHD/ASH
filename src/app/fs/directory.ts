@@ -10,11 +10,10 @@ export interface DirectoryChild {
     name: string,
 }
 
-export interface DirectoryTemplate {
+export interface DirectoryTemplate extends Partial<InodeTemplate> {
+    content?: DirectoryChild[];
     name: string;
     parent: string;
-    owner: string;
-    content: DirectoryChild[];
 }
 
 /**
@@ -39,16 +38,18 @@ export class Directory extends Inode {
         super.content = value;
     }
 
-    public static override create(template: DirectoryTemplate, id?: string): Directory {
+    public static override create(template: DirectoryTemplate): Directory {
         const now = new Date();
         const dir = new Directory({
-            ...template,
-            inodeType: InodeType.Directory,
-            id: id || StorageORM.getNewID(Inode.category),
-            size: 0,
+            content: template.content || [],
             created: now,
+            id: template.id || StorageORM.getNewID(Inode.category),
+            inodeType: InodeType.Directory,
             modified: now,
-            content: template.content,
+            name: template.name,
+            owner: template.owner || "root",
+            parent: template.parent || this.getRoot().id,
+            size: 0,
         });
         dir.save();
 
@@ -75,13 +76,11 @@ export class Directory extends Inode {
     public static getRoot(): Directory {
         let root = this.find(Directory.ROOT_DIRECTORY_ID) as Directory;
         if (root === null) {
-            // throw new Error("Root directory not found");
             root = this.create({
+                id: Directory.ROOT_DIRECTORY_ID,
                 name: "",
                 parent: Directory.ROOT_DIRECTORY_ID,
-                owner: "root",
-                content: [],
-            }, Directory.ROOT_DIRECTORY_ID);
+            });
         }
 
         return root;

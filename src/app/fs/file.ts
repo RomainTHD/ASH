@@ -6,11 +6,10 @@ import {
 } from "app/fs";
 import {StorageORM} from "app/orm";
 
-export interface FileTemplate {
+export interface FileTemplate extends Partial<InodeTemplate> {
+    content?: string;
     name: string;
     parent: string;
-    owner: string;
-    content: string;
 }
 
 /**
@@ -32,12 +31,15 @@ export class File extends Inode {
     public static override create(template: FileTemplate): File {
         const now = new Date();
         const f   = new File({
-            ...template,
-            inodeType: InodeType.File,
-            id: StorageORM.getNewID(Inode.category),
-            size: 0,
+            content: template.content || "",
             created: now,
+            id: template.id || StorageORM.getNewID(Inode.category),
+            inodeType: InodeType.File,
             modified: now,
+            name: template.name,
+            owner: template.owner || "root",
+            parent: template.parent || Directory.getRoot().id,
+            size: 0,
         });
         f.save();
 

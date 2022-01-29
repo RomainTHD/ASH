@@ -21,14 +21,15 @@ export enum InodeType {
 }
 
 export interface InodeTemplate {
+    content: unknown,
+    created: Date,
     id: string,
     inodeType: InodeType;
-    name: string,
-    size: number,
-    created: Date,
     modified: Date,
+    name: string,
+    owner: string,
     parent: string,
-    content: unknown,
+    size: number,
 }
 
 /**
@@ -40,13 +41,13 @@ export abstract class Inode extends Entity {
      * @protected
      */
     protected static override category = "inode";
-
     private readonly _inodeType: InodeType;
     private _name: string;
     private _size: number;
     private readonly _created: Date;
     private _modified: Date;
     private _parent: string;
+    private _owner: string;
     private _content: unknown;
 
     protected constructor(
@@ -59,7 +60,16 @@ export abstract class Inode extends Entity {
         this._created   = template.created;
         this._modified  = template.modified;
         this._parent    = template.parent;
+        this._owner     = template.owner;
         this._content   = template.content;
+    }
+
+    public get owner(): string {
+        return this._owner;
+    }
+
+    public set owner(value: string) {
+        this._owner = value;
     }
 
     public get inodeType(): InodeType {
@@ -195,7 +205,8 @@ export abstract class Inode extends Entity {
             created: this.created,
             modified: this.modified,
             parent: this.parent,
-            content: this._content,
+            owner: this.owner,
+            content: this.content,
         };
     }
 }
