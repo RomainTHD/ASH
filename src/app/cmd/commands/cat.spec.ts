@@ -44,12 +44,8 @@ describe("Cat", () => {
         const out = await tests.executeCommand(`cat ${path}`);
         expect(true).toBeTruthy();
 
-        /*
         expect(out.exitCode).toBe(ExitCode.Unsupported);
         expect(out.output).not.toContain(content);
-        */
-        // TODO: Fix this test, it should be `Unsupported` but it's `NotFound`
-        //       because the directory is not a file.
     });
 
     it("should not read anything", async () => {

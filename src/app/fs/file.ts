@@ -55,23 +55,18 @@ export class File extends Inode {
         return new this(json);
     }
 
-    public static findFromPath(path: string): File | null {
-        const items = path.split("/");
-        if (items.length <= 1) {
+    /**
+     * Finds a file by its path
+     * @param path File path
+     * @returns File or null if not found
+     */
+    public static override findFromPath(path: string): File | null {
+        const inode = super.findFromPath(path);
+
+        if (inode === null || inode.inodeType !== InodeType.File) {
             return null;
         }
 
-        const fileName = items.pop() as string;
-        const parent   = Directory.findFromPath(items.join("/"));
-        if (!parent) {
-            return null;
-        }
-
-        const node = parent.findChild(fileName);
-        if (!node || node.inodeType !== InodeType.File) {
-            return null;
-        }
-
-        return node as File;
+        return inode as File;
     }
 }

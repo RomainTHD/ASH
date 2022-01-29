@@ -92,29 +92,14 @@ export class Directory extends Inode {
      * @param path Directory path
      * @returns Directory or null if not found
      */
-    public static findFromPath(path: string): Directory | null {
-        const items = path.split("/");
-        items.pop(); // Remove last item, which has to be empty
+    public static override findFromPath(path: string): Directory | null {
+        const inode = super.findFromPath(path);
 
-        if (items[0] === "") {
-            items.shift(); // Remove root "/"
+        if (inode === null || inode.inodeType !== InodeType.Directory) {
+            return null;
         }
 
-        let current: Directory | null = this.getRoot();
-        for (const item of items) {
-            if (current === null) {
-                return null;
-            } else {
-                const child = current.findChild(item);
-                if (child === null || child.inodeType !== InodeType.Directory) {
-                    return null;
-                } else {
-                    current = child as Directory;
-                }
-            }
-        }
-
-        return current;
+        return inode as Directory;
     }
 
     /**

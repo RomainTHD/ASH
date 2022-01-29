@@ -2,6 +2,7 @@ import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {
     File,
+    Inode,
     InodeType,
 } from "app/fs";
 import {
@@ -31,7 +32,7 @@ export class Cat extends Command {
             return ExitCode.MissingArgument;
         }
 
-        const f = File.findFromPath(env.absolutePath(filePathArg));
+        const f = Inode.findFromPath(env.absolutePath(filePathArg));
         if (!f) {
             emit("No such file");
             return ExitCode.NotFound;
@@ -42,7 +43,7 @@ export class Cat extends Command {
             return ExitCode.Unsupported;
         }
 
-        emit(f.content);
+        emit((f as File).content);
         return ExitCode.Success;
     }
 }
