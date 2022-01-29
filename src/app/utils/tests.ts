@@ -12,11 +12,13 @@ import {strings} from ".";
  * @param cmdStr Command as a string
  * @param args Arguments to pass to the command.
  * If empty, the arguments will be parsed from the command string
+ * @param env Environment to pass to the command
  * @returns Exit code and command output
  */
 export async function executeCommand(
     cmdStr: string,
-    args?: Arguments,
+    args: Arguments | null = null,
+    env: Env | null        = null,
 ): Promise<{ exitCode: ExitCode, output: string }> {
     let argsArr = strings.splitSpace(cmdStr);
     const path  = (argsArr.shift() as string) || "";
@@ -25,11 +27,15 @@ export async function executeCommand(
         args = Process.processArgs(argsArr);
     }
 
+    if (!env) {
+        env = new Env();
+    }
+
     const cmd = Command.fromString(path);
 
     let output = "";
     const emit = (msg: string) => output += msg;
 
-    const exitCode = await cmd.execute(args, new Env(), emit);
+    const exitCode = await cmd.execute(args, env, emit);
     return {exitCode, output};
 }
