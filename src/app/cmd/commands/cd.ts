@@ -28,7 +28,7 @@ export class Cd extends Command {
             emit("error");
             return ExitCode.NotFound;
         } else {
-            env.cwd = path;
+            env.setCwd(path);
         }
 
         return ExitCode.Success;

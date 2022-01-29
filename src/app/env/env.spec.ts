@@ -35,8 +35,8 @@ describe("Env", () => {
         expect(env.absolutePath("../foo")).toBe(`${parent}foo`);
 
         // Home
-        expect(env.absolutePath("~")).toBe(`${home}`);
-        expect(env.absolutePath("~/foo")).toBe(`${home}foo`);
+        expect(env.absolutePath("~")).toBe(`${home}/`);
+        expect(env.absolutePath("~/foo")).toBe(`${home}/foo`);
 
         // Spaces
         expect(env.absolutePath("/foo bar/baz/")).toBe("/foo bar/baz/");

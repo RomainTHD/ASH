@@ -21,7 +21,7 @@ export class Pwd extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        emit(env.cwd);
+        emit(env.getCwd());
         return ExitCode.Success;
     }
 }

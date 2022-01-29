@@ -53,7 +53,7 @@ export class OutputComponent implements OnInit, OnDestroy {
         const time = new Date().toISOString().split("T")[1].split(".")[0];
         let base   = `${AnsiColor.FG.GREEN}root${AnsiColor.RESET}:` +
             `${AnsiColor.FG.MAGENTA}${time}${AnsiColor.RESET}:` +
-            `${AnsiColor.FG.BLUE}${env.cwd}${AnsiColor.RESET}$ `;
+            `${AnsiColor.FG.BLUE}${env.getCwd()}${AnsiColor.RESET}$ `;
 
         return AnsiColor.parse(DOMPurify.sanitize(base));
     }
