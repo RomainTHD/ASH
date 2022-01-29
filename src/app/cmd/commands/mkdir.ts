@@ -34,18 +34,16 @@ export class Mkdir extends Command {
 
         const dir = Directory.findFromPath(absPath);
         if (!dir) {
-            emit("No such directory");
+            emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
             return ExitCode.NotFound;
         }
 
         Directory.create({
             name,
             parent: dir.id,
-            owner: "",
-            content: [],
         });
 
-        emit(absPath);
+        emit(`${absPath}/${name}`);
         return ExitCode.Success;
     }
 }

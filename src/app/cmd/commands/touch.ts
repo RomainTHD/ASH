@@ -37,15 +37,13 @@ export class Touch extends Command {
 
         const dir = Directory.findFromPath(absPath);
         if (!dir) {
-            emit("No such directory");
+            emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
             return ExitCode.NotFound;
         }
 
         File.create({
             name,
             parent: dir.id,
-            owner: "",
-            content: "created",
         });
 
         emit(absPath);

@@ -34,12 +34,12 @@ export class Cat extends Command {
 
         const f = Inode.findFromPath(env.absolutePath(filePathArg));
         if (!f) {
-            emit("No such file");
+            emit(`cat: '${filePathArg}': no such file or directory`);
             return ExitCode.NotFound;
         }
 
         if (f.inodeType !== InodeType.File) {
-            emit("Not a file");
+            emit(`cat: '${filePathArg}': is not a file`);
             return ExitCode.Unsupported;
         }
 
