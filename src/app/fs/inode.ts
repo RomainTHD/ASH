@@ -156,7 +156,7 @@ export abstract class Inode extends Entity {
         }
 
         let parent: Directory | null = Directory.getRoot();
-        for (let i = 0; i < items.length - 1; ++i) {
+        for (let i = 0; i < items.length; ++i) {
             const item = items[i];
             if (parent === null) {
                 return null;
