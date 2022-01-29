@@ -18,7 +18,7 @@ describe("Cat", () => {
             content,
             parent: Directory.getRoot().id,
             owner: "",
-        }).save();
+        });
 
         const out = await tests.executeCommand(`cat ${path}`);
         expect(out.exitCode).toBe(ExitCode.Success);
@@ -39,7 +39,7 @@ describe("Cat", () => {
             content: [],
             parent: Directory.getRoot().id,
             owner: "",
-        }).save();
+        });
 
         const out = await tests.executeCommand(`cat ${path}`);
         expect(true).toBeTruthy();

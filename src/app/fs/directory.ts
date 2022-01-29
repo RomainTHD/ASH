@@ -124,5 +124,8 @@ export class Directory extends Inode {
             id: node.id,
             name: node.name,
         });
+        node.parent = this.id;
+        node.save();
+        this.save();
     }
 }
