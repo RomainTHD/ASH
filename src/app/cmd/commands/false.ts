@@ -1,4 +1,4 @@
-import {Command} from "app/cmd/command";
+import {Command} from "app/cmd";
 import {ExitCode} from "app/process";
 
 export class False extends Command {
