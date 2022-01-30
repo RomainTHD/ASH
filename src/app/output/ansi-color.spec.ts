@@ -11,11 +11,12 @@ describe("AnsiColor", () => {
     });
 
     it("should write the right HTML tag", () => {
-        const msg = "test";
-        const txt = AnsiColor.parse(`${AnsiColor.FG.BLUE}${msg}${AnsiColor.RESET}`);
-        const elt = front.stringToHTML(txt, true);
+        const color = AnsiColor.FG.BLUE;
+        const msg   = "test";
+        const txt   = AnsiColor.parse(`${color}${msg}${AnsiColor.RESET}`);
+        const elt   = front.stringToHTML(txt, true);
         expect(elt).toBeInstanceOf(HTMLSpanElement);
-        expect(elt.classList).toContain("fg--blue");
+        expect(elt.classList).toContain(`fg--${color.className}`);
         // FIXME: Not the best way to test the color,
         //  we should instead test the CSS
         expect(elt.innerText).toEqual(msg);

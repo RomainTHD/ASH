@@ -11,6 +11,8 @@ import {
  * @see usage
  */
 export class Echo extends Command {
+    public static override readonly command = "echo";
+
     public override readonly description = "Echo a message";
     public override readonly usage       = "echo [text]";
 
@@ -19,7 +21,7 @@ export class Echo extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        emit(args.others.join(" "));
+        emit(args.others.join(" "), !args.flags["n"]);
         return ExitCode.Success;
     }
 }

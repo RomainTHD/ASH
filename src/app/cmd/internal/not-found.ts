@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class NotFound extends Command {
+    public static override readonly command = "__unknown";
+
     public override readonly description = "Command not found";
     public override readonly usage       = "__unknown";
 
@@ -28,6 +30,6 @@ export class NotFound extends Command {
         emit: ProcessEmit,
     ): Promise<ExitCode> {
         emit(`${this._cmd}: command not found`);
-        return ExitCode.Success;
+        return ExitCode.Failure;
     }
 }

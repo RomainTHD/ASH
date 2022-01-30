@@ -12,6 +12,8 @@ import {
  * @see usage
  */
 export class Ls extends Command {
+    public static override readonly command = "ls";
+
     public override readonly description = "List files in the current directory";
     public override readonly usage       = "ls [options] [path]";
 
@@ -23,7 +25,7 @@ export class Ls extends Command {
         const path = env.absolutePath(args.others[0] || ".");
         const cwd  = Directory.findFromPath(path);
         if (!cwd) {
-            emit("error");
+            emit(`ls: cannot access '${path}': no such directory`);
             return ExitCode.NotFound;
         }
 

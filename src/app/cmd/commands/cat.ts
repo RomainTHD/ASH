@@ -2,6 +2,7 @@ import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {
     File,
+    Inode,
     InodeType,
 } from "app/fs";
 import {
@@ -15,6 +16,8 @@ import {
  * @see usage
  */
 export class Cat extends Command {
+    public static override readonly command = "cat";
+
     public override readonly description = "Prints the contents of a file";
     public override readonly usage       = "cat <file>";
 
@@ -23,18 +26,24 @@ export class Cat extends Command {
         env: Env,
         emit: ProcessEmit,
     ): Promise<ExitCode> {
-        const f = File.findFromPath(env.absolutePath(args.others[0]));
+        const filePathArg = args.others[0];
+        if (!filePathArg) {
+            emit("cat: missing file path");
+            return ExitCode.MissingArgument;
+        }
+
+        const f = Inode.findFromPath(env.absolutePath(filePathArg));
         if (!f) {
-            emit("No such file");
+            emit(`cat: '${filePathArg}': no such file or directory`);
             return ExitCode.NotFound;
         }
 
         if (f.inodeType !== InodeType.File) {
-            emit("Not a file");
+            emit(`cat: '${filePathArg}': is not a file`);
             return ExitCode.Unsupported;
         }
 
-        emit(f.content);
+        emit((f as File).content);
         return ExitCode.Success;
     }
 }

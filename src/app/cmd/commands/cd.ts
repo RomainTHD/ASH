@@ -1,6 +1,9 @@
 import {Command} from "app/cmd";
 import {Env} from "app/env";
-import {Directory} from "app/fs";
+import {
+    Inode,
+    InodeType,
+} from "app/fs";
 import {
     Arguments,
     ExitCode,
@@ -12,6 +15,8 @@ import {
  * @see usage
  */
 export class Cd extends Command {
+    public static override readonly command = "cd";
+
     public override readonly description = "Change directory";
     public override readonly usage       = "cd [path]";
 
@@ -21,14 +26,19 @@ export class Cd extends Command {
         emit: ProcessEmit,
     ): Promise<ExitCode> {
         const path = args.others[0] || "~";
-        const dir  = Directory.findFromPath(env.absolutePath(path));
+        const dir  = Inode.findFromPath(env.absolutePath(path));
         if (dir === null) {
-            emit("error");
+            emit(`cd: '${path}': no such directory`);
             return ExitCode.NotFound;
-        } else {
-            env.cwd = path;
         }
 
+        if (dir.inodeType !== InodeType.Directory) {
+            emit(`cd: '${path}': not a directory`);
+            return ExitCode.Unsupported;
+        }
+
+        env.setCwd(path);
+        emit(env.getCwd());
         return ExitCode.Success;
     }
 }

@@ -5,7 +5,10 @@ import {
     ViewEncapsulation,
 } from "@angular/core";
 import {EnvService} from "app/env";
-import {OutputService} from "app/output";
+import {
+    AnsiColor,
+    OutputService,
+} from "app/output";
 import * as DOMPurify from "dompurify";
 import {Subscription} from "rxjs";
 
@@ -35,9 +38,9 @@ export class OutputComponent implements OnInit, OnDestroy {
         }));
 
         this._subscriptions.push(outputService.subscribeOutput((output) => {
-            this.content += DOMPurify.sanitize(output)
+            this.content += AnsiColor.parse(DOMPurify.sanitize(output)
                 .replace("\n", "<br/>")
-                .replace("\r", "");
+                .replace("\r", ""));
         }));
 
         this._subscriptions.push(outputService.subscribeCommandEnd(() => {

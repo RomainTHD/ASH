@@ -10,11 +10,10 @@ export interface DirectoryChild {
     name: string,
 }
 
-export interface DirectoryTemplate {
+export interface DirectoryTemplate extends Partial<InodeTemplate> {
+    content?: DirectoryChild[];
     name: string;
     parent: string;
-    owner: string;
-    content: DirectoryChild[];
 }
 
 /**
@@ -39,26 +38,30 @@ export class Directory extends Inode {
         super.content = value;
     }
 
-    public static override create(template: DirectoryTemplate, id?: string): Directory {
+    public static override create(template: DirectoryTemplate): Directory {
         const now = new Date();
+        // We create the directory object with all its properties
         const dir = new Directory({
-            ...template,
-            inodeType: InodeType.Directory,
-            id: id || StorageORM.getNewID(Inode.category),
-            size: 0,
+            content: template.content || [],
             created: now,
+            id: template.id || StorageORM.getNewID(Inode.category),
+            inodeType: InodeType.Directory,
             modified: now,
-            content: template.content,
+            name: template.name,
+            owner: template.owner || "root",
+            parent: template.parent || this.getRoot().id,
+            size: 0,
         });
+        // Save it to the storage
         dir.save();
 
+        // Special case for the root directory "/", where its parent is itself
         if (dir.id !== Directory.ROOT_DIRECTORY_ID) {
             const parent = Directory.find(dir.parent) as Directory;
             if (!parent) {
                 throw new Error("Parent directory not found");
             }
             parent.addChild(dir);
-            parent.save();
         }
 
         return dir;
@@ -75,13 +78,11 @@ export class Directory extends Inode {
     public static getRoot(): Directory {
         let root = this.find(Directory.ROOT_DIRECTORY_ID) as Directory;
         if (root === null) {
-            // throw new Error("Root directory not found");
             root = this.create({
+                id: Directory.ROOT_DIRECTORY_ID,
                 name: "",
                 parent: Directory.ROOT_DIRECTORY_ID,
-                owner: "root",
-                content: [],
-            }, Directory.ROOT_DIRECTORY_ID);
+            });
         }
 
         return root;
@@ -92,29 +93,14 @@ export class Directory extends Inode {
      * @param path Directory path
      * @returns Directory or null if not found
      */
-    public static findFromPath(path: string): Directory | null {
-        const items = path.split("/");
-        items.pop(); // Remove last item, which has to be empty
+    public static override findFromPath(path: string): Directory | null {
+        const inode = super.findFromPath(path);
 
-        if (items[0] === "") {
-            items.shift(); // Remove root "/"
+        if (inode === null || inode.inodeType !== InodeType.Directory) {
+            return null;
         }
 
-        let current: Directory | null = this.getRoot();
-        for (const item of items) {
-            if (current === null) {
-                return null;
-            } else {
-                const child = current.findChild(item);
-                if (child === null || child.inodeType !== InodeType.Directory) {
-                    return null;
-                } else {
-                    current = child as Directory;
-                }
-            }
-        }
-
-        return current;
+        return inode as Directory;
     }
 
     /**
@@ -139,5 +125,8 @@ export class Directory extends Inode {
             id: node.id,
             name: node.name,
         });
+        node.parent = this.id;
+        node.save();
+        this.save();
     }
 }

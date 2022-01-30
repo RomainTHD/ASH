@@ -6,11 +6,10 @@ import {
 } from "app/fs";
 import {StorageORM} from "app/orm";
 
-export interface FileTemplate {
+export interface FileTemplate extends Partial<InodeTemplate> {
+    content?: string;
     name: string;
     parent: string;
-    owner: string;
-    content: string;
 }
 
 /**
@@ -31,14 +30,19 @@ export class File extends Inode {
 
     public static override create(template: FileTemplate): File {
         const now = new Date();
+        // Create the file object
         const f   = new File({
-            ...template,
-            inodeType: InodeType.File,
-            id: StorageORM.getNewID(Inode.category),
-            size: 0,
+            content: template.content || "",
             created: now,
+            id: template.id || StorageORM.getNewID(Inode.category),
+            inodeType: InodeType.File,
             modified: now,
+            name: template.name,
+            owner: template.owner || "root",
+            parent: template.parent || Directory.getRoot().id,
+            size: 0,
         });
+        // Save it in the storage
         f.save();
 
         const dir = Directory.find(f.parent) as Directory;
@@ -46,7 +50,7 @@ export class File extends Inode {
             throw new Error("Parent directory not found");
         }
         dir.addChild(f);
-        dir.save();
+        // Update the parent
 
         return f;
     }
@@ -55,23 +59,18 @@ export class File extends Inode {
         return new this(json);
     }
 
-    public static findFromPath(path: string): File | null {
-        const items = path.split("/");
-        if (items.length <= 1) {
+    /**
+     * Finds a file by its path
+     * @param path File path
+     * @returns File or null if not found
+     */
+    public static override findFromPath(path: string): File | null {
+        const inode = super.findFromPath(path);
+
+        if (inode === null || inode.inodeType !== InodeType.File) {
             return null;
         }
 
-        const fileName = items.pop() as string;
-        const parent   = Directory.findFromPath(items.join("/"));
-        if (!parent) {
-            return null;
-        }
-
-        const node = parent.findChild(fileName);
-        if (!node || node.inodeType !== InodeType.File) {
-            return null;
-        }
-
-        return node as File;
+        return inode as File;
     }
 }
