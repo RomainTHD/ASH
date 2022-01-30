@@ -6520,12 +6520,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "OutputComponent": () => (/* binding */ OutputComponent)
 /* harmony export */ });
-/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output */ 9548);
-/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dompurify */ 2094);
-/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dompurify */ 2094);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3668);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/output */ 9548);
 /* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
-
 
 
 
@@ -6536,26 +6535,22 @@ let OutputComponent = /*#__PURE__*/(() => {
       this._outputService = outputService;
       this._subscriptions = [];
 
-      this._subscriptions.push(outputService.onNewCommand.subscribe(obj => {
-        this.content += dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(obj.command);
+      this._subscriptions.push(outputService.subscribePromptMessage(msg => {
+        this.content += msg;
+      }));
+
+      this._subscriptions.push(outputService.subscribeNewCommand(obj => {
+        this.content += dompurify__WEBPACK_IMPORTED_MODULE_0__.sanitize(obj.command);
         this.content += "<br/>";
       }));
 
-      this._subscriptions.push(outputService.onNewOutput.subscribe(output => {
-        this.content += dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(output).replace("\n", "<br/>").replace("\r", "");
+      this._subscriptions.push(outputService.subscribeOutput(output => {
+        this.content += dompurify__WEBPACK_IMPORTED_MODULE_0__.sanitize(output).replace("\n", "<br/>").replace("\r", "");
       }));
 
-      this._subscriptions.push(outputService.onCommandEnd.subscribe(() => {
-        this.content += OutputComponent.getPromptText(envService.getEnv());
-      }));
+      this._subscriptions.push(outputService.subscribeCommandEnd(() => {}));
 
-      this.content = OutputComponent.getPromptText(envService.getEnv());
-    }
-
-    static getPromptText(env) {
-      const time = new Date().toISOString().split("T")[1].split(".")[0];
-      let base = `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.GREEN}root${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.MAGENTA}${time}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.BLUE}${env.cwd}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}$ `;
-      return app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.parse(dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(base));
+      this.content = "";
     }
 
     ngOnInit() {}
@@ -6569,7 +6564,7 @@ let OutputComponent = /*#__PURE__*/(() => {
   }
 
   OutputComponent.ɵfac = function OutputComponent_Factory(t) {
-    return new (t || OutputComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_0__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService));
+    return new (t || OutputComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_1__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService));
   };
 
   OutputComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({
@@ -6617,12 +6612,25 @@ __webpack_require__.r(__webpack_exports__);
 let OutputService = /*#__PURE__*/(() => {
   class OutputService {
     constructor() {
+      this.onPromptMessage = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
       this.onNewCommand = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
       this.onNewOutput = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
       this.onCommandEnd = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
     }
 
-    emitCommand(command, env) {
+    subscribePromptMessage(callback) {
+      return this.onPromptMessage.subscribe(callback);
+    }
+
+    emitPromptMessage(promptMessage) {
+      this.onPromptMessage.next(promptMessage);
+    }
+
+    subscribeNewCommand(callback) {
+      return this.onNewCommand.subscribe(callback);
+    }
+
+    emitNewCommand(command, env) {
       this.onNewCommand.next({
         command,
         env,
@@ -6630,8 +6638,16 @@ let OutputService = /*#__PURE__*/(() => {
       });
     }
 
+    subscribeOutput(callback) {
+      return this.onNewOutput.subscribe(callback);
+    }
+
     emitOutput(output) {
       this.onNewOutput.next(output);
+    }
+
+    subscribeCommandEnd(callback) {
+      return this.onCommandEnd.subscribe(callback);
     }
 
     emitCommandEnd() {
@@ -6769,6 +6785,33 @@ var ProcessStatus = /*#__PURE__*/(() => {
 
 /***/ }),
 
+/***/ 355:
+/*!*********************************!*\
+  !*** ./src/app/prompt/index.ts ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PromptComponent": () => (/* reexport safe */ _prompt_component__WEBPACK_IMPORTED_MODULE_2__.PromptComponent),
+/* harmony export */   "getPromptText": () => (/* binding */ getPromptText)
+/* harmony export */ });
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dompurify */ 2094);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _prompt_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./prompt.component */ 9416);
+
+
+
+function getPromptText(env) {
+  const time = new Date().toISOString().split("T")[1].split(".")[0];
+  let base = `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.GREEN}root${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.MAGENTA}${time}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.BLUE}${env.cwd}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}$&nbsp;`;
+  return app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.parse(dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(base));
+}
+
+/***/ }),
+
 /***/ 9416:
 /*!********************************************!*\
   !*** ./src/app/prompt/prompt.component.ts ***!
@@ -6780,20 +6823,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PromptComponent": () => (/* binding */ PromptComponent)
 /* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/runner */ 7847);
-/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/env */ 2227);
+/* harmony import */ var app_prompt_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/prompt/index */ 355);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3668);
+/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/runner */ 7847);
+/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/output */ 9548);
+
+
 
 
 
 const _c0 = ["promptElement"];
 let PromptComponent = /*#__PURE__*/(() => {
   class PromptComponent {
-    constructor(runner, env) {
+    constructor(runner, env, output) {
       this._runner = runner;
       this._env = env;
+      this._output = output;
       this.prompt = {
-        cmd: ""
+        cmd: "",
+        message: (0,app_prompt_index__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(env.getEnv())
       };
     }
 
@@ -6811,10 +6860,15 @@ let PromptComponent = /*#__PURE__*/(() => {
     onEnter(targetRaw) {
       const target = targetRaw.target;
 
+      this._output.emitPromptMessage(this.prompt.message);
+
       this._runner.run(this.prompt.cmd, this._env.getEnv());
 
-      this.prompt.cmd = "";
       target.innerText = "";
+      this.prompt = {
+        cmd: "",
+        message: (0,app_prompt_index__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(this._env.getEnv())
+      };
     }
 
     onTab() {
@@ -6824,45 +6878,48 @@ let PromptComponent = /*#__PURE__*/(() => {
   }
 
   PromptComponent.ɵfac = function PromptComponent_Factory(t) {
-    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_0__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_1__.EnvService));
+    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_1__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_3__.OutputService));
   };
 
-  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({
+  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({
     type: PromptComponent,
     selectors: [["app-prompt"]],
     viewQuery: function PromptComponent_Query(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵviewQuery"](_c0, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵviewQuery"](_c0, 5);
       }
 
       if (rf & 2) {
         let _t;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
       }
     },
-    decls: 5,
-    vars: 0,
-    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "input", "keyup.enter", "keydown.tab"], ["promptElement", ""]],
+    decls: 4,
+    vars: 1,
+    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "input", "keyup.enter", "keydown.tab"], ["promptElement", ""]],
     template: function PromptComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](2, " > ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](3, "div", 2, 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_3_listener($event) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](1, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener($event) {
           return ctx.onInput($event);
-        })("keyup.enter", function PromptComponent_Template_div_keyup_enter_3_listener($event) {
+        })("keyup.enter", function PromptComponent_Template_div_keyup_enter_2_listener($event) {
           return ctx.onEnter($event);
-        })("keydown.tab", function PromptComponent_Template_div_keydown_tab_3_listener() {
+        })("keydown.tab", function PromptComponent_Template_div_keydown_tab_2_listener() {
           return ctx.onTab();
         });
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+      }
+
+      if (rf & 2) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsanitizeHtml"]);
       }
     },
-    styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  width: auto;\n  float: left;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n  margin-left: 1.5ch;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
+    styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  float: left;\n  width: auto;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n  margin-left: 17ch;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
   });
   return PromptComponent;
 })();
@@ -6921,7 +6978,7 @@ let RunnerService = /*#__PURE__*/(() => {
       const path = argsArr.shift() || "";
       let args = app_process__WEBPACK_IMPORTED_MODULE_1__.Process.processArgs(argsArr);
 
-      this._output.emitCommand(cmd, env);
+      this._output.emitNewCommand(cmd, env);
 
       app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path).execute(args, env, (msg, newLine = true) => {
         msg = newLine ? msg + "\n" : msg;
