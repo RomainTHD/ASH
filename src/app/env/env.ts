@@ -51,7 +51,7 @@ export class Env {
     public setCwd(newCwd: string): void {
         let path = this.absolutePath(newCwd);
         if (path.startsWith(this.getHome())) {
-            path = `${this.getHome()}/${path.substr(this.getHome().length)}`;
+            path = `~/${path.substr(this.getHome().length)}`;
         }
         if (path.endsWith("/") && path.length > 1) {
             path = path.substr(0, path.length - 1);
@@ -81,6 +81,8 @@ export class Env {
 
         let addSlash = false;
         if (path.endsWith("/")) {
+            // Possibly add a trailing slash if needed. For now, we remove it
+            //  though, but we'll add it again later
             if (path !== "/") {
                 path     = path.slice(0, -1);
                 addSlash = true;
@@ -88,37 +90,23 @@ export class Env {
         }
 
         if (!path.startsWith("/")) {
+            // Adds the current working directory prefix in front of the path
             path = this.getCwd(true) + path;
         }
 
         let pathItems = path.split("/");
 
-        if (pathItems[0] === ".") {
-            let cwd = this.getCwd(true).split("/");
-            if (cwd[0] === "") {
-                cwd.shift();
-            }
-
-            if (cwd.length !== 0) {
-                pathItems = cwd.concat(pathItems.slice(1));
-            }
-        }
-
-        if (pathItems[0] === "..") {
-            pathItems = this.getCwd(true)
-                .split("/")
-                .slice(0, -1)
-                .concat(pathItems.slice(1));
-        }
-
         for (let i = 0; i < pathItems.length; ++i) {
             if (pathItems[i] === "..") {
+                // Transform "/foo/bar/../baz" into "/foo/baz" by removing the
+                //  previous item
                 pathItems.splice(i - 1, 2);
                 i -= 2;
                 if (i == pathItems.length - 1) {
                     pathItems.push("");
                 }
             } else if (pathItems[i] === ".") {
+                // Transform "/foo/./bar" into "/foo/bar"
                 pathItems.splice(i, 1);
                 --i;
                 if (i == pathItems.length - 1) {
@@ -127,6 +115,7 @@ export class Env {
             }
         }
 
+        // Add a trailing slash if needed
         if (addSlash) {
             pathItems.push("");
         }

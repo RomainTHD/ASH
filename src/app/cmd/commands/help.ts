@@ -29,6 +29,8 @@ export class Help extends Command {
         if (!args.others[0]) {
             const assoc: Record<string, typeof Command> = regularCommands;
             Object.keys(assoc).forEach((key) => {
+                // Like we did in `Command`, we're doing some kind of reflection
+                //  to go through all commands
                 const cmd = Command.fromString(assoc[key].command as string);
                 emit(`${cmd.usage} - ${cmd.description}`);
             });

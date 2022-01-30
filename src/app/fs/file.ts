@@ -30,6 +30,7 @@ export class File extends Inode {
 
     public static override create(template: FileTemplate): File {
         const now = new Date();
+        // Create the file object
         const f   = new File({
             content: template.content || "",
             created: now,
@@ -41,6 +42,7 @@ export class File extends Inode {
             parent: template.parent || Directory.getRoot().id,
             size: 0,
         });
+        // Save it in the storage
         f.save();
 
         const dir = Directory.find(f.parent) as Directory;
@@ -48,7 +50,7 @@ export class File extends Inode {
             throw new Error("Parent directory not found");
         }
         dir.addChild(f);
-        dir.save();
+        // Update the parent
 
         return f;
     }

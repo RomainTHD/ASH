@@ -40,6 +40,7 @@ export class Directory extends Inode {
 
     public static override create(template: DirectoryTemplate): Directory {
         const now = new Date();
+        // We create the directory object with all its properties
         const dir = new Directory({
             content: template.content || [],
             created: now,
@@ -51,15 +52,16 @@ export class Directory extends Inode {
             parent: template.parent || this.getRoot().id,
             size: 0,
         });
+        // Save it to the storage
         dir.save();
 
+        // Special case for the root directory "/", where its parent is itself
         if (dir.id !== Directory.ROOT_DIRECTORY_ID) {
             const parent = Directory.find(dir.parent) as Directory;
             if (!parent) {
                 throw new Error("Parent directory not found");
             }
             parent.addChild(dir);
-            parent.save();
         }
 
         return dir;
