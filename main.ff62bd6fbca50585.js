@@ -5154,6 +5154,55 @@ let Cd = /*#__PURE__*/(() => {
 
 /***/ }),
 
+/***/ 2058:
+/*!***************************************!*\
+  !*** ./src/app/cmd/commands/clear.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Clear": () => (/* binding */ Clear)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd_command__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd/command */ 8601);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+
+
+
+/**
+ * @see description
+ * @see usage
+ */
+
+let Clear = /*#__PURE__*/(() => {
+  class Clear extends app_cmd_command__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Clear the screen";
+      this.usage = "clear";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        // FIXME: Ugly implementation
+        for (let i = 0; i < 127; ++i) {
+          emit();
+        }
+
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
+      })();
+    }
+
+  }
+
+  Clear.command = "clear";
+  return Clear;
+})();
+
+/***/ }),
+
 /***/ 6746:
 /*!**************************************!*\
   !*** ./src/app/cmd/commands/echo.ts ***!
@@ -5306,27 +5355,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Cat": () => (/* reexport safe */ _cat__WEBPACK_IMPORTED_MODULE_0__.Cat),
 /* harmony export */   "Cd": () => (/* reexport safe */ _cd__WEBPACK_IMPORTED_MODULE_1__.Cd),
-/* harmony export */   "Echo": () => (/* reexport safe */ _echo__WEBPACK_IMPORTED_MODULE_2__.Echo),
-/* harmony export */   "False": () => (/* reexport safe */ _false__WEBPACK_IMPORTED_MODULE_3__.False),
-/* harmony export */   "Help": () => (/* reexport safe */ _help__WEBPACK_IMPORTED_MODULE_4__.Help),
-/* harmony export */   "Ls": () => (/* reexport safe */ _ls__WEBPACK_IMPORTED_MODULE_5__.Ls),
-/* harmony export */   "Man": () => (/* reexport safe */ _man__WEBPACK_IMPORTED_MODULE_6__.Man),
-/* harmony export */   "Mkdir": () => (/* reexport safe */ _mkdir__WEBPACK_IMPORTED_MODULE_7__.Mkdir),
-/* harmony export */   "Pwd": () => (/* reexport safe */ _pwd__WEBPACK_IMPORTED_MODULE_8__.Pwd),
-/* harmony export */   "Touch": () => (/* reexport safe */ _touch__WEBPACK_IMPORTED_MODULE_9__.Touch),
-/* harmony export */   "True": () => (/* reexport safe */ _true__WEBPACK_IMPORTED_MODULE_10__.True)
+/* harmony export */   "Clear": () => (/* reexport safe */ _clear__WEBPACK_IMPORTED_MODULE_2__.Clear),
+/* harmony export */   "Echo": () => (/* reexport safe */ _echo__WEBPACK_IMPORTED_MODULE_3__.Echo),
+/* harmony export */   "False": () => (/* reexport safe */ _false__WEBPACK_IMPORTED_MODULE_4__.False),
+/* harmony export */   "Help": () => (/* reexport safe */ _help__WEBPACK_IMPORTED_MODULE_5__.Help),
+/* harmony export */   "Ls": () => (/* reexport safe */ _ls__WEBPACK_IMPORTED_MODULE_6__.Ls),
+/* harmony export */   "Man": () => (/* reexport safe */ _man__WEBPACK_IMPORTED_MODULE_7__.Man),
+/* harmony export */   "Mkdir": () => (/* reexport safe */ _mkdir__WEBPACK_IMPORTED_MODULE_8__.Mkdir),
+/* harmony export */   "Pwd": () => (/* reexport safe */ _pwd__WEBPACK_IMPORTED_MODULE_9__.Pwd),
+/* harmony export */   "Touch": () => (/* reexport safe */ _touch__WEBPACK_IMPORTED_MODULE_10__.Touch),
+/* harmony export */   "True": () => (/* reexport safe */ _true__WEBPACK_IMPORTED_MODULE_11__.True)
 /* harmony export */ });
 /* harmony import */ var _cat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cat */ 3320);
 /* harmony import */ var _cd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cd */ 183);
-/* harmony import */ var _echo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./echo */ 6746);
-/* harmony import */ var _false__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./false */ 7316);
-/* harmony import */ var _help__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./help */ 4533);
-/* harmony import */ var _ls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ls */ 5401);
-/* harmony import */ var _man__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./man */ 3713);
-/* harmony import */ var _mkdir__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mkdir */ 4402);
-/* harmony import */ var _pwd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pwd */ 7941);
-/* harmony import */ var _touch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./touch */ 6551);
-/* harmony import */ var _true__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./true */ 5986);
+/* harmony import */ var _clear__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./clear */ 2058);
+/* harmony import */ var _echo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./echo */ 6746);
+/* harmony import */ var _false__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./false */ 7316);
+/* harmony import */ var _help__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./help */ 4533);
+/* harmony import */ var _ls__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ls */ 5401);
+/* harmony import */ var _man__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./man */ 3713);
+/* harmony import */ var _mkdir__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mkdir */ 4402);
+/* harmony import */ var _pwd__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pwd */ 7941);
+/* harmony import */ var _touch__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./touch */ 6551);
+/* harmony import */ var _true__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./true */ 5986);
+
 
  // export {Cp} from "./cp";
 
@@ -5706,6 +5758,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "internalCommands": () => (/* reexport module object */ _internal__WEBPACK_IMPORTED_MODULE_2__),
 /* harmony export */   "Cat": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Cat),
 /* harmony export */   "Cd": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Cd),
+/* harmony export */   "Clear": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Clear),
 /* harmony export */   "Echo": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Echo),
 /* harmony export */   "False": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.False),
 /* harmony export */   "Help": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Help),
@@ -6542,6 +6595,114 @@ let Inode = /*#__PURE__*/(() => {
 
 /***/ }),
 
+/***/ 3823:
+/*!********************************************!*\
+  !*** ./src/app/history/history.service.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HistoryService": () => (/* binding */ HistoryService)
+/* harmony export */ });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ 3668);
+
+/**
+ * History service
+ */
+
+let HistoryService = /*#__PURE__*/(() => {
+  class HistoryService {
+    constructor() {
+      this._history = [];
+      this._historyIndex = 0;
+    }
+    /**
+     * Add a command to the history
+     * @param cmd Command
+     */
+
+
+    pushCommand(cmd) {
+      this._history.push(cmd);
+
+      this._historyIndex = this._history.length;
+    }
+    /**
+     * Get the previous command, or null if not available
+     * @returns Previous command
+     */
+
+
+    previousCommand() {
+      if (this._historyIndex > 0) {
+        // We have a previous command
+        --this._historyIndex;
+        return this._history[this._historyIndex];
+      }
+
+      return null;
+    }
+    /**
+     * Get the next command, or null if not available
+     * @returns Next command
+     */
+
+
+    nextCommand() {
+      if (this._historyIndex < this._history.length - 1) {
+        // We have a next command
+        ++this._historyIndex;
+        return this._history[this._historyIndex];
+      } // End of the history
+
+
+      this._historyIndex = this._history.length;
+      return null;
+    }
+    /**
+     * Clear the history
+     */
+
+
+    clear() {
+      this._history = [];
+      this._historyIndex = 0;
+    }
+
+  }
+
+  HistoryService.ɵfac = function HistoryService_Factory(t) {
+    return new (t || HistoryService)();
+  };
+
+  HistoryService.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
+    token: HistoryService,
+    factory: HistoryService.ɵfac,
+    providedIn: "root"
+  });
+  return HistoryService;
+})();
+
+/***/ }),
+
+/***/ 6393:
+/*!**********************************!*\
+  !*** ./src/app/history/index.ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HistoryService": () => (/* reexport safe */ _history_service__WEBPACK_IMPORTED_MODULE_0__.HistoryService)
+/* harmony export */ });
+/* harmony import */ var _history_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./history.service */ 3823);
+
+
+/***/ }),
+
 /***/ 2806:
 /*!*******************************!*\
   !*** ./src/app/orm/entity.ts ***!
@@ -7139,100 +7300,216 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PromptComponent": () => (/* binding */ PromptComponent)
 /* harmony export */ });
-/* harmony import */ var app_prompt_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/prompt/index */ 355);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3668);
+/* harmony import */ var app_prompt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/prompt */ 355);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 3668);
 /* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/runner */ 7847);
 /* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
 /* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/history */ 6393);
+
 
 
 
 
 
 const _c0 = ["promptElement"];
+/**
+ * Arrow direction for the history
+ */
+
+var ArrowDir = /*#__PURE__*/(() => {
+  (function (ArrowDir) {
+    ArrowDir[ArrowDir["UP"] = 0] = "UP";
+    ArrowDir[ArrowDir["DOWN"] = 1] = "DOWN";
+  })(ArrowDir || (ArrowDir = {}));
+
+  return ArrowDir;
+})();
+
+/**
+ * Prompt component
+ */
 let PromptComponent = /*#__PURE__*/(() => {
   class PromptComponent {
-    constructor(runner, env, output) {
+    constructor(runner, env, output, history) {
+      /**
+       * The DOM element cannot directly access `ArrowDir`, so we forward its
+       * values as public variables
+       * @see ArrowDir
+       */
+      this.ARROW_UP = ArrowDir.UP;
+      this.ARROW_DOWN = ArrowDir.DOWN;
       this._runner = runner;
       this._env = env;
       this._output = output;
+      this._history = history;
       this.prompt = {
         cmd: "",
-        message: (0,app_prompt_index__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(env.getEnv())
+        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(env.getEnv())
       };
+      this._previousInput = null;
     }
+    /**
+     * Initialize the component after the view is loaded. This is where we
+     * load the DOM element to the TS component, and focus the input
+     */
 
-    ngOnInit() {}
 
     ngAfterViewInit() {
       this.promptElement.nativeElement.focus();
     }
+    /**
+     * Input typed, we update the model
+     */
 
-    onInput(targetRaw) {
-      const target = targetRaw.target;
-      this.prompt.cmd = target.innerText;
+
+    onInput() {
+      this._setPromptCmd(this._getInputContent(), false);
     }
+    /**
+     * Enter key pressed, we add the command to the history and execute it
+     */
 
-    onEnter(targetRaw) {
-      const target = targetRaw.target;
 
+    onEnter() {
       this._output.emitPromptMessage(this.prompt.message);
+
+      this._history.pushCommand(this.prompt.cmd);
 
       this._runner.run(this.prompt.cmd, this._env.getEnv());
 
-      target.innerText = "";
       this.prompt = {
         cmd: "",
-        message: (0,app_prompt_index__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(this._env.getEnv())
+        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(this._env.getEnv())
       };
+
+      this._updateView();
     }
+    /**
+     * Tab key pressed, we autocomplete the command (WIP)
+     */
+
 
     onTab() {
       this._runner.complete(this.prompt.cmd);
+    }
+    /**
+     * Arrow key handler, we move in the history
+     * @param dir Arrow direction
+     * @see ArrowDir
+     */
+
+
+    onArrow(dir) {
+      if (dir === ArrowDir.UP) {
+        const cmd = this._history.previousCommand();
+
+        if (cmd !== null && this._previousInput === null) {
+          // Backup the current input if we're not already in the history
+          this._previousInput = this.prompt.cmd;
+        }
+
+        this._setPromptCmd(cmd || this.prompt.cmd);
+      } else {
+        const cmd = this._history.nextCommand();
+
+        if (cmd === null) {
+          // Restore the previous input if we're at the end of the history
+          if (this._previousInput !== null) {
+            // Avoid erasing the input if we type the down key twice
+            this._setPromptCmd(this._previousInput);
+
+            this._previousInput = null;
+          }
+        } else {
+          this._setPromptCmd(cmd);
+        }
+      }
+    }
+    /**
+     * We refresh the view if it differs from the model
+     * @param forceRefresh Force a view refresh
+     * @private
+     */
+
+
+    _updateView(forceRefresh = false) {
+      if (forceRefresh || this.prompt.cmd !== this._getInputContent()) {
+        this.promptElement.nativeElement.innerText = this.prompt.cmd;
+      }
+    }
+    /**
+     * Get the content of the input view element
+     * @returns Content of the input element
+     * @private
+     */
+
+
+    _getInputContent() {
+      return this.promptElement.nativeElement.innerText;
+    }
+    /**
+     * Set the prompt command and update both the view and the model
+     * @param cmd Command to set
+     * @param updateView If we should update the view or not
+     * @private
+     */
+
+
+    _setPromptCmd(cmd, updateView = true) {
+      this.prompt.cmd = cmd.trim();
+
+      if (updateView) {
+        this._updateView();
+      }
     }
 
   }
 
   PromptComponent.ɵfac = function PromptComponent_Factory(t) {
-    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_1__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_3__.OutputService));
+    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_1__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_3__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_history__WEBPACK_IMPORTED_MODULE_4__.HistoryService));
   };
 
-  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({
+  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({
     type: PromptComponent,
     selectors: [["app-prompt"]],
     viewQuery: function PromptComponent_Query(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵviewQuery"](_c0, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵviewQuery"](_c0, 5);
       }
 
       if (rf & 2) {
         let _t;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
       }
     },
     decls: 4,
     vars: 1,
-    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "input", "keyup.enter", "keydown.tab"], ["promptElement", ""]],
+    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
     template: function PromptComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](1, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](2, "div", 2, 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener($event) {
-          return ctx.onInput($event);
-        })("keyup.enter", function PromptComponent_Template_div_keyup_enter_2_listener($event) {
-          return ctx.onEnter($event);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](1, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener() {
+          return ctx.onInput();
+        })("keyup.enter", function PromptComponent_Template_div_keyup_enter_2_listener() {
+          return ctx.onEnter();
         })("keydown.tab", function PromptComponent_Template_div_keydown_tab_2_listener() {
           return ctx.onTab();
+        })("keydown.arrowUp", function PromptComponent_Template_div_keydown_arrowUp_2_listener() {
+          return ctx.onArrow(ctx.ARROW_UP);
+        })("keydown.arrowDown", function PromptComponent_Template_div_keydown_arrowDown_2_listener() {
+          return ctx.onArrow(ctx.ARROW_DOWN);
         });
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
       }
 
       if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsanitizeHtml"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
       }
     },
     styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  float: left;\n  width: auto;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n  margin-left: 17ch;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
@@ -7302,7 +7579,7 @@ let RunnerService = /*#__PURE__*/(() => {
 
       this._output.emitNewCommand(cmd, env);
 
-      app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path).execute(args, env, (msg, newLine = true) => {
+      app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path).execute(args, env, (msg = "", newLine = true) => {
         msg = newLine ? msg + "\n" : msg;
         return this._output.emitOutput(msg);
       }).then(() => {
@@ -7522,7 +7799,7 @@ function _executeCommand() {
     const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(path);
     let output = "";
 
-    const emit = msg => output += msg;
+    const emit = (msg = "") => output += msg;
 
     const exitCode = yield cmd.execute(args, env, emit);
     return {
