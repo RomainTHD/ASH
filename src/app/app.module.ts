@@ -8,16 +8,16 @@ import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {OutputComponent} from "app/output/output.component";
 
+import {OutputComponent} from "app/output";
+import {PromptComponent} from "app/prompt";
 import {AppComponent} from "./app.component";
-import {PromptComponent} from "./prompt/prompt.component";
 
 @NgModule({
     declarations: [
-        AppComponent,
-        PromptComponent,
         OutputComponent,
+        PromptComponent,
+        AppComponent,
     ],
     imports: [
         BrowserModule,
