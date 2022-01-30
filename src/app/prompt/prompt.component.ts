@@ -2,68 +2,212 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
-    OnInit,
     ViewChild,
 } from "@angular/core";
 import {EnvService} from "app/env";
+import {HistoryService} from "app/history";
 import {OutputService} from "app/output";
-import {getPromptText} from "app/prompt/index";
+import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
 
+/**
+ * Prompt view model
+ */
 interface Prompt {
+    /**
+     * Command typed
+     */
     cmd: string;
+
+    /**
+     * Prompt prefix message
+     */
     message: string;
 }
 
+/**
+ * Arrow direction for the history
+ */
+enum ArrowDir {
+    UP,
+    DOWN
+}
+
+/**
+ * Prompt component
+ */
 @Component({
     selector: "app-prompt",
     templateUrl: "./prompt.component.html",
     styleUrls: ["./prompt.component.scss"],
 })
-export class PromptComponent implements OnInit, AfterViewInit {
+export class PromptComponent implements AfterViewInit {
+    /**
+     * View DOM element for the prompt input
+     */
     @ViewChild("promptElement")
     public promptElement?: ElementRef;
 
+    /**
+     * Model for the view
+     */
     public prompt: Prompt;
 
+    /**
+     * The DOM element cannot directly access `ArrowDir`, so we forward its
+     * values as public variables
+     * @see ArrowDir
+     */
+    public readonly ARROW_UP   = ArrowDir.UP;
+    public readonly ARROW_DOWN = ArrowDir.DOWN;
+
+    /**
+     * Runner service
+     * @see RunnerService
+     * @private
+     */
     private _runner: RunnerService;
+
+    /**
+     * Environment service
+     * @see EnvService
+     * @private
+     */
     private _env: EnvService;
+
+    /**
+     * Output service
+     * @see OutputService
+     * @private
+     */
     private _output: OutputService;
 
-    constructor(runner: RunnerService, env: EnvService, output: OutputService) {
-        this._runner = runner;
-        this._env    = env;
-        this._output = output;
-        this.prompt  = {
+    /**
+     * History service
+     * @see HistoryService
+     * @private
+     */
+    private _history: HistoryService;
+
+    /**
+     * Allows us to check whether we were in the history previously or not,
+     * because we only want to erase the prompt input if we were in the history
+     * @private
+     */
+    private _previousInput: string | null;
+
+    public constructor(
+        runner: RunnerService,
+        env: EnvService,
+        output: OutputService,
+        history: HistoryService,
+    ) {
+        this._runner  = runner;
+        this._env     = env;
+        this._output  = output;
+        this._history = history;
+        this.prompt   = {
             cmd: "",
             message: getPromptText(env.getEnv()),
         };
+
+        this._previousInput = null;
     }
 
-    ngOnInit(): void {
-    }
-
-    ngAfterViewInit(): void {
+    /**
+     * Initialize the component after the view is loaded. This is where we
+     * load the DOM element to the TS component, and focus the input
+     */
+    public ngAfterViewInit(): void {
         (this.promptElement as ElementRef).nativeElement.focus();
     }
 
-    onInput(targetRaw: Event): void {
-        const target    = (targetRaw.target) as HTMLDivElement;
-        this.prompt.cmd = target.innerText;
+    /**
+     * Input typed, we update the model
+     */
+    public onInput(): void {
+        this._setPromptCmd(this._getInputContent(), false);
     }
 
-    onEnter(targetRaw: Event) {
-        const target = (targetRaw.target) as HTMLDivElement;
+    /**
+     * Enter key pressed, we add the command to the history and execute it
+     */
+    public onEnter(): void {
         this._output.emitPromptMessage(this.prompt.message);
+        this._history.pushCommand(this.prompt.cmd);
         this._runner.run(this.prompt.cmd, this._env.getEnv());
-        target.innerText = "";
-        this.prompt      = {
+        this.prompt = {
             cmd: "",
             message: getPromptText(this._env.getEnv()),
         };
+        this._updateView();
     }
 
-    onTab() {
+    /**
+     * Tab key pressed, we autocomplete the command (WIP)
+     */
+    public onTab(): void {
         this._runner.complete(this.prompt.cmd);
+    }
+
+    /**
+     * Arrow key handler, we move in the history
+     * @param dir Arrow direction
+     * @see ArrowDir
+     */
+    public onArrow(dir: ArrowDir): void {
+        if (dir === ArrowDir.UP) {
+            const cmd = this._history.previousCommand();
+            if (cmd !== null && this._previousInput === null) {
+                // Backup the current input if we're not already in the history
+                this._previousInput = this.prompt.cmd;
+            }
+            this._setPromptCmd(cmd || this.prompt.cmd);
+        } else {
+            const cmd = this._history.nextCommand();
+            if (cmd === null) {
+                // Restore the previous input if we're at the end of the history
+                if (this._previousInput !== null) {
+                    // Avoid erasing the input if we type the down key twice
+                    this._setPromptCmd(this._previousInput);
+                    this._previousInput = null;
+                }
+            } else {
+                this._setPromptCmd(cmd);
+            }
+        }
+    }
+
+    /**
+     * We refresh the view if it differs from the model
+     * @param forceRefresh Force a view refresh
+     * @private
+     */
+    private _updateView(forceRefresh = false): void {
+        if (forceRefresh || this.prompt.cmd !== this._getInputContent()) {
+            (this.promptElement as ElementRef).nativeElement.innerText = this.prompt.cmd;
+        }
+    }
+
+    /**
+     * Get the content of the input view element
+     * @returns Content of the input element
+     * @private
+     */
+    private _getInputContent(): string {
+        return (this.promptElement as ElementRef).nativeElement.innerText;
+    }
+
+    /**
+     * Set the prompt command and update both the view and the model
+     * @param cmd Command to set
+     * @param updateView If we should update the view or not
+     * @private
+     */
+    private _setPromptCmd(cmd: string, updateView = true): void {
+        this.prompt.cmd = cmd.trim();
+        if (updateView) {
+            this._updateView();
+        }
     }
 }

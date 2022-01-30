@@ -5,8 +5,10 @@
     <div class="prompt__container__child--snd prompt__input"
          contenteditable="true"
          #promptElement
-         (input)="onInput($event)"
-         (keyup.enter)="onEnter($event)"
+         (input)="onInput()"
+         (keyup.enter)="onEnter()"
          (keydown.tab)="onTab()"
+         (keydown.arrowUp)="onArrow(ARROW_UP)"
+         (keydown.arrowDown)="onArrow(ARROW_DOWN)"
     ></div>
 </div>
