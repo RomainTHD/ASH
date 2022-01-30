@@ -1,6 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Env} from "app/env";
-import {Subject} from "rxjs";
+import {
+    Subject,
+    Subscription,
+} from "rxjs";
 
 export interface CommandEntry {
     command: string;
@@ -16,17 +19,31 @@ export interface OutputEntry {
     providedIn: "root",
 })
 export class OutputService {
-    public onNewCommand: Subject<CommandEntry>;
-    public onNewOutput: Subject<string>;
-    public onCommandEnd: Subject<undefined>;
+    private onPromptMessage: Subject<string>;
+    private onNewCommand: Subject<CommandEntry>;
+    private onNewOutput: Subject<string>;
+    private onCommandEnd: Subject<undefined>;
 
     constructor() {
-        this.onNewCommand = new Subject<CommandEntry>();
-        this.onNewOutput  = new Subject<string>();
-        this.onCommandEnd = new Subject<undefined>();
+        this.onPromptMessage = new Subject<string>();
+        this.onNewCommand    = new Subject<CommandEntry>();
+        this.onNewOutput     = new Subject<string>();
+        this.onCommandEnd    = new Subject<undefined>();
     }
 
-    public emitCommand(command: string, env: Env): void {
+    public subscribePromptMessage(callback: (msb: string) => void): Subscription {
+        return this.onPromptMessage.subscribe(callback);
+    }
+
+    public emitPromptMessage(promptMessage: string): void {
+        this.onPromptMessage.next(promptMessage);
+    }
+
+    public subscribeNewCommand(callback: (obj: CommandEntry) => void): Subscription {
+        return this.onNewCommand.subscribe(callback);
+    }
+
+    public emitNewCommand(command: string, env: Env): void {
         this.onNewCommand.next({
             command,
             env,
@@ -34,11 +51,19 @@ export class OutputService {
         });
     }
 
-    public emitOutput(output: string) {
+    public subscribeOutput(callback: (output: string) => void): Subscription {
+        return this.onNewOutput.subscribe(callback);
+    }
+
+    public emitOutput(output: string): void {
         this.onNewOutput.next(output);
     }
 
-    public emitCommandEnd() {
+    public subscribeCommandEnd(callback: () => void): Subscription {
+        return this.onCommandEnd.subscribe(callback);
+    }
+
+    public emitCommandEnd(): void {
         this.onCommandEnd.next(undefined);
     }
 }
