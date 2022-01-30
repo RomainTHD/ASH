@@ -31,7 +31,7 @@ export class RunnerService {
         Command.fromString(path).execute(
             args,
             env,
-            (msg, newLine = true) => {
+            (msg = "", newLine = true) => {
                 msg = newLine ? msg + "\n" : msg;
                 return this._output.emitOutput(msg);
             },

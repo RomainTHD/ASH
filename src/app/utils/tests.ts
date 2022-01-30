@@ -34,7 +34,7 @@ export async function executeCommand(
     const cmd = Command.fromString(path);
 
     let output = "";
-    const emit = (msg: string) => output += msg;
+    const emit = (msg: string = "") => output += msg;
 
     const exitCode = await cmd.execute(args, env, emit);
     return {exitCode, output};

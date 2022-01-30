@@ -1,5 +1,6 @@
 export {Cat} from "./cat";
 export {Cd} from "./cd";
+export {Clear} from "./clear";
 // export {Cp} from "./cp";
 export {Echo} from "./echo";
 // export {Exit} from "./exit";
