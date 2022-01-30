@@ -18,7 +18,7 @@ export class RunnerService {
     public run(cmd: string, env: Env): void {
         cmd = cmd.trim();
         if (cmd === "") {
-            this._output.emitCommand("", env);
+            this._output.emitNewCommand("", env);
             this._output.emitCommandEnd();
             return;
         }
@@ -27,7 +27,7 @@ export class RunnerService {
         const path  = (argsArr.shift() as string) || "";
         let args    = Process.processArgs(argsArr);
 
-        this._output.emitCommand(cmd, env);
+        this._output.emitNewCommand(cmd, env);
         Command.fromString(path).execute(
             args,
             env,

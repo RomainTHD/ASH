@@ -6,10 +6,13 @@ import {
     ViewChild,
 } from "@angular/core";
 import {EnvService} from "app/env";
+import {OutputService} from "app/output";
+import {getPromptText} from "app/prompt/index";
 import {RunnerService} from "app/runner";
 
 interface Prompt {
     cmd: string;
+    message: string;
 }
 
 @Component({
@@ -22,14 +25,18 @@ export class PromptComponent implements OnInit, AfterViewInit {
     public promptElement?: ElementRef;
 
     public prompt: Prompt;
+
     private _runner: RunnerService;
     private _env: EnvService;
+    private _output: OutputService;
 
-    constructor(runner: RunnerService, env: EnvService) {
+    constructor(runner: RunnerService, env: EnvService, output: OutputService) {
         this._runner = runner;
         this._env    = env;
+        this._output = output;
         this.prompt  = {
             cmd: "",
+            message: getPromptText(env.getEnv()),
         };
     }
 
@@ -47,9 +54,13 @@ export class PromptComponent implements OnInit, AfterViewInit {
 
     onEnter(targetRaw: Event) {
         const target = (targetRaw.target) as HTMLDivElement;
+        this._output.emitPromptMessage(this.prompt.message);
         this._runner.run(this.prompt.cmd, this._env.getEnv());
-        this.prompt.cmd  = "";
         target.innerText = "";
+        this.prompt      = {
+            cmd: "",
+            message: getPromptText(this._env.getEnv()),
+        };
     }
 
     onTab() {
