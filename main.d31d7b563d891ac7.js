@@ -4870,7 +4870,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppComponent": () => (/* binding */ AppComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_output_output_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output/output.component */ 4040);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output */ 9548);
 
 
 let AppComponent = /*#__PURE__*/(() => {
@@ -4898,7 +4898,7 @@ let AppComponent = /*#__PURE__*/(() => {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
       }
     },
-    directives: [app_output_output_component__WEBPACK_IMPORTED_MODULE_0__.OutputComponent],
+    directives: [app_output__WEBPACK_IMPORTED_MODULE_0__.OutputComponent],
     styles: [".content[_ngcontent-%COMP%] {\n  margin: 1rem;\n}"]
   });
   return AppComponent;
@@ -4923,9 +4923,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/toolbar */ 8643);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ 5427);
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser/animations */ 9782);
-/* harmony import */ var app_output_output_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output/output.component */ 4040);
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 2050);
-/* harmony import */ var _prompt_prompt_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./prompt/prompt.component */ 9416);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_prompt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/prompt */ 355);
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app.component */ 2050);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3668);
 
 
@@ -4946,7 +4946,7 @@ let AppModule = /*#__PURE__*/(() => {
 
   AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineNgModule"]({
     type: AppModule,
-    bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
+    bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__.AppComponent]
   });
   AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjector"]({
     providers: [],
@@ -4957,12 +4957,12 @@ let AppModule = /*#__PURE__*/(() => {
 
 (function () {
   (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵsetNgModuleScope"](AppModule, {
-    declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent, _prompt_prompt_component__WEBPACK_IMPORTED_MODULE_2__.PromptComponent, app_output_output_component__WEBPACK_IMPORTED_MODULE_0__.OutputComponent],
+    declarations: [app_output__WEBPACK_IMPORTED_MODULE_0__.OutputComponent, app_prompt__WEBPACK_IMPORTED_MODULE_1__.PromptComponent, _app_component__WEBPACK_IMPORTED_MODULE_2__.AppComponent],
     imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__.BrowserModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormsModule, _angular_material_list__WEBPACK_IMPORTED_MODULE_6__.MatListModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__.BrowserAnimationsModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__.MatToolbarModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_9__.MatInputModule]
   });
 })();
 
-_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵsetComponentScope"](app_output_output_component__WEBPACK_IMPORTED_MODULE_0__.OutputComponent, [_prompt_prompt_component__WEBPACK_IMPORTED_MODULE_2__.PromptComponent], []);
+_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵsetComponentScope"](app_output__WEBPACK_IMPORTED_MODULE_0__.OutputComponent, [app_prompt__WEBPACK_IMPORTED_MODULE_1__.PromptComponent], []);
 
 /***/ }),
 
@@ -4985,49 +4985,45 @@ __webpack_require__.r(__webpack_exports__);
  * Generic command
  */
 
-class Command extends app_process__WEBPACK_IMPORTED_MODULE_0__.Process {
-  /**
-   * String to command map
-   * @param cmd Command
-   * @returns Command instance
-   */
-  static fromString(cmd) {
-    return (() => {
-      switch (cmd.trim()) {
-        case "cat":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Cat();
+let Command = /*#__PURE__*/(() => {
+  class Command extends app_process__WEBPACK_IMPORTED_MODULE_0__.Process {
+    /**
+     * String to command map
+     * @param cmd Command
+     * @returns Command instance
+     */
+    static fromString(cmd) {
+      cmd = cmd.trim(); // To stop TS complaining
 
-        case "cd":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Cd();
+      const assoc = ___WEBPACK_IMPORTED_MODULE_1__.commands;
+      let classCommand = null;
+      Object.entries(assoc).forEach(([_, currentClass]) => {
+        // For each command child class, if its command name is the same
+        //  as the command string, then we found the command
+        if (cmd === currentClass.command) {
+          classCommand = currentClass;
+        }
+      });
 
-        case "echo":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Echo();
-
-        case "ls":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Ls();
-
-        case "mkdir":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Mkdir();
-
-        case "pwd":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Pwd();
-
-        case "touch":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Touch();
-
-        case "__reset":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Reset();
-
-        case "":
-          return new ___WEBPACK_IMPORTED_MODULE_1__.Noop();
-
-        default:
-          return new ___WEBPACK_IMPORTED_MODULE_1__.NotFound(cmd);
+      if (classCommand !== null) {
+        // @ts-ignore
+        // Weird TS error, the variable type is marked as `never`, which is
+        //  clearly wrong, and then the `new` doesn't work since `Command`
+        //  is abstract
+        return new classCommand();
+      } else {
+        return new ___WEBPACK_IMPORTED_MODULE_1__.commands.NotFound(cmd);
       }
-    })();
+    }
+
   }
 
-}
+  /**
+   * Command name, like `cat` or `ls`
+   */
+  Command.command = null;
+  return Command;
+})();
 
 /***/ }),
 
@@ -5055,33 +5051,45 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Cat extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Prints the contents of a file";
-    this.usage = "cat <file>";
+let Cat = /*#__PURE__*/(() => {
+  class Cat extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Prints the contents of a file";
+      this.usage = "cat <file>";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const filePathArg = args.others[0];
+
+        if (!filePathArg) {
+          emit("cat: missing file path");
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
+        }
+
+        const f = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(env.absolutePath(filePathArg));
+
+        if (!f) {
+          emit(`cat: '${filePathArg}': no such file or directory`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
+        }
+
+        if (f.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_2__.InodeType.File) {
+          emit(`cat: '${filePathArg}': is not a file`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Unsupported;
+        }
+
+        emit(f.content);
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      const f = app_fs__WEBPACK_IMPORTED_MODULE_2__.File.findFromPath(env.absolutePath(args.others[0]));
-
-      if (!f) {
-        emit("No such file");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
-      }
-
-      if (f.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_2__.InodeType.File) {
-        emit("Not a file");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Unsupported;
-      }
-
-      emit(f.content);
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
-  }
-
-}
+  Cat.command = "cat";
+  return Cat;
+})();
 
 /***/ }),
 
@@ -5109,30 +5117,40 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Cd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Change directory";
-    this.usage = "cd [path]";
+let Cd = /*#__PURE__*/(() => {
+  class Cd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Change directory";
+      this.usage = "cd [path]";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const path = args.others[0] || "~";
+        const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(env.absolutePath(path));
+
+        if (dir === null) {
+          emit(`cd: '${path}': no such directory`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
+        }
+
+        if (dir.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_2__.InodeType.Directory) {
+          emit(`cd: '${path}': not a directory`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Unsupported;
+        }
+
+        env.setCwd(path);
+        emit(env.getCwd());
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      const path = args.others[0] || "~";
-      const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(env.absolutePath(path));
-
-      if (dir === null) {
-        emit("error");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
-      } else {
-        env.cwd = path;
-      }
-
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
-  }
-
-}
+  Cd.command = "cd";
+  return Cd;
+})();
 
 /***/ }),
 
@@ -5158,21 +5176,122 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Echo extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Echo a message";
-    this.usage = "echo [text]";
+let Echo = /*#__PURE__*/(() => {
+  class Echo extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Echo a message";
+      this.usage = "echo [text]";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        emit(args.others.join(" "), !args.flags["n"]);
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      emit(args.others.join(" "));
-      return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
-    })();
+  Echo.command = "echo";
+  return Echo;
+})();
+
+/***/ }),
+
+/***/ 7316:
+/*!***************************************!*\
+  !*** ./src/app/cmd/commands/false.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "False": () => (/* binding */ False)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+
+
+
+let False = /*#__PURE__*/(() => {
+  class False extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Do nothing and fails";
+      this.usage = "false";
+    }
+
+    execute(..._) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Failure;
+      })();
+    }
+
   }
 
-}
+  False.command = "false";
+  return False;
+})();
+
+/***/ }),
+
+/***/ 4533:
+/*!**************************************!*\
+  !*** ./src/app/cmd/commands/help.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Help": () => (/* binding */ Help)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+
+
+
+/**
+ * Show help for a command
+ * @see description
+ * @see usage
+ */
+
+let Help = /*#__PURE__*/(() => {
+  class Help extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Show help for a command";
+      this.usage = "help [command]";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        if (!args.others[0]) {
+          const assoc = app_cmd__WEBPACK_IMPORTED_MODULE_1__.regularCommands;
+          Object.keys(assoc).forEach(key => {
+            // Like we did in `Command`, we're doing some kind of reflection
+            //  to go through all commands
+            const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(assoc[key].command);
+            emit(`${cmd.usage} - ${cmd.description}`);
+          });
+          return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
+        } else {
+          // Not sure about this one, but should work for now
+          return new app_cmd__WEBPACK_IMPORTED_MODULE_1__.Man().execute(args, env, emit);
+        }
+      })();
+    }
+
+  }
+
+  Help.command = "help";
+  return Help;
+})();
 
 /***/ }),
 
@@ -5188,27 +5307,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Cat": () => (/* reexport safe */ _cat__WEBPACK_IMPORTED_MODULE_0__.Cat),
 /* harmony export */   "Cd": () => (/* reexport safe */ _cd__WEBPACK_IMPORTED_MODULE_1__.Cd),
 /* harmony export */   "Echo": () => (/* reexport safe */ _echo__WEBPACK_IMPORTED_MODULE_2__.Echo),
-/* harmony export */   "Ls": () => (/* reexport safe */ _ls__WEBPACK_IMPORTED_MODULE_3__.Ls),
-/* harmony export */   "Mkdir": () => (/* reexport safe */ _mkdir__WEBPACK_IMPORTED_MODULE_4__.Mkdir),
-/* harmony export */   "Pwd": () => (/* reexport safe */ _pwd__WEBPACK_IMPORTED_MODULE_5__.Pwd),
-/* harmony export */   "Touch": () => (/* reexport safe */ _touch__WEBPACK_IMPORTED_MODULE_6__.Touch)
+/* harmony export */   "False": () => (/* reexport safe */ _false__WEBPACK_IMPORTED_MODULE_3__.False),
+/* harmony export */   "Help": () => (/* reexport safe */ _help__WEBPACK_IMPORTED_MODULE_4__.Help),
+/* harmony export */   "Ls": () => (/* reexport safe */ _ls__WEBPACK_IMPORTED_MODULE_5__.Ls),
+/* harmony export */   "Man": () => (/* reexport safe */ _man__WEBPACK_IMPORTED_MODULE_6__.Man),
+/* harmony export */   "Mkdir": () => (/* reexport safe */ _mkdir__WEBPACK_IMPORTED_MODULE_7__.Mkdir),
+/* harmony export */   "Pwd": () => (/* reexport safe */ _pwd__WEBPACK_IMPORTED_MODULE_8__.Pwd),
+/* harmony export */   "Touch": () => (/* reexport safe */ _touch__WEBPACK_IMPORTED_MODULE_9__.Touch),
+/* harmony export */   "True": () => (/* reexport safe */ _true__WEBPACK_IMPORTED_MODULE_10__.True)
 /* harmony export */ });
 /* harmony import */ var _cat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cat */ 3320);
 /* harmony import */ var _cd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cd */ 183);
 /* harmony import */ var _echo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./echo */ 6746);
-/* harmony import */ var _ls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ls */ 5401);
-/* harmony import */ var _mkdir__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mkdir */ 4402);
-/* harmony import */ var _pwd__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pwd */ 7941);
-/* harmony import */ var _touch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./touch */ 6551);
+/* harmony import */ var _false__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./false */ 7316);
+/* harmony import */ var _help__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./help */ 4533);
+/* harmony import */ var _ls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ls */ 5401);
+/* harmony import */ var _man__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./man */ 3713);
+/* harmony import */ var _mkdir__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mkdir */ 4402);
+/* harmony import */ var _pwd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pwd */ 7941);
+/* harmony import */ var _touch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./touch */ 6551);
+/* harmony import */ var _true__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./true */ 5986);
 
  // export {Cp} from "./cp";
 
  // export {Exit} from "./exit";
-// export {Grep} from "./grep";
-// export {Help} from "./help";
+
+ // export {Grep} from "./grep";
+
+
 
 
  // export {Mv} from "./mv";
+
 
 
 
@@ -5239,40 +5369,105 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Ls extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "List files in the current directory";
-    this.usage = "ls [options] [path]";
-  }
+let Ls = /*#__PURE__*/(() => {
+  class Ls extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "List files in the current directory";
+      this.usage = "ls [options] [path]";
+    }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      const path = env.absolutePath(args.others[0] || ".");
-      const cwd = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(path);
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const path = env.absolutePath(args.others[0] || ".");
+        const cwd = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(path);
 
-      if (!cwd) {
-        emit("error");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
-      }
-
-      let output = "[ ";
-      cwd.content.forEach((child, idx) => {
-        output += `${child.name}`;
-
-        if (idx !== cwd.content.length - 1) {
-          output += ",";
+        if (!cwd) {
+          emit(`ls: cannot access '${path}': no such directory`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
-        output += " ";
-      });
-      output += "]";
-      emit(output);
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
+        let output = "[ ";
+        cwd.content.forEach((child, idx) => {
+          output += `${child.name}`;
+
+          if (idx !== cwd.content.length - 1) {
+            output += ",";
+          }
+
+          output += " ";
+        });
+        output += "]";
+        emit(output);
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-}
+  Ls.command = "ls";
+  return Ls;
+})();
+
+/***/ }),
+
+/***/ 3713:
+/*!*************************************!*\
+  !*** ./src/app/cmd/commands/man.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Man": () => (/* binding */ Man)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/process */ 8728);
+
+
+
+
+let Man = /*#__PURE__*/(() => {
+  class Man extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Informations about a command";
+      this.usage = "man <cmd>";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const cmd = args.others[0];
+
+        if (!cmd) {
+          emit("man: missing command name");
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
+        }
+
+        const commandObject = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(cmd);
+
+        if (!commandObject || commandObject instanceof app_cmd__WEBPACK_IMPORTED_MODULE_1__.NotFound) {
+          emit(`man: no manual entry for '${cmd}'`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
+        }
+
+        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.BOLD}Manual for \`${cmd}\`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Usage:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+        emit(commandObject.usage);
+        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Description:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+        emit(commandObject.description);
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
+  }
+
+  Man.command = "man";
+  return Man;
+})();
 
 /***/ }),
 
@@ -5300,37 +5495,47 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Mkdir extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Create a directory";
-    this.usage = "mkdir <path>";
+let Mkdir = /*#__PURE__*/(() => {
+  class Mkdir extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Create a directory";
+      this.usage = "mkdir <path>";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const dirPathArg = args.others[0];
+
+        if (!dirPathArg) {
+          emit("mkdir: missing directory path");
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
+        }
+
+        let pathArr = dirPathArg.split("/");
+        const name = pathArr.pop();
+        const absPath = env.absolutePath(pathArr.join("/"));
+        const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
+
+        if (!dir) {
+          emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
+        }
+
+        app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.create({
+          name,
+          parent: dir.id
+        });
+        emit(`${absPath}/${name}`);
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      let pathArr = args.others[0].split("/");
-      const name = pathArr.pop();
-      const absPath = env.absolutePath(pathArr.join("/"));
-      const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
-
-      if (!dir) {
-        emit("No such directory");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
-      }
-
-      app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.create({
-        name,
-        parent: dir.id,
-        owner: "",
-        content: []
-      });
-      emit(absPath);
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
-  }
-
-}
+  Mkdir.command = "mkdir";
+  return Mkdir;
+})();
 
 /***/ }),
 
@@ -5356,21 +5561,26 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Pwd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Prints the current working directory";
-    this.usage = "pwd";
+let Pwd = /*#__PURE__*/(() => {
+  class Pwd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Prints the current working directory";
+      this.usage = "pwd";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        emit(env.getCwd());
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      emit(env.cwd);
-      return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
-    })();
-  }
-
-}
+  Pwd.command = "pwd";
+  return Pwd;
+})();
 
 /***/ }),
 
@@ -5398,37 +5608,86 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Touch extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Touch a file";
-    this.usage = "touch <file>";
+let Touch = /*#__PURE__*/(() => {
+  class Touch extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Touch a file";
+      this.usage = "touch <file>";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const filePathArg = args.others[0];
+
+        if (!filePathArg) {
+          emit("touch: missing file path");
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
+        }
+
+        let pathArr = filePathArg.split("/");
+        const name = pathArr.pop();
+        const absPath = env.absolutePath(pathArr.join("/"));
+        const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
+
+        if (!dir) {
+          emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
+          return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
+        }
+
+        app_fs__WEBPACK_IMPORTED_MODULE_2__.File.create({
+          name,
+          parent: dir.id
+        });
+        emit(absPath);
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      let pathArr = args.others[0].split("/");
-      const name = pathArr.pop();
-      const absPath = env.absolutePath(pathArr.join("/"));
-      const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
+  Touch.command = "touch";
+  return Touch;
+})();
 
-      if (!dir) {
-        emit("No such directory");
-        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
-      }
+/***/ }),
 
-      app_fs__WEBPACK_IMPORTED_MODULE_2__.File.create({
-        name,
-        parent: dir.id,
-        owner: "",
-        content: "created"
-      });
-      emit(absPath);
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
+/***/ 5986:
+/*!**************************************!*\
+  !*** ./src/app/cmd/commands/true.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "True": () => (/* binding */ True)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+
+
+
+let True = /*#__PURE__*/(() => {
+  class True extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Do nothing successfully";
+      this.usage = "true";
+    }
+
+    execute(..._) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
+      })();
+    }
+
   }
 
-}
+  True.command = "true";
+  return True;
+})();
 
 /***/ }),
 
@@ -5442,20 +5701,37 @@ class Touch extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Command": () => (/* reexport safe */ _command__WEBPACK_IMPORTED_MODULE_0__.Command),
+/* harmony export */   "commands": () => (/* binding */ commands),
+/* harmony export */   "regularCommands": () => (/* reexport module object */ _commands__WEBPACK_IMPORTED_MODULE_1__),
+/* harmony export */   "internalCommands": () => (/* reexport module object */ _internal__WEBPACK_IMPORTED_MODULE_2__),
 /* harmony export */   "Cat": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Cat),
 /* harmony export */   "Cd": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Cd),
 /* harmony export */   "Echo": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Echo),
+/* harmony export */   "False": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.False),
+/* harmony export */   "Help": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Help),
 /* harmony export */   "Ls": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Ls),
+/* harmony export */   "Man": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Man),
 /* harmony export */   "Mkdir": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Mkdir),
 /* harmony export */   "Pwd": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Pwd),
 /* harmony export */   "Touch": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Touch),
-/* harmony export */   "Noop": () => (/* reexport safe */ _internal__WEBPACK_IMPORTED_MODULE_2__.Noop),
+/* harmony export */   "True": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.True),
 /* harmony export */   "NotFound": () => (/* reexport safe */ _internal__WEBPACK_IMPORTED_MODULE_2__.NotFound),
 /* harmony export */   "Reset": () => (/* reexport safe */ _internal__WEBPACK_IMPORTED_MODULE_2__.Reset)
 /* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ 4762);
 /* harmony import */ var _command__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./command */ 8601);
 /* harmony import */ var _commands__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./commands */ 1298);
 /* harmony import */ var _internal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./internal */ 7150);
+
+
+
+
+
+const regular = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__rest)(_commands__WEBPACK_IMPORTED_MODULE_1__, []);
+
+const internal = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__rest)(_internal__WEBPACK_IMPORTED_MODULE_2__, []);
+
+const commands = Object.assign(Object.assign({}, regular), internal);
 
 
 
@@ -5471,56 +5747,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Noop": () => (/* reexport safe */ _noop__WEBPACK_IMPORTED_MODULE_0__.Noop),
-/* harmony export */   "NotFound": () => (/* reexport safe */ _not_found__WEBPACK_IMPORTED_MODULE_1__.NotFound),
-/* harmony export */   "Reset": () => (/* reexport safe */ _reset__WEBPACK_IMPORTED_MODULE_2__.Reset)
+/* harmony export */   "NotFound": () => (/* reexport safe */ _not_found__WEBPACK_IMPORTED_MODULE_0__.NotFound),
+/* harmony export */   "Reset": () => (/* reexport safe */ _reset__WEBPACK_IMPORTED_MODULE_1__.Reset)
 /* harmony export */ });
-/* harmony import */ var _noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./noop */ 7126);
-/* harmony import */ var _not_found__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./not-found */ 9191);
-/* harmony import */ var _reset__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reset */ 5208);
+/* harmony import */ var _not_found__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./not-found */ 9191);
+/* harmony import */ var _reset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reset */ 5208);
 
 
-
-
-/***/ }),
-
-/***/ 7126:
-/*!**************************************!*\
-  !*** ./src/app/cmd/internal/noop.ts ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Noop": () => (/* binding */ Noop)
-/* harmony export */ });
-/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
-/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
-/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
-
-
-
-/**
- * No-op command
- * @see description
- * @see usage
- */
-
-class Noop extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "No-op command";
-    this.usage = "";
-  }
-
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
-    })();
-  }
-
-}
 
 /***/ }),
 
@@ -5547,24 +5780,29 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class NotFound extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor(cmd = "__unknown") {
-    super();
-    this.description = "Command not found";
-    this.usage = "__unknown";
-    this._cmd = cmd;
+let NotFound = /*#__PURE__*/(() => {
+  class NotFound extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor(cmd = "__unknown") {
+      super();
+      this.description = "Command not found";
+      this.usage = "__unknown";
+      this._cmd = cmd;
+    }
+
+    execute(args, env, emit) {
+      var _this = this;
+
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        emit(`${_this._cmd}: command not found`);
+        return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Failure;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    var _this = this;
-
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      emit(`${_this._cmd}: command not found`);
-      return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
-    })();
-  }
-
-}
+  NotFound.command = "__unknown";
+  return NotFound;
+})();
 
 /***/ }),
 
@@ -5593,22 +5831,27 @@ __webpack_require__.r(__webpack_exports__);
  * @see usage
  */
 
-class Reset extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-  constructor() {
-    super(...arguments);
-    this.description = "Reset the app and erase all filesystem";
-    this.usage = "__reset";
+let Reset = /*#__PURE__*/(() => {
+  class Reset extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Reset the app and erase all filesystem";
+      this.usage = "__reset";
+    }
+
+    execute(args, env, emit) {
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        app_orm__WEBPACK_IMPORTED_MODULE_2__.StorageORM.resetAll();
+        emit("OK");
+        return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
+      })();
+    }
+
   }
 
-  execute(args, env, emit) {
-    return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      app_orm__WEBPACK_IMPORTED_MODULE_2__.StorageORM.resetAll();
-      emit("OK");
-      return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
-    })();
-  }
-
-}
+  Reset.command = "__reset";
+  return Reset;
+})();
 
 /***/ }),
 
@@ -5626,6 +5869,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/env */ 2227);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 3668);
 
+
+/**
+ * Environment service, allows us to use the current environment across all
+ * components
+ */
 
 let EnvService = /*#__PURE__*/(() => {
   class EnvService {
@@ -5677,20 +5925,52 @@ let Env = /*#__PURE__*/(() => {
      * @param path Current working directory
      */
     constructor(path = null) {
-      this._cwd = path === null ? "/" : path;
+      this._cwd = "/";
+
+      if (path !== null) {
+        this.setCwd(path);
+      }
+
       this._home = Env.DEFAULT_HOME;
     }
+    /**
+     * Current working directory
+     * @param trailingSlash Add a trailing slash or not
+     * @returns Current working directory
+     */
 
-    get home() {
-      return this._home;
+
+    getCwd(trailingSlash = false) {
+      return this._cwd + (trailingSlash && this._cwd !== "/" ? "/" : "");
     }
+    /**
+     * Set current working directory
+     * @param newCwd New current working directory
+     */
 
-    get cwd() {
-      return this._cwd;
+
+    setCwd(newCwd) {
+      let path = this.absolutePath(newCwd);
+
+      if (path.startsWith(this.getHome())) {
+        path = `~/${path.substr(this.getHome().length)}`;
+      }
+
+      if (path.endsWith("/") && path.length > 1) {
+        path = path.substr(0, path.length - 1);
+      }
+
+      this._cwd = path;
     }
+    /**
+     * Get home directory
+     * @param trailingSlash Add a trailing slash or not
+     * @returns Home directory
+     */
 
-    set cwd(value) {
-      this._cwd = value;
+
+    getHome(trailingSlash = false) {
+      return this._home + (trailingSlash && this._home !== "/" ? "/" : "");
     }
     /**
      * @param path Relative path
@@ -5701,12 +5981,14 @@ let Env = /*#__PURE__*/(() => {
     absolutePath(path) {
       if (path.startsWith("~")) {
         // FIXME: What about files like "~foo" ?
-        path = this.home + path.substr(2);
+        path = this.getHome(true) + path.substr(2);
       }
 
       let addSlash = false;
 
       if (path.endsWith("/")) {
+        // Possibly add a trailing slash if needed. For now, we remove it
+        //  though, but we'll add it again later
         if (path !== "/") {
           path = path.slice(0, -1);
           addSlash = true;
@@ -5714,29 +5996,16 @@ let Env = /*#__PURE__*/(() => {
       }
 
       if (!path.startsWith("/")) {
-        path = this.cwd + path;
+        // Adds the current working directory prefix in front of the path
+        path = this.getCwd(true) + path;
       }
 
       let pathItems = path.split("/");
 
-      if (pathItems[0] === ".") {
-        let cwd = this.cwd.split("/");
-
-        if (cwd[0] === "") {
-          cwd.shift();
-        }
-
-        if (cwd.length !== 0) {
-          pathItems = cwd.concat(pathItems.slice(1));
-        }
-      }
-
-      if (pathItems[0] === "..") {
-        pathItems = this.cwd.split("/").slice(0, -1).concat(pathItems.slice(1));
-      }
-
       for (let i = 0; i < pathItems.length; ++i) {
         if (pathItems[i] === "..") {
+          // Transform "/foo/bar/../baz" into "/foo/baz" by removing the
+          //  previous item
           pathItems.splice(i - 1, 2);
           i -= 2;
 
@@ -5744,6 +6013,7 @@ let Env = /*#__PURE__*/(() => {
             pathItems.push("");
           }
         } else if (pathItems[i] === ".") {
+          // Transform "/foo/./bar" into "/foo/bar"
           pathItems.splice(i, 1);
           --i;
 
@@ -5751,7 +6021,8 @@ let Env = /*#__PURE__*/(() => {
             pathItems.push("");
           }
         }
-      }
+      } // Add a trailing slash if needed
+
 
       if (addSlash) {
         pathItems.push("");
@@ -5767,7 +6038,7 @@ let Env = /*#__PURE__*/(() => {
 
 
     getPathDirectory() {
-      const dir = app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.findFromPath(this.absolutePath(this.cwd));
+      const dir = app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.findFromPath(this.absolutePath(this.getCwd()));
 
       if (dir === null) {
         throw new Error("Directory not found");
@@ -5779,7 +6050,7 @@ let Env = /*#__PURE__*/(() => {
   }
 
   /**
-   * Default home
+   * Default home, not terminated with a slash
    * @private
    */
   Env.DEFAULT_HOME = "/home/user";
@@ -5840,17 +6111,22 @@ let Directory = /*#__PURE__*/(() => {
       super.content = value;
     }
 
-    static create(template, id) {
-      const now = new Date();
-      const dir = new Directory(Object.assign(Object.assign({}, template), {
-        inodeType: app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.Directory,
-        id: id || app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM.getNewID(app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode.category),
-        size: 0,
+    static create(template) {
+      const now = new Date(); // We create the directory object with all its properties
+
+      const dir = new Directory({
+        content: template.content || [],
         created: now,
+        id: template.id || app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM.getNewID(app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode.category),
+        inodeType: app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.Directory,
         modified: now,
-        content: template.content
-      }));
-      dir.save();
+        name: template.name,
+        owner: template.owner || "root",
+        parent: template.parent || this.getRoot().id,
+        size: 0
+      }); // Save it to the storage
+
+      dir.save(); // Special case for the root directory "/", where its parent is itself
 
       if (dir.id !== Directory.ROOT_DIRECTORY_ID) {
         const parent = Directory.find(dir.parent);
@@ -5860,7 +6136,6 @@ let Directory = /*#__PURE__*/(() => {
         }
 
         parent.addChild(dir);
-        parent.save();
       }
 
       return dir;
@@ -5879,13 +6154,11 @@ let Directory = /*#__PURE__*/(() => {
       let root = this.find(Directory.ROOT_DIRECTORY_ID);
 
       if (root === null) {
-        // throw new Error("Root directory not found");
         root = this.create({
+          id: Directory.ROOT_DIRECTORY_ID,
           name: "",
-          parent: Directory.ROOT_DIRECTORY_ID,
-          owner: "root",
-          content: []
-        }, Directory.ROOT_DIRECTORY_ID);
+          parent: Directory.ROOT_DIRECTORY_ID
+        });
       }
 
       return root;
@@ -5898,30 +6171,13 @@ let Directory = /*#__PURE__*/(() => {
 
 
     static findFromPath(path) {
-      const items = path.split("/");
-      items.pop(); // Remove last item, which has to be empty
+      const inode = super.findFromPath(path);
 
-      if (items[0] === "") {
-        items.shift(); // Remove root "/"
+      if (inode === null || inode.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.Directory) {
+        return null;
       }
 
-      let current = this.getRoot();
-
-      for (const item of items) {
-        if (current === null) {
-          return null;
-        } else {
-          const child = current.findChild(item);
-
-          if (child === null || child.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.Directory) {
-            return null;
-          } else {
-            current = child;
-          }
-        }
-      }
-
-      return current;
+      return inode;
     }
     /**
      * Finds a child by name
@@ -5950,6 +6206,9 @@ let Directory = /*#__PURE__*/(() => {
         id: node.id,
         name: node.name
       });
+      node.parent = this.id;
+      node.save();
+      this.save();
     }
 
   }
@@ -5997,14 +6256,20 @@ class File extends app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode {
   }
 
   static create(template) {
-    const now = new Date();
-    const f = new File(Object.assign(Object.assign({}, template), {
-      inodeType: app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.File,
-      id: app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM.getNewID(app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode.category),
-      size: 0,
+    const now = new Date(); // Create the file object
+
+    const f = new File({
+      content: template.content || "",
       created: now,
-      modified: now
-    }));
+      id: template.id || app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM.getNewID(app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode.category),
+      inodeType: app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.File,
+      modified: now,
+      name: template.name,
+      owner: template.owner || "root",
+      parent: template.parent || app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.getRoot().id,
+      size: 0
+    }); // Save it in the storage
+
     f.save();
     const dir = app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.find(f.parent);
 
@@ -6012,36 +6277,29 @@ class File extends app_fs__WEBPACK_IMPORTED_MODULE_0__.Inode {
       throw new Error("Parent directory not found");
     }
 
-    dir.addChild(f);
-    dir.save();
+    dir.addChild(f); // Update the parent
+
     return f;
   }
 
   static fromJSON(json) {
     return new this(json);
   }
+  /**
+   * Finds a file by its path
+   * @param path File path
+   * @returns File or null if not found
+   */
+
 
   static findFromPath(path) {
-    const items = path.split("/");
+    const inode = super.findFromPath(path);
 
-    if (items.length <= 1) {
+    if (inode === null || inode.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.File) {
       return null;
     }
 
-    const fileName = items.pop();
-    const parent = app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.findFromPath(items.join("/"));
-
-    if (!parent) {
-      return null;
-    }
-
-    const node = parent.findChild(fileName);
-
-    if (!node || node.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_0__.InodeType.File) {
-      return null;
-    }
-
-    return node;
+    return inode;
   }
 
 }
@@ -6117,7 +6375,16 @@ let Inode = /*#__PURE__*/(() => {
       this._created = template.created;
       this._modified = template.modified;
       this._parent = template.parent;
+      this._owner = template.owner;
       this._content = template.content;
+    }
+
+    get owner() {
+      return this._owner;
+    }
+
+    set owner(value) {
+      this._owner = value;
     }
 
     get inodeType() {
@@ -6194,6 +6461,52 @@ let Inode = /*#__PURE__*/(() => {
     static findAll() {
       return app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM.readAll(Inode.category).map(json => this.fromJSON(JSON.parse(json)));
     }
+    /**
+     * Finds an inode by its path
+     * @param path Inode path
+     * @returns Inode or null if not found
+     */
+
+
+    static findFromPath(path) {
+      const items = path.split("/");
+      let inodeName = items.pop();
+
+      if (inodeName === "") {
+        // For directories, if the path ends with a slash,
+        //  the last item is an empty string
+        inodeName = items.pop();
+      }
+
+      if (items[0] === "") {
+        items.shift(); // Remove root "/"
+      }
+
+      let parent = app_fs__WEBPACK_IMPORTED_MODULE_0__.Directory.getRoot();
+
+      for (let i = 0; i < items.length; ++i) {
+        const item = items[i];
+
+        if (parent === null) {
+          return null;
+        } else {
+          const child = parent.findChild(item);
+
+          if (child === null) {
+            return null;
+          } else {
+            parent = child;
+          }
+        }
+      }
+
+      if (inodeName === "") {
+        // We're asking for the root directory
+        return parent;
+      } else {
+        return parent.findChild(inodeName);
+      }
+    }
 
     delete() {
       app_orm__WEBPACK_IMPORTED_MODULE_1__.StorageORM["delete"](Inode.category, this.id);
@@ -6212,7 +6525,8 @@ let Inode = /*#__PURE__*/(() => {
         created: this.created,
         modified: this.modified,
         parent: this.parent,
-        content: this._content
+        owner: this.owner,
+        content: this.content
       };
     }
 
@@ -6391,8 +6705,8 @@ class AnsiColor {
      * @private
      */
     this.__flag_is_ansi = true;
-    this._ansi = ansi;
-    this._class = cls;
+    this.ansiCode = ansi;
+    this.className = cls;
   }
   /**
    * Parse some text with ANSI color codes
@@ -6404,7 +6718,7 @@ class AnsiColor {
   static parse(text) {
     // Split on each reset, and will add for each part the right amount of
     //  closing tags
-    let parts = text.split(this.RESET._ansi).map(part => {
+    let parts = text.split(this.RESET.ansiCode).map(part => {
       let count = 0;
 
       const processPart = (obj, classModifier) => {
@@ -6417,11 +6731,10 @@ class AnsiColor {
         } // FIXME: Only replaced once ?
 
 
-        const ansi = color._ansi.replace("\[", "\\\[");
-
+        const ansi = color.ansiCode.replace("\[", "\\\[");
         count += (part.match(new RegExp(ansi, "gm")) || []).length;
-        const cls = (classModifier ? classModifier + "--" : "") + color._class;
-        part = part.replace(color._ansi, `<span class="${cls}">`);
+        const cls = (classModifier ? classModifier + "--" : "") + color.className;
+        part = part.replace(color.ansiCode, `<span class="${cls}">`);
       }; // Process all basic tags
 
 
@@ -6443,7 +6756,7 @@ class AnsiColor {
   }
 
   toString() {
-    return this._ansi;
+    return this.ansiCode;
   }
 
 }
@@ -6520,11 +6833,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "OutputComponent": () => (/* binding */ OutputComponent)
 /* harmony export */ });
-/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dompurify */ 2094);
-/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dompurify */ 2094);
+/* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dompurify__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/output */ 9548);
 /* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
+
 
 
 
@@ -6540,12 +6854,12 @@ let OutputComponent = /*#__PURE__*/(() => {
       }));
 
       this._subscriptions.push(outputService.subscribeNewCommand(obj => {
-        this.content += dompurify__WEBPACK_IMPORTED_MODULE_0__.sanitize(obj.command);
+        this.content += dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(obj.command);
         this.content += "<br/>";
       }));
 
       this._subscriptions.push(outputService.subscribeOutput(output => {
-        this.content += dompurify__WEBPACK_IMPORTED_MODULE_0__.sanitize(output).replace("\n", "<br/>").replace("\r", "");
+        this.content += app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.parse(dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(output).replace("\n", "<br/>").replace("\r", ""));
       }));
 
       this._subscriptions.push(outputService.subscribeCommandEnd(() => {}));
@@ -6564,7 +6878,7 @@ let OutputComponent = /*#__PURE__*/(() => {
   }
 
   OutputComponent.ɵfac = function OutputComponent_Factory(t) {
-    return new (t || OutputComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_1__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService));
+    return new (t || OutputComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_0__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService));
   };
 
   OutputComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({
@@ -6684,7 +6998,7 @@ __webpack_require__.r(__webpack_exports__);
 var ExitCode = /*#__PURE__*/(() => {
   (function (ExitCode) {
     ExitCode[ExitCode["Success"] = 0] = "Success";
-    ExitCode[ExitCode["Error"] = 1] = "Error";
+    ExitCode[ExitCode["Failure"] = 1] = "Failure";
     ExitCode[ExitCode["Cancelled"] = 2] = "Cancelled";
     ExitCode[ExitCode["Timeout"] = 3] = "Timeout";
     ExitCode[ExitCode["Unknown"] = 4] = "Unknown";
@@ -6692,6 +7006,8 @@ var ExitCode = /*#__PURE__*/(() => {
     ExitCode[ExitCode["Unauthorized"] = 6] = "Unauthorized";
     ExitCode[ExitCode["NotFound"] = 7] = "NotFound";
     ExitCode[ExitCode["Invalid"] = 8] = "Invalid";
+    ExitCode[ExitCode["MissingArgument"] = 9] = "MissingArgument";
+    ExitCode[ExitCode["InvalidArgument"] = 10] = "InvalidArgument";
   })(ExitCode || (ExitCode = {}));
 
   return ExitCode;
@@ -6737,10 +7053,10 @@ class Process {
     let others = [];
 
     for (let i = 0; i < args.length; ++i) {
-      let arg = args[i];
+      let arg = args[i].trim();
 
       if (arg.startsWith("--")) {
-        let name = arg.slice(2);
+        let name = arg.slice(2).trim();
 
         if (name === "") {
           continue;
@@ -6748,14 +7064,14 @@ class Process {
 
         options[name] = {
           name,
-          next: args[i + 1] || null
+          next: args[i + 1] ? args[i + 1].trim() : null
         };
       } else if (arg.startsWith("-")) {
-        let name = arg.slice(1);
+        let name = arg.slice(1).trim();
         name.split("").forEach(flag => {
           flags[flag] = {
             name: flag,
-            next: args[i + 1] || null
+            next: args[i + 1] ? args[i + 1].trim() : null
           };
         });
       } else {
@@ -6806,7 +7122,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function getPromptText(env) {
   const time = new Date().toISOString().split("T")[1].split(".")[0];
-  let base = `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.GREEN}root${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.MAGENTA}${time}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.BLUE}${env.cwd}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}$&nbsp;`;
+  let base = `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.GREEN}root${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.MAGENTA}${time}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}:` + `${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.FG.BLUE}${env.getCwd()}${app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.RESET}$&nbsp;`;
   return app_output__WEBPACK_IMPORTED_MODULE_0__.AnsiColor.parse(dompurify__WEBPACK_IMPORTED_MODULE_1__.sanitize(base));
 }
 
@@ -6970,8 +7286,14 @@ let RunnerService = /*#__PURE__*/(() => {
     }
 
     run(cmd, env) {
-      while (cmd.endsWith("\n")) {
-        cmd = cmd.slice(0, -1);
+      cmd = cmd.trim();
+
+      if (cmd === "") {
+        this._output.emitNewCommand("", env);
+
+        this._output.emitCommandEnd();
+
+        return;
       }
 
       let argsArr = app_utils__WEBPACK_IMPORTED_MODULE_2__.strings.splitSpace(cmd);
@@ -7044,10 +7366,13 @@ function stringToHTML(str, raw = false) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "front": () => (/* reexport module object */ _front__WEBPACK_IMPORTED_MODULE_0__),
-/* harmony export */   "strings": () => (/* reexport module object */ _strings__WEBPACK_IMPORTED_MODULE_1__)
+/* harmony export */   "strings": () => (/* reexport module object */ _strings__WEBPACK_IMPORTED_MODULE_1__),
+/* harmony export */   "tests": () => (/* reexport module object */ _tests__WEBPACK_IMPORTED_MODULE_2__)
 /* harmony export */ });
 /* harmony import */ var _front__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./front */ 997);
 /* harmony import */ var _strings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./strings */ 3200);
+/* harmony import */ var _tests__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tests */ 6403);
+
 
 
 
@@ -7147,6 +7472,69 @@ function splitSpace(str, keepQuotes = true) {
 
 /***/ }),
 
+/***/ 6403:
+/*!********************************!*\
+  !*** ./src/app/utils/tests.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "executeCommand": () => (/* binding */ executeCommand)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
+/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! . */ 4905);
+
+
+
+
+
+/**
+ * Execute a string command
+ * @param cmdStr Command as a string
+ * @param args Arguments to pass to the command.
+ * If empty, the arguments will be parsed from the command string
+ * @param env Environment to pass to the command
+ * @returns Exit code and command output
+ */
+
+function executeCommand(_x) {
+  return _executeCommand.apply(this, arguments);
+}
+
+function _executeCommand() {
+  _executeCommand = (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (cmdStr, args = null, env = null) {
+    let argsArr = ___WEBPACK_IMPORTED_MODULE_4__.strings.splitSpace(cmdStr);
+    const path = argsArr.shift() || "";
+
+    if (!args) {
+      args = app_process__WEBPACK_IMPORTED_MODULE_3__.Process.processArgs(argsArr);
+    }
+
+    if (!env) {
+      env = new app_env__WEBPACK_IMPORTED_MODULE_2__.Env();
+    }
+
+    const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(path);
+    let output = "";
+
+    const emit = msg => output += msg;
+
+    const exitCode = yield cmd.execute(args, env, emit);
+    return {
+      exitCode,
+      output
+    };
+  });
+  return _executeCommand.apply(this, arguments);
+}
+
+/***/ }),
+
 /***/ 3612:
 /*!***********************!*\
   !*** ./src/assert.ts ***!
@@ -7197,18 +7585,18 @@ const environment = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ 5427);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app/app.module */ 4750);
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./environments/environment */ 8260);
+/* harmony import */ var app_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/app.module */ 4750);
+/* harmony import */ var environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! environments/environment */ 8260);
 
 
 
 
 
-if (_environments_environment__WEBPACK_IMPORTED_MODULE_1__.environment.production) {
+if (environments_environment__WEBPACK_IMPORTED_MODULE_1__.environment.production) {
   (0,_angular_core__WEBPACK_IMPORTED_MODULE_2__.enableProdMode)();
 }
 
-_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.platformBrowser().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_0__.AppModule).catch(err => console.error(err));
+_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.platformBrowser().bootstrapModule(app_app_module__WEBPACK_IMPORTED_MODULE_0__.AppModule).catch(err => console.error(err));
 
 /***/ }),
 
@@ -7482,6 +7870,283 @@ function __classPrivateFieldSet(receiver, privateMap, value) {
     }
     privateMap.set(receiver, value);
     return value;
+}
+
+
+/***/ }),
+
+/***/ 4762:
+/*!*****************************************!*\
+  !*** ./node_modules/tslib/tslib.es6.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "__extends": () => (/* binding */ __extends),
+/* harmony export */   "__assign": () => (/* binding */ __assign),
+/* harmony export */   "__rest": () => (/* binding */ __rest),
+/* harmony export */   "__decorate": () => (/* binding */ __decorate),
+/* harmony export */   "__param": () => (/* binding */ __param),
+/* harmony export */   "__metadata": () => (/* binding */ __metadata),
+/* harmony export */   "__awaiter": () => (/* binding */ __awaiter),
+/* harmony export */   "__generator": () => (/* binding */ __generator),
+/* harmony export */   "__createBinding": () => (/* binding */ __createBinding),
+/* harmony export */   "__exportStar": () => (/* binding */ __exportStar),
+/* harmony export */   "__values": () => (/* binding */ __values),
+/* harmony export */   "__read": () => (/* binding */ __read),
+/* harmony export */   "__spread": () => (/* binding */ __spread),
+/* harmony export */   "__spreadArrays": () => (/* binding */ __spreadArrays),
+/* harmony export */   "__spreadArray": () => (/* binding */ __spreadArray),
+/* harmony export */   "__await": () => (/* binding */ __await),
+/* harmony export */   "__asyncGenerator": () => (/* binding */ __asyncGenerator),
+/* harmony export */   "__asyncDelegator": () => (/* binding */ __asyncDelegator),
+/* harmony export */   "__asyncValues": () => (/* binding */ __asyncValues),
+/* harmony export */   "__makeTemplateObject": () => (/* binding */ __makeTemplateObject),
+/* harmony export */   "__importStar": () => (/* binding */ __importStar),
+/* harmony export */   "__importDefault": () => (/* binding */ __importDefault),
+/* harmony export */   "__classPrivateFieldGet": () => (/* binding */ __classPrivateFieldGet),
+/* harmony export */   "__classPrivateFieldSet": () => (/* binding */ __classPrivateFieldSet)
+/* harmony export */ });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+/** @deprecated */
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
 
