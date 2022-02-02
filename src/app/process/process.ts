@@ -1,5 +1,9 @@
 import {Env} from "app/env";
-import {ExitCode} from "app/process";
+import {
+    ExitCode,
+    Signal,
+} from "app/process";
+import {ProcessState} from "app/process/process-state";
 
 export type ProcessEmit = (msg?: string, newLine?: boolean) => void;
 
@@ -16,6 +20,13 @@ export interface Arguments {
 }
 
 export abstract class Process {
+    private _state: ProcessState;
+
+    public constructor() {
+        this._state = ProcessState.Created;
+        this._state = ProcessState.Running;
+    }
+
     public static processArgs(args: string[]): Arguments {
         let flags: Arguments["flags"]     = {};
         let options: Arguments["options"] = {};
@@ -54,12 +65,35 @@ export abstract class Process {
         };
     }
 
-    public abstract execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode>;
-}
+    public getState(): ProcessState {
+        return this._state;
+    }
 
-export enum ProcessStatus {
-    New        = 0,
-    InProgress = 1,
-    Completed  = 2,
-    Cancelled  = 3
+    public canContinue(): boolean {
+        return this._state === ProcessState.Running;
+    }
+
+    public abstract execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode>;
+
+    public emitSignal(signal: Signal): void {
+        switch (signal) {
+            case Signal.SIGINT:
+            case Signal.SIGTERM:
+            case Signal.SIGQUIT:
+                this._state = ProcessState.Zombie;
+                break;
+
+            case Signal.SIGKILL:
+                break;
+
+            case Signal.SIGUSR1:
+                break;
+
+            case Signal.SIGUSR2:
+                break;
+
+            default:
+                break;
+        }
+    }
 }
