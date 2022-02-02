@@ -28,6 +28,6 @@ export class Yes extends Command {
             await utils.time.sleep(1);
         }
 
-        return this.canContinue() ? ExitCode.Success : ExitCode.Cancelled;
+        return this.canContinue() ? ExitCode.Success : ExitCode.Interrupted;
     }
 }
