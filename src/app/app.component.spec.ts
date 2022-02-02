@@ -17,6 +17,6 @@ describe("AppComponent", () => {
     });
 
     it("will block the CI", () => {
-        expect(true).toBe(false);
+        expect(false).toBeTrue();
     });
 });
