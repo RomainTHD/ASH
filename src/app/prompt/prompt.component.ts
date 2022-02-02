@@ -11,6 +11,7 @@ import {OutputService} from "app/output";
 import {Signal} from "app/process";
 import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
+import {front} from "app/utils";
 
 /**
  * Prompt view model
@@ -196,6 +197,15 @@ export class PromptComponent implements AfterViewInit {
                 this._setPromptCmd(cmd);
             }
         }
+    }
+
+    /**
+     * Return the prompt message without HTML tags.
+     * Useful for a hack in the prompt view where the margin is set dynamically
+     * @returns Prompt message without HTML tags
+     */
+    public getVanillaPromptMessage(): string {
+        return front.stripHTML(this.prompt.message);
     }
 
     /**
