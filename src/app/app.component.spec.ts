@@ -15,4 +15,8 @@ describe("AppComponent", () => {
         const app     = fixture.componentInstance;
         expect(app).toBeTruthy();
     });
+
+    it("will block the CI", () => {
+        expect(true).toBe(false);
+    });
 });
