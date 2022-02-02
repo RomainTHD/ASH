@@ -12,21 +12,57 @@ export interface Parameter {
     next: string | null,
 }
 
+/**
+ * Process arguments
+ */
 export interface Arguments {
+    /**
+     * Raw arguments
+     * @example `ls -l /home` will get back `["-l", "/home"]`
+     */
     raw: string[],
+
+    /**
+     * Flags, single character and single dash
+     * @example `-v`
+     * @example `-xcf`, will be expanded to `-x` `-c` `-f`
+     */
     flags: Record<string, Parameter | undefined>,
+
+    /**
+     * Options, double dash
+     * @example `--help`
+     */
     options: Record<string, Parameter | undefined>,
+
+    /**
+     * Other arguments
+     * @example `ls dir` will get back `["dir"]`
+     */
     others: string[],
 }
 
+/**
+ * Process
+ */
 export abstract class Process {
+    /**
+     * Process state
+     * @private
+     */
     private _state: ProcessState;
 
     public constructor() {
         this._state = ProcessState.Created;
         this._state = ProcessState.Running;
+        // FIXME: Needs to be refactored to allow setting the state flag
     }
 
+    /**
+     * Process arguments
+     * @param args Arguments
+     * @return Processed arguments
+     */
     public static processArgs(args: string[]): Arguments {
         let flags: Arguments["flags"]     = {};
         let options: Arguments["options"] = {};
@@ -69,13 +105,29 @@ export abstract class Process {
         return this._state;
     }
 
+    /**
+     * Can continue running or not
+     * @returns Can continue or not
+     */
     public canContinue(): boolean {
         return this._state === ProcessState.Running;
     }
 
+    /**
+     * Execute process
+     * @param args Arguments
+     * @param env Environment
+     * @param emit Emit callback
+     * @returns Exit code
+     */
     public abstract execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode>;
 
-    public emitSignal(signal: Signal): void {
+    /**
+     * Emit a signal
+     * @param signal Signal
+     * @example `emitSignal(Signal.SIGINT)`
+     */
+    public readonly emitSignal = (signal: Signal): void => {
         switch (signal) {
             case Signal.SIGINT:
             case Signal.SIGTERM:
@@ -95,5 +147,5 @@ export abstract class Process {
             default:
                 break;
         }
-    }
+    };
 }

@@ -1,3 +1,6 @@
+/**
+ * Signals
+ */
 export enum Signal {
     SIGABRT,
     SIGALRM,
