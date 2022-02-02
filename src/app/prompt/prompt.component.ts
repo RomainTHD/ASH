@@ -11,7 +11,7 @@ import {OutputService} from "app/output";
 import {Signal} from "app/process";
 import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
-import {front} from "app/utils";
+import {utils} from "app/utils";
 
 /**
  * Prompt view model
@@ -139,12 +139,12 @@ export class PromptComponent implements AfterViewInit {
         const cmd = this.prompt.cmd;
         this._output.emitPromptMessage(this.prompt.message);
         this._history.pushCommand(cmd);
+        this._runner.run(cmd, this._env.getEnv());
         this.prompt = {
             cmd: "",
             message: getPromptText(this._env.getEnv()),
         };
         this._updateView();
-        this._runner.run(cmd, this._env.getEnv());
     }
 
     /**
@@ -205,7 +205,7 @@ export class PromptComponent implements AfterViewInit {
      * @returns Prompt message without HTML tags
      */
     public getVanillaPromptMessage(): string {
-        return front.stripHTML(this.prompt.message);
+        return utils.front.stripHTML(this.prompt.message);
     }
 
     /**
