@@ -2,7 +2,10 @@ import {Injectable} from "@angular/core";
 import {Command} from "app/cmd";
 import {Env} from "app/env";
 import {OutputService} from "app/output";
-import {Process} from "app/process";
+import {
+    Process,
+    Signal,
+} from "app/process";
 import {strings} from "app/utils";
 
 @Injectable({
@@ -10,15 +13,17 @@ import {strings} from "app/utils";
 })
 export class RunnerService {
     private _output: OutputService;
+    private _process: Process | null;
 
     constructor(history: OutputService) {
-        this._output = history;
+        this._output  = history;
+        this._process = null;
     }
 
     public run(cmd: string, env: Env): void {
         cmd = cmd.trim();
         if (cmd === "") {
-            this._output.emitNewCommand("", env);
+            this._output.emitNewCommand("");
             this._output.emitCommandEnd();
             return;
         }
@@ -27,19 +32,26 @@ export class RunnerService {
         const path  = (argsArr.shift() as string) || "";
         let args    = Process.processArgs(argsArr);
 
-        this._output.emitNewCommand(cmd, env);
-        Command.fromString(path).execute(
+        this._output.emitNewCommand(cmd);
+        this._process = Command.fromString(path);
+        this._process.execute(
             args,
             env,
             (msg = "", newLine = true) => {
-                msg = newLine ? msg + "\n" : msg;
-                return this._output.emitOutput(msg);
+                return this._output.emitOutput(newLine ? msg + "\n" : msg);
             },
         ).then(() => {
             this._output.emitCommandEnd();
+            this._process = null;
         });
     }
 
-    public complete(cmd: string) {
+    public autoComplete(prefix: string) {
+    }
+
+    public emitSignal(signal: Signal): void {
+        if (this._process !== null) {
+            this._process.emitSignal(signal);
+        }
     }
 }
