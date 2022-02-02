@@ -5,7 +5,7 @@ import {
     ExitCode,
     ProcessEmit,
 } from "app/process";
-import {time} from "app/utils";
+import {utils} from "app/utils";
 
 /**
  * @see description
@@ -25,7 +25,7 @@ export class Yes extends Command {
         const msg = args.others[0] || "y";
         while (this.canContinue()) {
             emit(msg);
-            await time.sleep(1);
+            await utils.time.sleep(1);
         }
 
         return this.canContinue() ? ExitCode.Success : ExitCode.Cancelled;

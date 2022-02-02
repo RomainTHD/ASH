@@ -6,7 +6,7 @@ import {
     Process,
     Signal,
 } from "app/process";
-import {strings} from "app/utils";
+import {utils} from "app/utils";
 
 @Injectable({
     providedIn: "root",
@@ -28,7 +28,7 @@ export class RunnerService {
             return;
         }
 
-        let argsArr = strings.splitSpace(cmd);
+        let argsArr = utils.strings.splitSpace(cmd);
         const path  = (argsArr.shift() as string) || "";
         let args    = Process.processArgs(argsArr);
 
