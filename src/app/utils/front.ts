@@ -13,3 +13,12 @@ export function stringToHTML(str: string, raw = false): HTMLElement {
     assert(elt instanceof HTMLElement, "stringToHTML: element is not an HTMLElement");
     return elt as HTMLElement;
 }
+
+export function stripHTML(str: string): string {
+    return str
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">");
+}
