@@ -7301,11 +7301,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "PromptComponent": () => (/* binding */ PromptComponent)
 /* harmony export */ });
 /* harmony import */ var app_prompt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/prompt */ 355);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/runner */ 7847);
-/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
-/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/output */ 9548);
-/* harmony import */ var app_history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/history */ 6393);
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/utils */ 4905);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 3668);
+/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/runner */ 7847);
+/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/env */ 2227);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_history__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/history */ 6393);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ 6019);
+
+
 
 
 
@@ -7313,9 +7317,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const _c0 = ["promptElement"];
+
+const _c1 = function (a0) {
+  return {
+    "margin-left.ch": a0
+  };
+};
 /**
  * Arrow direction for the history
  */
+
 
 var ArrowDir = /*#__PURE__*/(() => {
   (function (ArrowDir) {
@@ -7427,6 +7438,16 @@ let PromptComponent = /*#__PURE__*/(() => {
       }
     }
     /**
+     * Return the prompt message without HTML tags.
+     * Useful for a hack in the prompt view where the margin is set dynamically
+     * @returns Prompt message without HTML tags
+     */
+
+
+    getVanillaPromptMessage() {
+      return app_utils__WEBPACK_IMPORTED_MODULE_1__.front.stripHTML(this.prompt.message);
+    }
+    /**
      * We refresh the view if it differs from the model
      * @param forceRefresh Force a view refresh
      * @private
@@ -7467,32 +7488,32 @@ let PromptComponent = /*#__PURE__*/(() => {
   }
 
   PromptComponent.ɵfac = function PromptComponent_Factory(t) {
-    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_1__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_2__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_3__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](app_history__WEBPACK_IMPORTED_MODULE_4__.HistoryService));
+    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_2__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_3__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_4__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_history__WEBPACK_IMPORTED_MODULE_5__.HistoryService));
   };
 
-  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({
+  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({
     type: PromptComponent,
     selectors: [["app-prompt"]],
     viewQuery: function PromptComponent_Query(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵviewQuery"](_c0, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵviewQuery"](_c0, 5);
       }
 
       if (rf & 2) {
         let _t;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
       }
     },
     decls: 4,
-    vars: 1,
-    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
+    vars: 4,
+    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "ngStyle", "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
     template: function PromptComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](1, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "div", 2, 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener() {
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](1, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener() {
           return ctx.onInput();
         })("keyup.enter", function PromptComponent_Template_div_keyup_enter_2_listener() {
           return ctx.onEnter();
@@ -7503,16 +7524,19 @@ let PromptComponent = /*#__PURE__*/(() => {
         })("keydown.arrowDown", function PromptComponent_Template_div_keydown_arrowDown_2_listener() {
           return ctx.onArrow(ctx.ARROW_DOWN);
         });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
       }
 
       if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵsanitizeHtml"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpureFunction1"](2, _c1, ctx.getVanillaPromptMessage().length));
       }
     },
-    styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  float: left;\n  width: auto;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n  margin-left: 17ch;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
+    directives: [_angular_common__WEBPACK_IMPORTED_MODULE_7__.NgStyle],
+    styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  float: left;\n  width: auto;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
   });
   return PromptComponent;
 })();
@@ -7614,7 +7638,8 @@ let RunnerService = /*#__PURE__*/(() => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "stringToHTML": () => (/* binding */ stringToHTML)
+/* harmony export */   "stringToHTML": () => (/* binding */ stringToHTML),
+/* harmony export */   "stripHTML": () => (/* binding */ stripHTML)
 /* harmony export */ });
 /* harmony import */ var assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! assert */ 3612);
 
@@ -7629,6 +7654,9 @@ function stringToHTML(str, raw = false) {
   (0,assert__WEBPACK_IMPORTED_MODULE_0__["default"])(elt !== null, "stringToHTML: no element in template");
   (0,assert__WEBPACK_IMPORTED_MODULE_0__["default"])(elt instanceof HTMLElement, "stringToHTML: element is not an HTMLElement");
   return elt;
+}
+function stripHTML(str) {
+  return str.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 }
 
 /***/ }),
