@@ -43,13 +43,9 @@ export abstract class Command extends Process {
 
         const builder = new ProcessBuilder();
         if (classCommand !== null) {
-            // @ts-ignore
-            // Weird TS error, the variable type is marked as `never`, which is
-            //  clearly wrong, and then the `new` doesn't work since `Command`
-            //  is abstract
             builder.setProcessClass(classCommand);
         } else {
-            builder.setProcessClass(commands.NotFound);
+            builder.setProcessClass(commands.NotFound.setCommandName(cmd));
         }
 
         return builder;
