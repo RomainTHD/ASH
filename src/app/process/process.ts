@@ -1,9 +1,9 @@
 import {Env} from "app/env";
 import {
     ExitCode,
+    ProcessState,
     Signal,
 } from "app/process";
-import {ProcessState} from "app/process/process-state";
 
 export type ProcessEmit = (msg?: string, newLine?: boolean) => void;
 
@@ -45,7 +45,7 @@ export interface Arguments {
 /**
  * Process
  */
-export abstract class Process {
+export class Process {
     /**
      * Process state
      * @private
@@ -120,7 +120,9 @@ export abstract class Process {
      * @param emit Emit callback
      * @returns Exit code
      */
-    public abstract execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode>;
+    public execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode> {
+        throw new Error("Not implemented.");
+    }
 
     /**
      * Emit a signal
