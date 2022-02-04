@@ -1,7 +1,7 @@
 export {
     Arguments,
     Process,
-    ProcessEmit,
+    Stream,
 } from "./process";
 
 export {ExitCode} from "./exit-code";

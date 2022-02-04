@@ -31,11 +31,17 @@ export async function executeCommand(
         env = new Env();
     }
 
-    const cmd = Command.fromString(path);
+    let output   = "";
+    const stdout = {
+        emit: (msg: string = "") => output += msg,
+    };
 
-    let output = "";
-    const emit = (msg: string = "") => output += msg;
+    const cmd = Command.fromString(path)
+        .setArgs(args)
+        .setStdout(stdout)
+        .setEnv(env)
+        .build();
 
-    const exitCode = await cmd.execute(args, env, emit);
+    const exitCode = await cmd.execute();
     return {exitCode, output};
 }

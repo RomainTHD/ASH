@@ -32,15 +32,20 @@ export class RunnerService {
         const path  = (argsArr.shift() as string) || "";
         let args    = Process.processArgs(argsArr);
 
-        this._output.emitNewCommand(cmd);
-        this._process = Command.fromString(path);
-        this._process.execute(
-            args,
-            env,
-            (msg = "", newLine = true) => {
+        const stdout = {
+            emit: (msg = "", newLine = true) => {
                 return this._output.emitOutput(newLine ? msg + "\n" : msg);
             },
-        ).then(() => {
+        };
+
+        this._output.emitNewCommand(cmd);
+        this._process = Command.fromString(path)
+            .setStdout(stdout)
+            .setEnv(env)
+            .setArgs(args)
+            .build();
+
+        this._process.execute().then(() => {
             this._output.emitCommandEnd();
             this._process = null;
         });

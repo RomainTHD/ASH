@@ -5,7 +5,9 @@ import {
     Signal,
 } from "app/process";
 
-export type ProcessEmit = (msg?: string, newLine?: boolean) => void;
+export interface Stream {
+    emit: (msg?: string, newLine?: boolean) => void;
+}
 
 export interface Parameter {
     name: string,
@@ -45,17 +47,26 @@ export interface Arguments {
 /**
  * Process
  */
-export class Process {
+export abstract class Process {
+    protected readonly args: Arguments;
+    protected readonly env: Env;
+    protected readonly stdout: Stream;
+
     /**
      * Process state
      * @private
      */
     private _state: ProcessState;
 
-    public constructor() {
+    public constructor(
+        args: Arguments,
+        env: Env,
+        stdout: Stream,
+    ) {
         this._state = ProcessState.Created;
-        this._state = ProcessState.Running;
-        // FIXME: Needs to be refactored to allow setting the state flag
+        this.args   = args;
+        this.env    = env;
+        this.stdout = stdout;
     }
 
     /**
@@ -115,14 +126,14 @@ export class Process {
 
     /**
      * Execute process
-     * @param args Arguments
-     * @param env Environment
-     * @param emit Emit callback
      * @returns Exit code
      */
-    public execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode> {
-        throw new Error("Not implemented.");
-    }
+    public readonly execute = async (): Promise<ExitCode> => {
+        this._state    = ProcessState.Running;
+        const exitCode = await this.onExecution();
+        this._state    = ProcessState.Zombie;
+        return exitCode;
+    };
 
     /**
      * Emit a signal
@@ -150,4 +161,10 @@ export class Process {
                 break;
         }
     };
+
+    protected abstract onExecution(): Promise<ExitCode>;
+
+    /* {
+        throw new utils.errors.NotImplementerError();
+    } */
 }

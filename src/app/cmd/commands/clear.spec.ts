@@ -1,7 +1,8 @@
-import {Clear} from "./clear";
+import {Command} from "app/cmd";
+import {Clear} from ".";
 
 describe("Clear", () => {
     it("should create an instance", () => {
-        expect(new Clear()).toBeTruthy();
+        expect(Command.fromString("clear").processClass).toBe(Clear);
     });
 });

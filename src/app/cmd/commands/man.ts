@@ -2,42 +2,35 @@ import {
     Command,
     NotFound,
 } from "app/cmd";
-import {Env} from "app/env";
 import {AnsiColor} from "app/output";
-import {
-    Arguments,
-    ExitCode,
-    ProcessEmit,
-} from "app/process";
+import {ExitCode} from "app/process";
 
 export class Man extends Command {
     public static override readonly command = "man";
 
-    public override readonly description = "Informations about a command";
-    public override readonly usage       = "man <cmd>";
+    public static override readonly description = "Informations about a command";
+    public static override readonly usage       = "man <cmd>";
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
-        const cmd = args.others[0];
+    protected override async onExecution(): Promise<ExitCode> {
+        const cmd = this.args.others[0];
         if (!cmd) {
-            emit("man: missing command name");
+            this.stdout.emit("man: missing command name");
             return ExitCode.MissingArgument;
         }
 
         const commandObject = Command.fromString(cmd);
-        if (!commandObject || commandObject instanceof NotFound) {
-            emit(`man: no manual entry for '${cmd}'`);
+        const processClass  = commandObject.processClass as typeof Command;
+
+        if (!commandObject || processClass === NotFound) {
+            this.stdout.emit(`man: no manual entry for '${cmd}'`);
             return ExitCode.NotFound;
         }
 
-        emit(`${AnsiColor.BOLD}Manual for \`${cmd}\`${AnsiColor.RESET}`);
-        emit(`${AnsiColor.UNDERLINE}Usage:${AnsiColor.RESET}`);
-        emit(commandObject.usage);
-        emit(`${AnsiColor.UNDERLINE}Description:${AnsiColor.RESET}`);
-        emit(commandObject.description);
+        this.stdout.emit(`${AnsiColor.BOLD}Manual for \`${cmd}\`${AnsiColor.RESET}`);
+        this.stdout.emit(`${AnsiColor.UNDERLINE}Usage:${AnsiColor.RESET}`);
+        this.stdout.emit(processClass.usage as string);
+        this.stdout.emit(`${AnsiColor.UNDERLINE}Description:${AnsiColor.RESET}`);
+        this.stdout.emit(processClass.description as string);
 
         return ExitCode.Success;
     }

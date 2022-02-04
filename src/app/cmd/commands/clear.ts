@@ -1,10 +1,5 @@
 import {Command} from "app/cmd/command";
-import {Env} from "app/env";
-import {
-    Arguments,
-    ExitCode,
-    ProcessEmit,
-} from "app/process";
+import {ExitCode} from "app/process";
 
 /**
  * @see description
@@ -13,17 +8,13 @@ import {
 export class Clear extends Command {
     public static override readonly command = "clear";
 
-    public override readonly description = "Clear the screen";
-    public override readonly usage       = "clear";
+    public static override readonly description = "Clear the screen";
+    public static override readonly usage       = "clear";
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
+    protected override async onExecution(): Promise<ExitCode> {
         // FIXME: Ugly implementation
         for (let i = 0; i < 127; ++i) {
-            emit();
+            this.stdout.emit();
         }
 
         return ExitCode.Success;

@@ -3,7 +3,7 @@ import {Env} from "app/env";
 import {
     Arguments,
     ExitCode,
-    ProcessEmit,
+    Stream,
 } from "app/process";
 
 /**
@@ -14,22 +14,23 @@ import {
 export class NotFound extends Command {
     public static override readonly command = "__unknown";
 
-    public override readonly description = "Command not found";
-    public override readonly usage       = "__unknown";
+    public static override readonly description = "Command not found";
+    public static override readonly usage       = "__unknown";
 
     private readonly _cmd: string;
 
-    public constructor(cmd = "__unknown") {
-        super();
+    public constructor(
+        args: Arguments,
+        env: Env,
+        stdout: Stream,
+        cmd = "__unknown",
+    ) {
+        super(args, env, stdout);
         this._cmd = cmd;
     }
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
-        emit(`${this._cmd}: command not found`);
+    protected override async onExecution(): Promise<ExitCode> {
+        this.stdout.emit(`${this._cmd}: command not found`);
         return ExitCode.Failure;
     }
 }

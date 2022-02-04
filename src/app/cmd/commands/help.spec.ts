@@ -1,4 +1,4 @@
-import {Command} from "app/cmd/command";
+import {Command} from "app/cmd";
 import {ExitCode} from "app/process";
 import {utils} from "app/utils";
 import {Help} from ".";
@@ -16,8 +16,8 @@ describe("Help", () => {
         const cmd = "ls";
         const out = await utils.tests.executeCommand(`help ${cmd}`);
         expect(out.exitCode).toBe(ExitCode.Success);
-        const cmdInstance = Command.fromString(cmd);
-        expect(out.output).toContain(cmdInstance.usage);
-        expect(out.output).toContain(cmdInstance.description);
+        const processClass = Command.fromString(cmd).processClass as typeof Command;
+        expect(out.output).toContain(processClass.usage as string);
+        expect(out.output).toContain(processClass.description as string);
     });
 });

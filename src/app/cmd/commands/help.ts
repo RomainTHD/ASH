@@ -3,12 +3,8 @@ import {
     Man,
     regularCommands,
 } from "app/cmd";
-import {Env} from "app/env";
-import {
-    Arguments,
-    ExitCode,
-    ProcessEmit,
-} from "app/process";
+import {ExitCode} from "app/process";
+import {ProcessBuilder} from "app/process/process-builder";
 
 /**
  * Show help for a command
@@ -18,27 +14,31 @@ import {
 export class Help extends Command {
     public static override readonly command = "help";
 
-    public override readonly description = "Show help for a command";
-    public override readonly usage       = "help [command]";
+    public static override readonly description = "Show help for a command";
+    public static override readonly usage       = "help [command]";
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
-        if (!args.others[0]) {
+    protected override async onExecution(): Promise<ExitCode> {
+        if (!this.args.others[0]) {
             const assoc: Record<string, typeof Command> = regularCommands;
             Object.keys(assoc).forEach((key) => {
                 // Like we did in `Command`, we're doing some kind of reflection
                 //  to go through all commands
-                const cmd = Command.fromString(assoc[key].command as string);
-                emit(`${cmd.usage} - ${cmd.description}`);
+                const cmd          = Command.fromString(assoc[key].command as string);
+                const processClass = cmd.processClass as typeof Command;
+                this.stdout.emit(`${processClass.usage} - ${processClass.description}`);
             });
 
             return ExitCode.Success;
         } else {
-            // Not sure about this one, but should work for now
-            return new Man().execute(args, env, emit);
+            // FIXME: Ugly way to do so, but should work for now
+            const process = new ProcessBuilder()
+                .setProcessClass(Man)
+                .setArgs(this.args)
+                .setEnv(this.env)
+                .setStdout(this.stdout)
+                .build();
+
+            return process.execute();
         }
     }
 }

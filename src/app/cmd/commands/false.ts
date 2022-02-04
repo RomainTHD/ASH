@@ -4,10 +4,10 @@ import {ExitCode} from "app/process";
 export class False extends Command {
     public static override readonly command = "false";
 
-    public override readonly description = "Do nothing and fails";
-    public override readonly usage       = "false";
+    public static override readonly description = "Do nothing and fails";
+    public static override readonly usage       = "false";
 
-    public override async execute(..._: never): Promise<ExitCode> {
+    protected override async onExecution(): Promise<ExitCode> {
         return ExitCode.Failure;
     }
 }

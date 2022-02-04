@@ -4,21 +4,26 @@ import {
     Process,
     Signal,
 } from "app/process";
+import {ProcessBuilder} from "app/process/process-builder";
 import {utils} from "app/utils";
 import {Yes} from ".";
 
 describe("Yes", () => {
     // Test function since both tests are really similar
     const testFunction = async (args: string[]): Promise<{ exitCode: ExitCode, output: string }> => {
-        let output = "";
-        const emit = (msg: string = "") => output += msg + "\n";
+        let output   = "";
+        const stdout = {
+            emit: (msg: string = "") => output += msg + "\n",
+        };
 
-        const process = new Yes();
-        const promise = process.execute(
-            Process.processArgs(args),
-            new Env(),
-            emit,
-        );
+        const process = new ProcessBuilder()
+            .setProcessClass(Yes)
+            .setStdout(stdout)
+            .setArgs(Process.processArgs(args))
+            .setEnv(new Env())
+            .build();
+
+        const promise = process.execute();
 
         await utils.time.sleep(100);
         process.emitSignal(Signal.SIGINT);
