@@ -5364,7 +5364,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Mkdir": () => (/* reexport safe */ _mkdir__WEBPACK_IMPORTED_MODULE_8__.Mkdir),
 /* harmony export */   "Pwd": () => (/* reexport safe */ _pwd__WEBPACK_IMPORTED_MODULE_9__.Pwd),
 /* harmony export */   "Touch": () => (/* reexport safe */ _touch__WEBPACK_IMPORTED_MODULE_10__.Touch),
-/* harmony export */   "True": () => (/* reexport safe */ _true__WEBPACK_IMPORTED_MODULE_11__.True)
+/* harmony export */   "True": () => (/* reexport safe */ _true__WEBPACK_IMPORTED_MODULE_11__.True),
+/* harmony export */   "Yes": () => (/* reexport safe */ _yes__WEBPACK_IMPORTED_MODULE_12__.Yes)
 /* harmony export */ });
 /* harmony import */ var _cat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cat */ 3320);
 /* harmony import */ var _cd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cd */ 183);
@@ -5378,6 +5379,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pwd__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./pwd */ 7941);
 /* harmony import */ var _touch__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./touch */ 6551);
 /* harmony import */ var _true__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./true */ 5986);
+/* harmony import */ var _yes__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./yes */ 7784);
 
 
  // export {Cp} from "./cp";
@@ -5390,6 +5392,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // export {Mv} from "./mv";
+
 
 
 
@@ -5743,6 +5746,61 @@ let True = /*#__PURE__*/(() => {
 
 /***/ }),
 
+/***/ 7784:
+/*!*************************************!*\
+  !*** ./src/app/cmd/commands/yes.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Yes": () => (/* binding */ Yes)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_cmd_command__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd/command */ 8601);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/utils */ 4905);
+
+
+
+
+/**
+ * @see description
+ * @see usage
+ */
+
+let Yes = /*#__PURE__*/(() => {
+  class Yes extends app_cmd_command__WEBPACK_IMPORTED_MODULE_1__.Command {
+    constructor() {
+      super(...arguments);
+      this.description = "Output a string repeatedly until killed";
+      this.usage = "yes [string]";
+    }
+
+    execute(args, env, emit) {
+      var _this = this;
+
+      return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        const msg = args.others[0] || "y";
+
+        while (_this.canContinue()) {
+          emit(msg);
+          yield app_utils__WEBPACK_IMPORTED_MODULE_3__.utils.time.sleep(1);
+        }
+
+        return _this.canContinue() ? app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success : app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Interrupted;
+      })();
+    }
+
+  }
+
+  Yes.command = "yes";
+  return Yes;
+})();
+
+/***/ }),
+
 /***/ 1385:
 /*!******************************!*\
   !*** ./src/app/cmd/index.ts ***!
@@ -5768,6 +5826,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Pwd": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Pwd),
 /* harmony export */   "Touch": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Touch),
 /* harmony export */   "True": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.True),
+/* harmony export */   "Yes": () => (/* reexport safe */ _commands__WEBPACK_IMPORTED_MODULE_1__.Yes),
 /* harmony export */   "NotFound": () => (/* reexport safe */ _internal__WEBPACK_IMPORTED_MODULE_2__.NotFound),
 /* harmony export */   "Reset": () => (/* reexport safe */ _internal__WEBPACK_IMPORTED_MODULE_2__.Reset)
 /* harmony export */ });
@@ -7105,10 +7164,9 @@ let OutputService = /*#__PURE__*/(() => {
       return this.onNewCommand.subscribe(callback);
     }
 
-    emitNewCommand(command, env) {
+    emitNewCommand(command) {
       this.onNewCommand.next({
         command,
-        env,
         time: new Date()
       });
     }
@@ -7156,11 +7214,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ExitCode": () => (/* binding */ ExitCode)
 /* harmony export */ });
+/**
+ * Process exit code
+ */
 var ExitCode = /*#__PURE__*/(() => {
   (function (ExitCode) {
     ExitCode[ExitCode["Success"] = 0] = "Success";
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
-    ExitCode[ExitCode["Cancelled"] = 2] = "Cancelled";
+    ExitCode[ExitCode["Interrupted"] = 2] = "Interrupted";
     ExitCode[ExitCode["Timeout"] = 3] = "Timeout";
     ExitCode[ExitCode["Unknown"] = 4] = "Unknown";
     ExitCode[ExitCode["Unsupported"] = 5] = "Unsupported";
@@ -7186,12 +7247,57 @@ var ExitCode = /*#__PURE__*/(() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Process": () => (/* reexport safe */ _process__WEBPACK_IMPORTED_MODULE_0__.Process),
-/* harmony export */   "ExitCode": () => (/* reexport safe */ _exit_code__WEBPACK_IMPORTED_MODULE_1__.ExitCode)
+/* harmony export */   "ExitCode": () => (/* reexport safe */ _exit_code__WEBPACK_IMPORTED_MODULE_1__.ExitCode),
+/* harmony export */   "Signal": () => (/* reexport safe */ _signal__WEBPACK_IMPORTED_MODULE_2__.Signal)
 /* harmony export */ });
 /* harmony import */ var _process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./process */ 8555);
 /* harmony import */ var _exit_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./exit-code */ 7567);
+/* harmony import */ var _signal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./signal */ 7186);
 
 
+
+
+/***/ }),
+
+/***/ 6544:
+/*!******************************************!*\
+  !*** ./src/app/process/process-state.ts ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ProcessState": () => (/* binding */ ProcessState)
+/* harmony export */ });
+/**
+ * Process states
+ */
+var ProcessState = /*#__PURE__*/(() => {
+  (function (ProcessState) {
+    /**
+     * Created, still not running
+     */
+    ProcessState[ProcessState["Created"] = 0] = "Created";
+    /**
+     * Running
+     */
+
+    ProcessState[ProcessState["Running"] = 1] = "Running";
+    /**
+     * Finished, but not yet cleaned up
+     */
+
+    ProcessState[ProcessState["Zombie"] = 2] = "Zombie";
+    /**
+     * Sleeping
+     */
+
+    ProcessState[ProcessState["Asleep"] = 3] = "Asleep";
+  })(ProcessState || (ProcessState = {}));
+
+  return ProcessState;
+})(); // FIXME: Add more states, like `Terminated` ?
 
 /***/ }),
 
@@ -7204,10 +7310,55 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Process": () => (/* binding */ Process),
-/* harmony export */   "ProcessStatus": () => (/* binding */ ProcessStatus)
+/* harmony export */   "Process": () => (/* binding */ Process)
 /* harmony export */ });
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var app_process_process_state__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/process/process-state */ 6544);
+
+
+/**
+ * Process
+ */
+
 class Process {
+  constructor() {
+    /**
+     * Emit a signal
+     * @param signal Signal
+     * @example `emitSignal(Signal.SIGINT)`
+     */
+    this.emitSignal = signal => {
+      switch (signal) {
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGINT:
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGTERM:
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGQUIT:
+          this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Zombie;
+          break;
+
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGKILL:
+          break;
+
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGUSR1:
+          break;
+
+        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGUSR2:
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Created;
+    this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running; // FIXME: Needs to be refactored to allow setting the state flag
+  }
+  /**
+   * Process arguments
+   * @param args Arguments
+   * @return Processed arguments
+   */
+
+
   static processArgs(args) {
     let flags = {};
     let options = {};
@@ -7248,16 +7399,106 @@ class Process {
     };
   }
 
-}
-var ProcessStatus = /*#__PURE__*/(() => {
-  (function (ProcessStatus) {
-    ProcessStatus[ProcessStatus["New"] = 0] = "New";
-    ProcessStatus[ProcessStatus["InProgress"] = 1] = "InProgress";
-    ProcessStatus[ProcessStatus["Completed"] = 2] = "Completed";
-    ProcessStatus[ProcessStatus["Cancelled"] = 3] = "Cancelled";
-  })(ProcessStatus || (ProcessStatus = {}));
+  getState() {
+    return this._state;
+  }
+  /**
+   * Can continue running or not
+   * @returns Can continue or not
+   */
 
-  return ProcessStatus;
+
+  canContinue() {
+    return this._state === app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running;
+  }
+
+}
+
+/***/ }),
+
+/***/ 7186:
+/*!***********************************!*\
+  !*** ./src/app/process/signal.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Signal": () => (/* binding */ Signal)
+/* harmony export */ });
+/**
+ * Signals
+ */
+var Signal = /*#__PURE__*/(() => {
+  (function (Signal) {
+    Signal[Signal["SIGABRT"] = 0] = "SIGABRT";
+    Signal[Signal["SIGALRM"] = 1] = "SIGALRM";
+    Signal[Signal["SIGBUS"] = 2] = "SIGBUS";
+    Signal[Signal["SIGCHLD"] = 3] = "SIGCHLD";
+    Signal[Signal["SIGCLD"] = 4] = "SIGCLD";
+    /**
+     * Awake a sleeping process
+     * @see SIGSTOP
+     */
+
+    Signal[Signal["SIGCONT"] = 5] = "SIGCONT";
+    Signal[Signal["SIGEMT"] = 6] = "SIGEMT";
+    Signal[Signal["SIGFPE"] = 7] = "SIGFPE";
+    Signal[Signal["SIGHUP"] = 8] = "SIGHUP";
+    Signal[Signal["SIGILL"] = 9] = "SIGILL";
+    Signal[Signal["SIGINFO"] = 10] = "SIGINFO";
+    /**
+     * Keyboard interrupt
+     */
+
+    Signal[Signal["SIGINT"] = 11] = "SIGINT";
+    Signal[Signal["SIGIO"] = 12] = "SIGIO";
+    Signal[Signal["SIGIOT"] = 13] = "SIGIOT";
+    /**
+     * Kill signal
+     */
+
+    Signal[Signal["SIGKILL"] = 14] = "SIGKILL";
+    Signal[Signal["SIGLOST"] = 15] = "SIGLOST";
+    Signal[Signal["SIGPIPE"] = 16] = "SIGPIPE";
+    Signal[Signal["SIGPOLL"] = 17] = "SIGPOLL";
+    Signal[Signal["SIGPROF"] = 18] = "SIGPROF";
+    Signal[Signal["SIGPWR"] = 19] = "SIGPWR";
+    Signal[Signal["SIGQUIT"] = 20] = "SIGQUIT";
+    Signal[Signal["SIGSEGV"] = 21] = "SIGSEGV";
+    Signal[Signal["SIGSTKFLT"] = 22] = "SIGSTKFLT";
+    /**
+     * Put a process to sleep
+     * @see SIGCONT
+     */
+
+    Signal[Signal["SIGSTOP"] = 23] = "SIGSTOP";
+    Signal[Signal["SIGTSTP"] = 24] = "SIGTSTP";
+    Signal[Signal["SIGSYS"] = 25] = "SIGSYS";
+    Signal[Signal["SIGTERM"] = 26] = "SIGTERM";
+    Signal[Signal["SIGTRAP"] = 27] = "SIGTRAP";
+    Signal[Signal["SIGTTIN"] = 28] = "SIGTTIN";
+    Signal[Signal["SIGTTOU"] = 29] = "SIGTTOU";
+    Signal[Signal["SIGUNUSED"] = 30] = "SIGUNUSED";
+    Signal[Signal["SIGURG"] = 31] = "SIGURG";
+    /**
+     * User defined signal 1
+     */
+
+    Signal[Signal["SIGUSR1"] = 32] = "SIGUSR1";
+    /**
+     * User defined signal 2
+     */
+
+    Signal[Signal["SIGUSR2"] = 33] = "SIGUSR2";
+    Signal[Signal["SIGVTALRM"] = 34] = "SIGVTALRM";
+    Signal[Signal["SIGXCPU"] = 35] = "SIGXCPU";
+    Signal[Signal["SIGXFSZ"] = 36] = "SIGXFSZ";
+    Signal[Signal["SIGWINCH"] = 37] = "SIGWINCH";
+  })(Signal || (Signal = {}));
+
+  return Signal;
 })();
 
 /***/ }),
@@ -7300,14 +7541,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PromptComponent": () => (/* binding */ PromptComponent)
 /* harmony export */ });
-/* harmony import */ var app_prompt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/prompt */ 355);
-/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/utils */ 4905);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/runner */ 7847);
-/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/env */ 2227);
-/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/output */ 9548);
-/* harmony import */ var app_history__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/history */ 6393);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ 6019);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var app_prompt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/prompt */ 355);
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/utils */ 4905);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/core */ 3668);
+/* harmony import */ var app_runner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/runner */ 7847);
+/* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/env */ 2227);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_history__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/history */ 6393);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common */ 6019);
+
 
 
 
@@ -7356,7 +7599,7 @@ let PromptComponent = /*#__PURE__*/(() => {
       this._history = history;
       this.prompt = {
         cmd: "",
-        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(env.getEnv())
+        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_1__.getPromptText)(env.getEnv())
       };
       this._previousInput = null;
     }
@@ -7383,18 +7626,43 @@ let PromptComponent = /*#__PURE__*/(() => {
 
 
     onEnter() {
+      const cmd = this.prompt.cmd;
+
       this._output.emitPromptMessage(this.prompt.message);
 
-      this._history.pushCommand(this.prompt.cmd);
+      this._history.pushCommand(cmd);
 
-      this._runner.run(this.prompt.cmd, this._env.getEnv());
+      this._runner.run(cmd, this._env.getEnv());
 
       this.prompt = {
         cmd: "",
-        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_0__.getPromptText)(this._env.getEnv())
+        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_1__.getPromptText)(this._env.getEnv())
       };
 
       this._updateView();
+    }
+    /**
+     * Catch the Ctrl-C event, and emit it to the runner
+     */
+
+
+    onCtrlC(event) {
+      event.preventDefault();
+
+      this._runner.emitSignal(app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGINT);
+
+      this._output.emitPromptMessage(this.prompt.message);
+
+      this._output.emitNewCommand(`${this.prompt.cmd}^C`);
+
+      this.prompt = {
+        cmd: "",
+        message: (0,app_prompt__WEBPACK_IMPORTED_MODULE_1__.getPromptText)(this._env.getEnv())
+      };
+
+      this._updateView();
+
+      this._output.emitCommandEnd();
     }
     /**
      * Tab key pressed, we autocomplete the command (WIP)
@@ -7402,7 +7670,7 @@ let PromptComponent = /*#__PURE__*/(() => {
 
 
     onTab() {
-      this._runner.complete(this.prompt.cmd);
+      this._runner.autoComplete(this.prompt.cmd);
     }
     /**
      * Arrow key handler, we move in the history
@@ -7445,7 +7713,7 @@ let PromptComponent = /*#__PURE__*/(() => {
 
 
     getVanillaPromptMessage() {
-      return app_utils__WEBPACK_IMPORTED_MODULE_1__.front.stripHTML(this.prompt.message);
+      return app_utils__WEBPACK_IMPORTED_MODULE_2__.utils.front.stripHTML(this.prompt.message);
     }
     /**
      * We refresh the view if it differs from the model
@@ -7488,21 +7756,28 @@ let PromptComponent = /*#__PURE__*/(() => {
   }
 
   PromptComponent.ɵfac = function PromptComponent_Factory(t) {
-    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_2__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_3__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_4__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdirectiveInject"](app_history__WEBPACK_IMPORTED_MODULE_5__.HistoryService));
+    return new (t || PromptComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵdirectiveInject"](app_runner__WEBPACK_IMPORTED_MODULE_3__.RunnerService), _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵdirectiveInject"](app_env__WEBPACK_IMPORTED_MODULE_4__.EnvService), _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵdirectiveInject"](app_output__WEBPACK_IMPORTED_MODULE_5__.OutputService), _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵdirectiveInject"](app_history__WEBPACK_IMPORTED_MODULE_6__.HistoryService));
   };
 
-  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineComponent"]({
+  PromptComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵdefineComponent"]({
     type: PromptComponent,
     selectors: [["app-prompt"]],
     viewQuery: function PromptComponent_Query(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵviewQuery"](_c0, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵviewQuery"](_c0, 5);
       }
 
       if (rf & 2) {
         let _t;
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵloadQuery"]()) && (ctx.promptElement = _t.first);
+      }
+    },
+    hostBindings: function PromptComponent_HostBindings(rf, ctx) {
+      if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵlistener"]("keydown.control.c", function PromptComponent_keydown_control_c_HostBindingHandler($event) {
+          return ctx.onCtrlC($event);
+        }, false, _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵresolveDocument"]);
       }
     },
     decls: 4,
@@ -7510,10 +7785,10 @@ let PromptComponent = /*#__PURE__*/(() => {
     consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "ngStyle", "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
     template: function PromptComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelement"](1, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementStart"](2, "div", 2, 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener() {
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](1, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵlistener"]("input", function PromptComponent_Template_div_input_2_listener() {
           return ctx.onInput();
         })("keyup.enter", function PromptComponent_Template_div_keyup_enter_2_listener() {
           return ctx.onEnter();
@@ -7524,18 +7799,18 @@ let PromptComponent = /*#__PURE__*/(() => {
         })("keydown.arrowDown", function PromptComponent_Template_div_keydown_arrowDown_2_listener() {
           return ctx.onArrow(ctx.ARROW_DOWN);
         });
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementEnd"]();
       }
 
       if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵsanitizeHtml"]);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵpureFunction1"](2, _c1, ctx.getVanillaPromptMessage().length));
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("innerHTML", ctx.prompt.message, _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵsanitizeHtml"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction1"](2, _c1, ctx.getVanillaPromptMessage().length));
       }
     },
-    directives: [_angular_common__WEBPACK_IMPORTED_MODULE_7__.NgStyle],
+    directives: [_angular_common__WEBPACK_IMPORTED_MODULE_8__.NgStyle],
     styles: [".prompt__container__child--fst[_ngcontent-%COMP%] {\n  float: left;\n  width: auto;\n}\n.prompt__container__child--snd[_ngcontent-%COMP%] {\n  display: block;\n}\n.prompt__input[_ngcontent-%COMP%] {\n  outline: 0 solid transparent;\n}"]
   });
   return PromptComponent;
@@ -7584,34 +7859,44 @@ let RunnerService = /*#__PURE__*/(() => {
   class RunnerService {
     constructor(history) {
       this._output = history;
+      this._process = null;
     }
 
     run(cmd, env) {
       cmd = cmd.trim();
 
       if (cmd === "") {
-        this._output.emitNewCommand("", env);
+        this._output.emitNewCommand("");
 
         this._output.emitCommandEnd();
 
         return;
       }
 
-      let argsArr = app_utils__WEBPACK_IMPORTED_MODULE_2__.strings.splitSpace(cmd);
+      let argsArr = app_utils__WEBPACK_IMPORTED_MODULE_2__.utils.strings.splitSpace(cmd);
       const path = argsArr.shift() || "";
       let args = app_process__WEBPACK_IMPORTED_MODULE_1__.Process.processArgs(argsArr);
 
-      this._output.emitNewCommand(cmd, env);
+      this._output.emitNewCommand(cmd);
 
-      app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path).execute(args, env, (msg = "", newLine = true) => {
-        msg = newLine ? msg + "\n" : msg;
-        return this._output.emitOutput(msg);
+      this._process = app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path);
+
+      this._process.execute(args, env, (msg = "", newLine = true) => {
+        return this._output.emitOutput(newLine ? msg + "\n" : msg);
       }).then(() => {
         this._output.emitCommandEnd();
+
+        this._process = null;
       });
     }
 
-    complete(cmd) {}
+    autoComplete(prefix) {}
+
+    emitSignal(signal) {
+      if (this._process !== null) {
+        this._process.emitSignal(signal);
+      }
+    }
 
   }
 
@@ -7670,16 +7955,26 @@ function stripHTML(str) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "front": () => (/* reexport module object */ _front__WEBPACK_IMPORTED_MODULE_0__),
-/* harmony export */   "strings": () => (/* reexport module object */ _strings__WEBPACK_IMPORTED_MODULE_1__),
-/* harmony export */   "tests": () => (/* reexport module object */ _tests__WEBPACK_IMPORTED_MODULE_2__)
+/* harmony export */   "utils": () => (/* binding */ utils)
 /* harmony export */ });
 /* harmony import */ var _front__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./front */ 997);
 /* harmony import */ var _strings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./strings */ 3200);
 /* harmony import */ var _tests__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tests */ 6403);
+/* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./time */ 9974);
 
 
 
+
+var utils = /*#__PURE__*/(() => {
+  (function (utils) {
+    utils.front = _front__WEBPACK_IMPORTED_MODULE_0__;
+    utils.strings = _strings__WEBPACK_IMPORTED_MODULE_1__;
+    utils.tests = _tests__WEBPACK_IMPORTED_MODULE_2__;
+    utils.time = _time__WEBPACK_IMPORTED_MODULE_3__;
+  })(utils || (utils = {}));
+
+  return utils;
+})();
 
 /***/ }),
 
@@ -7813,7 +8108,7 @@ function executeCommand(_x) {
 
 function _executeCommand() {
   _executeCommand = (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (cmdStr, args = null, env = null) {
-    let argsArr = ___WEBPACK_IMPORTED_MODULE_4__.strings.splitSpace(cmdStr);
+    let argsArr = ___WEBPACK_IMPORTED_MODULE_4__.utils.strings.splitSpace(cmdStr);
     const path = argsArr.shift() || "";
 
     if (!args) {
@@ -7836,6 +8131,37 @@ function _executeCommand() {
     };
   });
   return _executeCommand.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ 9974:
+/*!*******************************!*\
+  !*** ./src/app/utils/time.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "sleep": () => (/* binding */ sleep)
+/* harmony export */ });
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+
+
+/**
+ * Sleep for the given number of milliseconds
+ * @param ms Time in milliseconds
+ */
+function sleep(_x) {
+  return _sleep.apply(this, arguments);
+}
+
+function _sleep() {
+  _sleep = (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  });
+  return _sleep.apply(this, arguments);
 }
 
 /***/ }),
