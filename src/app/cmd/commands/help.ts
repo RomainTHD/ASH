@@ -36,6 +36,7 @@ export class Help extends Command {
                 .setArgs(this.args)
                 .setEnv(this.env)
                 .setStdout(this.stdout)
+                .setStderr(this.stderr)
                 .build();
 
             return process.execute();

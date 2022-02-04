@@ -6,16 +6,22 @@ import {
 } from "app/process";
 import {utils} from "app/utils";
 
+/**
+ * Builder pattern for processes
+ * @see Process
+ */
 export class ProcessBuilder {
     private _args: Arguments | null;
     private _env: Env | null;
     private _stdout: Stream | null;
+    private _stderr: Stream | null;
     private _processClass: typeof Process | null;
 
     public constructor() {
         this._args         = null;
         this._env          = null;
         this._stdout       = null;
+        this._stderr       = null;
         this._processClass = null;
     }
 
@@ -41,6 +47,11 @@ export class ProcessBuilder {
         return this;
     }
 
+    public setStderr(stderr: Stream): ProcessBuilder {
+        this._stderr = stderr;
+        return this;
+    }
+
     public setProcessClass(processClass: typeof Process): ProcessBuilder {
         this._processClass = processClass;
         return this;
@@ -50,6 +61,7 @@ export class ProcessBuilder {
         if (this._args === null ||
             this._env === null ||
             this._stdout === null ||
+            this._stderr === null ||
             this._processClass === null
         ) {
             throw new utils.errors.BuilderPatternError();
@@ -61,6 +73,7 @@ export class ProcessBuilder {
             this._args,
             this._env,
             this._stdout,
+            this._stderr,
         );
     }
 }

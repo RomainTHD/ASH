@@ -23,9 +23,10 @@ export class NotFound extends Command {
         args: Arguments,
         env: Env,
         stdout: Stream,
+        stderr: Stream,
         cmd = "__unknown",
     ) {
-        super(args, env, stdout);
+        super(args, env, stdout, stderr);
         this._cmd = cmd;
     }
 

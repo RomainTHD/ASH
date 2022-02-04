@@ -1,4 +1,5 @@
 import {Env} from "app/env";
+import {AnsiColor} from "app/output";
 import {
     ExitCode,
     Process,
@@ -13,12 +14,17 @@ describe("Yes", () => {
     const testFunction = async (args: string[]): Promise<{ exitCode: ExitCode, output: string }> => {
         let output   = "";
         const stdout = {
-            emit: (msg: string = "") => output += msg + "\n",
+            emit: (msg: string = "") => output += `${msg}\n`,
+        };
+
+        const stderr = {
+            emit: (msg: string = "") => output += `${AnsiColor.FG.RED}${msg}\n`,
         };
 
         const process = new ProcessBuilder()
             .setProcessClass(Yes)
             .setStdout(stdout)
+            .setStderr(stderr)
             .setArgs(Process.processArgs(args))
             .setEnv(new Env())
             .build();

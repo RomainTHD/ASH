@@ -48,9 +48,29 @@ export interface Arguments {
  * Process
  */
 export abstract class Process {
+    /**
+     * Arguments
+     * @protected
+     */
     protected readonly args: Arguments;
+
+    /**
+     * Environment
+     * @protected
+     */
     protected readonly env: Env;
+
+    /**
+     * Stdout
+     * @protected
+     */
     protected readonly stdout: Stream;
+
+    /**
+     * Stderr
+     * @protected
+     */
+    protected readonly stderr: Stream;
 
     /**
      * Process state
@@ -62,11 +82,13 @@ export abstract class Process {
         args: Arguments,
         env: Env,
         stdout: Stream,
+        stderr: Stream,
     ) {
         this._state = ProcessState.Created;
         this.args   = args;
         this.env    = env;
         this.stdout = stdout;
+        this.stderr = stderr;
     }
 
     /**
@@ -163,8 +185,4 @@ export abstract class Process {
     };
 
     protected abstract onExecution(): Promise<ExitCode>;
-
-    /* {
-        throw new utils.errors.NotImplementerError();
-    } */
 }
