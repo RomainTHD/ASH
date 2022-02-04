@@ -1,3 +1,5 @@
+import {utils} from "app/utils";
+
 /**
  * An entity used by the storage handler
  */
@@ -14,19 +16,19 @@ export abstract class Entity {
     }
 
     public static create(template: object): Entity {
-        throw new Error("Not implemented");
+        throw new utils.errors.NotImplementerError();
     }
 
     public static find(id: string): Entity | null {
-        throw new Error("Not implemented");
+        throw new utils.errors.NotImplementerError();
     }
 
     public static findAll(): Entity[] {
-        throw new Error("Not implemented");
+        throw new utils.errors.NotImplementerError();
     }
 
     public static fromJSON(json: object): Entity {
-        throw new Error("Not implemented");
+        throw new utils.errors.NotImplementerError();
     }
 
     public abstract save(): void;
