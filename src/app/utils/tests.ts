@@ -1,5 +1,6 @@
 import {Command} from "app/cmd";
 import {Env} from "app/env";
+import {AnsiColor} from "app/output";
 import {
     Arguments,
     ExitCode,
@@ -33,12 +34,21 @@ export async function executeCommand(
 
     let output   = "";
     const stdout = {
-        emit: (msg: string = "") => output += msg,
+        emit: (msg: string = "", newLine = true) => {
+            output += msg + (newLine ? "\n" : "");
+        },
+    };
+
+    const stderr = {
+        emit: (msg: string = "", newLine = true) => {
+            output += AnsiColor.FG.RED + msg + (newLine ? "\n" : "");
+        },
     };
 
     const cmd = Command.fromString(path)
         .setArgs(args)
         .setStdout(stdout)
+        .setStderr(stderr)
         .setEnv(env)
         .build();
 
