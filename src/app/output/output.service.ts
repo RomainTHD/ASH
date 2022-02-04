@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Env} from "app/env";
 import {
     Subject,
     Subscription,
@@ -7,7 +6,6 @@ import {
 
 export interface CommandEntry {
     command: string;
-    env: Env;
     time: Date;
 }
 
@@ -43,10 +41,9 @@ export class OutputService {
         return this.onNewCommand.subscribe(callback);
     }
 
-    public emitNewCommand(command: string, env: Env): void {
+    public emitNewCommand(command: string): void {
         this.onNewCommand.next({
             command,
-            env,
             time: new Date(),
         });
     }

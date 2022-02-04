@@ -5,7 +5,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {strings} from ".";
+import {utils} from ".";
 
 /**
  * Execute a string command
@@ -20,7 +20,7 @@ export async function executeCommand(
     args: Arguments | null = null,
     env: Env | null        = null,
 ): Promise<{ exitCode: ExitCode, output: string }> {
-    let argsArr = strings.splitSpace(cmdStr);
+    let argsArr = utils.strings.splitSpace(cmdStr);
     const path  = (argsArr.shift() as string) || "";
 
     if (!args) {

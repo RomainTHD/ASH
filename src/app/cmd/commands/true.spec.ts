@@ -1,9 +1,9 @@
 import {ExitCode} from "app/process";
-import {tests} from "app/utils";
+import {utils} from "app/utils";
 
 describe("True", () => {
     it("should return true", async () => {
-        const out = await tests.executeCommand("true");
+        const out = await utils.tests.executeCommand("true");
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(out.output).toBe("");
     });
