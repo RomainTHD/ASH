@@ -1,4 +1,4 @@
-import {utils} from ".";
+import * as utils from ".";
 
 describe("Front", () => {
     const msg = "Hello World";

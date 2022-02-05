@@ -5,7 +5,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {utils} from ".";
+import * as utils from ".";
 
 /**
  * Execute a string command

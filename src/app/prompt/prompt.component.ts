@@ -11,7 +11,7 @@ import {OutputService} from "app/output";
 import {Signal} from "app/process";
 import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 /**
  * Prompt view model

@@ -1,5 +1,5 @@
 import {ExitCode} from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 describe("False", () => {
     it("should return false", async () => {

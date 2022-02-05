@@ -6,7 +6,7 @@ import {
     Process,
     Signal,
 } from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 @Injectable({
     providedIn: "root",
