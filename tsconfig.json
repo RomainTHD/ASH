@@ -1,8 +1,7 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "rootDir": "./src",
-        "baseUrl": "./src",
+        "baseUrl": "./",
         "outDir": "./dist/out-tsc",
         "forceConsistentCasingInFileNames": true,
         "strict": true,
@@ -21,6 +20,12 @@
         "lib": [
             "es2020",
             "dom"
+        ],
+        "types": [
+            "@types/node"
+        ],
+        "typeRoots": [
+            "@types"
         ]
     },
     "angularCompilerOptions": {
