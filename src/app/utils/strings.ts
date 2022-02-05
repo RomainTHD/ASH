@@ -7,6 +7,13 @@ export class UnterminatedStringError extends Error {
     }
 }
 
+/**
+ * Split a string on spaces, but not on spaces inside of quotes.
+ * Also handle escaped quotes.
+ * @param str String to split
+ * @param keepQuotes Keep quotes in the result or not
+ * @returns Array of strings
+ */
 export function splitSpace(str: string, keepQuotes = true): string[] {
     const res   = [];
     let current = "";

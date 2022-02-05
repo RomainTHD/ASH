@@ -149,9 +149,10 @@ export class PromptComponent implements AfterViewInit {
 
     /**
      * Catch the Ctrl-C event, and emit it to the runner
+     * @param event Event
      */
     @HostListener("document:keydown.control.c", ["$event"])
-    onCtrlC(event: KeyboardEvent) {
+    onCtrlC(event: KeyboardEvent): void {
         event.preventDefault();
         this._runner.emitSignal(Signal.SIGINT);
         this._output.emitPromptMessage(this.prompt.message);

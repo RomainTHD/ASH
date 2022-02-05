@@ -61,7 +61,7 @@ export abstract class Process {
     /**
      * Process arguments
      * @param args Arguments
-     * @return Processed arguments
+     * @returns Processed arguments
      */
     public static processArgs(args: string[]): Arguments {
         const flags: Arguments["flags"]     = {};
