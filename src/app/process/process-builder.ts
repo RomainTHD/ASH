@@ -4,7 +4,7 @@ import {
     Process,
     Stream,
 } from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 /**
  * Builder pattern for processes

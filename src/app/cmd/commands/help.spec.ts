@@ -1,7 +1,6 @@
 import {Command} from "app/cmd";
 import {ExitCode} from "app/process";
-import {utils} from "app/utils";
-import {Help} from ".";
+import * as utils from "app/utils";
 
 describe("Help", () => {
     it("should show the same help as man", async () => {

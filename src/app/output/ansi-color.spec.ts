@@ -1,4 +1,4 @@
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 import {AnsiColor} from ".";
 
 describe("AnsiColor", () => {

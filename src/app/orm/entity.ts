@@ -1,10 +1,10 @@
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 /**
  * An entity used by the storage handler
  */
 export abstract class Entity {
-    protected static category: string = "TDB";
+    protected static category = "TDB";
     protected _id: string;
 
     protected constructor(id: string) {
@@ -16,10 +16,12 @@ export abstract class Entity {
     }
 
     public static create(template: object): Entity {
+        void template;
         throw new utils.errors.NotImplementerError();
     }
 
     public static find(id: string): Entity | null {
+        void id;
         throw new utils.errors.NotImplementerError();
     }
 
@@ -28,6 +30,7 @@ export abstract class Entity {
     }
 
     public static fromJSON(json: object): Entity {
+        void json;
         throw new utils.errors.NotImplementerError();
     }
 

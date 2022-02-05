@@ -1,6 +1,6 @@
 import {Command} from "app/cmd";
 import {ExitCode} from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 describe("Man", () => {
     it("should return the correct documentation", async () => {

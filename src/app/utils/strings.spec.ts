@@ -1,4 +1,4 @@
-import {utils} from ".";
+import * as utils from ".";
 
 describe("utils.strings", () => {
     const splitSpace = utils.strings.splitSpace;

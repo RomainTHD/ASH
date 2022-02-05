@@ -6,7 +6,7 @@ import {
     Signal,
 } from "app/process";
 import {ProcessBuilder} from "app/process/process-builder";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 import {Yes} from ".";
 
 describe("Yes", () => {
@@ -14,11 +14,11 @@ describe("Yes", () => {
     const testFunction = async (args: string[]): Promise<{ exitCode: ExitCode, output: string }> => {
         let output   = "";
         const stdout = {
-            emit: (msg: string = "") => output += `${msg}\n`,
+            emit: (msg = "") => output += `${msg}\n`,
         };
 
         const stderr = {
-            emit: (msg: string = "") => output += `${AnsiColor.FG.RED}${msg}\n`,
+            emit: (msg = "") => output += `${AnsiColor.FG.RED}${msg}\n`,
         };
 
         const process = new ProcessBuilder()

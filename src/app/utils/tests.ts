@@ -6,7 +6,7 @@ import {
     ExitCode,
     Process,
 } from "app/process";
-import {utils} from ".";
+import * as utils from ".";
 
 /**
  * Execute a string command
@@ -21,8 +21,8 @@ export async function executeCommand(
     args: Arguments | null = null,
     env: Env | null        = null,
 ): Promise<{ exitCode: ExitCode, output: string }> {
-    let argsArr = utils.strings.splitSpace(cmdStr);
-    const path  = (argsArr.shift() as string) || "";
+    const argsArr = utils.strings.splitSpace(cmdStr);
+    const path    = (argsArr.shift() as string) || "";
 
     if (!args) {
         args = Process.processArgs(argsArr);
@@ -34,13 +34,13 @@ export async function executeCommand(
 
     let output   = "";
     const stdout = {
-        emit: (msg: string = "", newLine = true) => {
+        emit: (msg = "", newLine = true) => {
             output += msg + (newLine ? "\n" : "");
         },
     };
 
     const stderr = {
-        emit: (msg: string = "", newLine = true) => {
+        emit: (msg = "", newLine = true) => {
             output += AnsiColor.FG.RED + msg + (newLine ? "\n" : "");
         },
     };

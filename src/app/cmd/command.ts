@@ -34,6 +34,7 @@ export abstract class Command extends Process {
         let classCommand: typeof Command | null     = null;
 
         Object.entries(assoc).forEach(([_, currentClass]) => {
+            void _;
             // For each command child class, if its command name is the same
             //  as the command string, then we found the command
             if (cmd === currentClass.command) {

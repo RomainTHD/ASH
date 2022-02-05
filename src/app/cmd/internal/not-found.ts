@@ -18,7 +18,7 @@ export class NotFound extends Command {
      * point. Ugly fix to an ugly problem.
      * @private
      */
-    private static _cmd: string = "__unknown";
+    private static _cmd = "__unknown";
 
     /**
      * Hack to get the command name in the instance, while only sending a class

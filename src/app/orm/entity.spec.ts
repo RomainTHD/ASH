@@ -1,4 +1,3 @@
-import {Entity} from ".";
-
 describe("Entity", () => {
+    // To be completed
 });

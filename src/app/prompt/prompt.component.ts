@@ -11,7 +11,7 @@ import {OutputService} from "app/output";
 import {Signal} from "app/process";
 import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 /**
  * Prompt view model
@@ -149,9 +149,10 @@ export class PromptComponent implements AfterViewInit {
 
     /**
      * Catch the Ctrl-C event, and emit it to the runner
+     * @param event Event
      */
     @HostListener("document:keydown.control.c", ["$event"])
-    onCtrlC(event: KeyboardEvent) {
+    onCtrlC(event: KeyboardEvent): void {
         event.preventDefault();
         this._runner.emitSignal(Signal.SIGINT);
         this._output.emitPromptMessage(this.prompt.message);
