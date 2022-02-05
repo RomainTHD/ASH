@@ -7,7 +7,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jsdoc/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -16,7 +17,9 @@
     },
     "plugins": [
         "jasmine",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "html",
+        "jsdoc"
     ],
     "rules": {
         "indent": [
@@ -41,6 +44,9 @@
             "error",
             "always"
         ],
-        "@typescript-eslint/ban-ts-comment": "warn"
+        "@typescript-eslint/ban-ts-comment": "warn",
+        "jsdoc/newline-after-description": 0,
+        "jsdoc/require-param-type": 0,
+        "jsdoc/require-returns-type": 0
     }
 }
