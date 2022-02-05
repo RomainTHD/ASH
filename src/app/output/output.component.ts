@@ -1,10 +1,8 @@
 import {
     Component,
     OnDestroy,
-    OnInit,
     ViewEncapsulation,
 } from "@angular/core";
-import {EnvService} from "app/env";
 import {
     AnsiColor,
     OutputService,
@@ -18,13 +16,13 @@ import {Subscription} from "rxjs";
     styleUrls: ["./output.component.scss"],
     encapsulation: ViewEncapsulation.None, // Because we use raw HTML / CSS tags
 })
-export class OutputComponent implements OnInit, OnDestroy {
+export class OutputComponent implements OnDestroy {
     public content: string;
 
     private _outputService: OutputService;
     private _subscriptions: Subscription[];
 
-    constructor(outputService: OutputService, envService: EnvService) {
+    constructor(outputService: OutputService) {
         this._outputService = outputService;
         this._subscriptions = [];
 
@@ -44,12 +42,10 @@ export class OutputComponent implements OnInit, OnDestroy {
         }));
 
         this._subscriptions.push(outputService.subscribeCommandEnd(() => {
+            // Do nothing for now
         }));
 
         this.content = "";
-    }
-
-    ngOnInit(): void {
     }
 
     ngOnDestroy() {

@@ -28,7 +28,7 @@ export class Mkdir extends Command {
             return ExitCode.MissingArgument;
         }
 
-        let pathArr   = dirPathArg.split("/");
+        const pathArr = dirPathArg.split("/");
         const name    = pathArr.pop() as string;
         const absPath = env.absolutePath(pathArr.join("/"));
 

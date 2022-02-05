@@ -6,7 +6,6 @@ import {
 import {StorageORM} from "app/orm";
 import {ExitCode} from "app/process";
 import * as utils from "app/utils";
-import {Cd} from ".";
 
 describe("Cd", () => {
     let env: Env;

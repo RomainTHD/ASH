@@ -8,7 +8,7 @@ export class UnterminatedStringError extends Error {
 }
 
 export function splitSpace(str: string, keepQuotes = true): string[] {
-    let res     = [];
+    const res   = [];
     let current = "";
 
     let quoteMode: string | null = null;

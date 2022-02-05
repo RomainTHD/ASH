@@ -8,6 +8,7 @@ export class True extends Command {
     public override readonly usage       = "true";
 
     public override async execute(..._: never): Promise<ExitCode> {
+        void _;
         return ExitCode.Success;
     }
 }
