@@ -1,7 +1,11 @@
 {
     "name": "ash",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Angular shell",
+    "funding": {
+        "url": "https://github.com/sponsors/RomainTHD/",
+        "type": "individual"
+    },
     "keywords": [
         "angular",
         "shell"
