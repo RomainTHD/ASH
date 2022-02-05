@@ -43,3 +43,13 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Cypress generated files
+cypress.env.json
+cypress.meta.json
+cypress/logs/
+cypress/videos/*
+cypress/screenshots/*
+cypress/integration/_generated/*
+cypress/data/migration/generated/*.csv
+cypress/build/*
