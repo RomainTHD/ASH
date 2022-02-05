@@ -7782,7 +7782,7 @@ let PromptComponent = /*#__PURE__*/(() => {
     },
     decls: 4,
     vars: 4,
-    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "ngStyle", "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
+    consts: [[1, "prompt__container"], [1, "prompt__container__child--fst", 3, "innerHTML"], ["id", "prompt-input", "contenteditable", "true", 1, "prompt__container__child--snd", "prompt__input", 3, "ngStyle", "input", "keyup.enter", "keydown.tab", "keydown.arrowUp", "keydown.arrowDown"], ["promptElement", ""]],
     template: function PromptComponent_Template(rf, ctx) {
       if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 0);
