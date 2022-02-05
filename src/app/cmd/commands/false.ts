@@ -8,6 +8,7 @@ export class False extends Command {
     public override readonly usage       = "false";
 
     public override async execute(..._: never): Promise<ExitCode> {
+        void _;
         return ExitCode.Failure;
     }
 }

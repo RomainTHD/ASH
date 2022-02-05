@@ -1,4 +1,3 @@
-import {File} from ".";
-
 describe("File", () => {
+    // To be completed
 });

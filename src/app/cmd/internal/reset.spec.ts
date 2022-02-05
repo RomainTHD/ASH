@@ -1,6 +1,6 @@
 import {Directory} from "app/fs";
 import {ExitCode} from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 describe("Reset", () => {
     it("should reset the filesystem", async () => {

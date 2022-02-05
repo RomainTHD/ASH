@@ -61,17 +61,17 @@ export abstract class Process {
     /**
      * Process arguments
      * @param args Arguments
-     * @return Processed arguments
+     * @returns Processed arguments
      */
     public static processArgs(args: string[]): Arguments {
-        let flags: Arguments["flags"]     = {};
-        let options: Arguments["options"] = {};
-        let others: Arguments["others"]   = [];
+        const flags: Arguments["flags"]     = {};
+        const options: Arguments["options"] = {};
+        const others: Arguments["others"]   = [];
 
         for (let i = 0; i < args.length; ++i) {
-            let arg = args[i].trim();
+            const arg = args[i].trim();
             if (arg.startsWith("--")) {
-                let name = arg.slice(2).trim();
+                const name = arg.slice(2).trim();
                 if (name === "") {
                     continue;
                 }
@@ -81,7 +81,7 @@ export abstract class Process {
                     next: args[i + 1] ? args[i + 1].trim() : null,
                 };
             } else if (arg.startsWith("-")) {
-                let name = arg.slice(1).trim();
+                const name = arg.slice(1).trim();
                 name.split("").forEach((flag) => {
                     flags[flag] = {
                         name: flag,

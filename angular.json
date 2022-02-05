@@ -140,9 +140,21 @@
                             "devServerTarget": "ASH:serve:production"
                         }
                     }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "src/**/*.ts",
+                            "src/**/*.html"
+                        ]
+                    }
                 }
             }
         }
     },
-    "defaultProject": "ASH"
+    "defaultProject": "ASH",
+    "cli": {
+        "defaultCollection": "@angular-eslint/schematics"
+    }
 }

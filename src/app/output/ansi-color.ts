@@ -73,7 +73,7 @@ export class AnsiColor {
     public static parse(text: string): string {
         // Split on each reset, and will add for each part the right amount of
         //  closing tags
-        let parts = text.split(this.RESET.ansiCode).map((part) => {
+        const parts = text.split(this.RESET.ansiCode).map((part) => {
             let count = 0;
 
             const processPart = (obj: { 1: AnsiColor }, classModifier: string | null) => {
@@ -85,7 +85,7 @@ export class AnsiColor {
                 }
 
                 // FIXME: Only replaced once ?
-                const ansi = color.ansiCode.replace("\[", "\\\[");
+                const ansi = color.ansiCode.replace("[", "\\[");
                 count += (part.match(new RegExp(ansi, "gm")) || []).length;
 
                 const cls = (classModifier ? classModifier + "--" : "") + color.className;

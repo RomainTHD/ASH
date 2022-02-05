@@ -4,14 +4,14 @@ import {
     Process,
     Signal,
 } from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 import {Yes} from ".";
 
 describe("Yes", () => {
     // Test function since both tests are really similar
     const testFunction = async (args: string[]): Promise<{ exitCode: ExitCode, output: string }> => {
         let output = "";
-        const emit = (msg: string = "") => output += msg + "\n";
+        const emit = (msg = "") => output += msg + "\n";
 
         const process = new Yes();
         const promise = process.execute(

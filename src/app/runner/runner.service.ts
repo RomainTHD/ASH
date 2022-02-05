@@ -6,7 +6,7 @@ import {
     Process,
     Signal,
 } from "app/process";
-import {utils} from "app/utils";
+import * as utils from "app/utils";
 
 @Injectable({
     providedIn: "root",
@@ -28,9 +28,9 @@ export class RunnerService {
             return;
         }
 
-        let argsArr = utils.strings.splitSpace(cmd);
-        const path  = (argsArr.shift() as string) || "";
-        let args    = Process.processArgs(argsArr);
+        const argsArr = utils.strings.splitSpace(cmd);
+        const path    = (argsArr.shift() as string) || "";
+        const args    = Process.processArgs(argsArr);
 
         this._output.emitNewCommand(cmd);
         this._process = Command.fromString(path);
@@ -47,6 +47,8 @@ export class RunnerService {
     }
 
     public autoComplete(prefix: string) {
+        void prefix;
+        // To be implemented
     }
 
     public emitSignal(signal: Signal): void {
