@@ -1,7 +1,11 @@
 {
     "name": "ash",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Angular shell",
+    "funding": {
+        "url": "https://github.com/sponsors/RomainTHD/",
+        "type": "individual"
+    },
     "keywords": [
         "angular",
         "shell"
@@ -15,10 +19,15 @@
     "scripts": {
         "build": "ng build",
         "build:prod": "ng build --prod",
+        "cypress:open": "cypress open",
+        "cypress:run": "cypress run",
         "deploy:gh-pages": "ng deploy",
+        "e2e": "ng e2e",
+        "e2e:ci": "start-server-and-test start:cypress http://localhost:4201 cypress:run",
         "lint": "ng lint",
         "ng": "ng",
         "start": "ng serve",
+        "start:cypress": "ng serve --port 4201",
         "test": "ng test",
         "test:firefox": "ng test --browsers Firefox",
         "test:prod": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
@@ -43,13 +52,30 @@
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "~13.0.4",
+        "@angular-eslint/builder": "13.0.1",
+        "@angular-eslint/eslint-plugin": "13.0.1",
+        "@angular-eslint/eslint-plugin-template": "13.0.1",
+        "@angular-eslint/schematics": "13.0.1",
+        "@angular-eslint/template-parser": "13.0.1",
         "@angular/cli": "~13.0.4",
         "@angular/compiler-cli": "~13.0.0",
+        "@cypress/schematic": "^1.6.0",
+        "@cypress/webpack-preprocessor": "^5.11.0",
         "@types/dompurify": "^2.3.3",
         "@types/jasmine": "~3.10.0",
         "@types/node": "^12.20.42",
+        "@typescript-eslint/eslint-plugin": "^5.10.2",
+        "@typescript-eslint/parser": "^5.10.2",
         "angular-cli-ghpages": "^1.0.0",
+        "cypress": "^9.4.1",
+        "eslint": "^8.8.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-html": "^6.2.0",
+        "eslint-plugin-jasmine": "^4.1.3",
+        "eslint-plugin-jsdoc": "^37.7.1",
+        "eslint-plugin-prettier": "^4.0.0",
         "jasmine-core": "~3.10.0",
+        "jasmine-spec-reporter": "^7.0.0",
         "karma": "~6.3.0",
         "karma-chrome-launcher": "~3.1.0",
         "karma-coverage": "~2.0.3",
@@ -59,6 +85,9 @@
         "karma-jasmine-html-reporter": "~1.7.0",
         "karma-junit-reporter": "^2.0.1",
         "karma-opera-launcher": "^1.0.0",
+        "prettier": "^2.5.1",
+        "start-server-and-test": "^1.14.0",
+        "ts-loader": "^9.2.6",
         "typescript": "~4.4.3"
     }
 }

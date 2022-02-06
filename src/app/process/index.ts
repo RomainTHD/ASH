@@ -5,3 +5,4 @@ export {
 } from "./process";
 
 export {ExitCode} from "./exit-code";
+export {Signal} from "./signal";

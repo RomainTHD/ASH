@@ -14,3 +14,4 @@ export {Mkdir} from "./mkdir";
 export {Pwd} from "./pwd";
 export {Touch} from "./touch";
 export {True} from "./true";
+export {Yes} from "./yes";

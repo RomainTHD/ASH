@@ -94,7 +94,7 @@ export class Env {
             path = this.getCwd(true) + path;
         }
 
-        let pathItems = path.split("/");
+        const pathItems = path.split("/");
 
         for (let i = 0; i < pathItems.length; ++i) {
             if (pathItems[i] === "..") {

@@ -98,8 +98,7 @@
                             "src/favicon.ico",
                             "src/assets"
                         ],
-                        "styles": [
-                        ],
+                        "styles": [],
                         "scripts": []
                     }
                 },
@@ -110,9 +109,52 @@
                         "branch": "gh-pages",
                         "message": "ci: Auto-deploy to GitHub Pages"
                     }
+                },
+                "cypress-run": {
+                    "builder": "@cypress/schematic:cypress",
+                    "options": {
+                        "devServerTarget": "ASH:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "ASH:serve:production"
+                        }
+                    }
+                },
+                "cypress-open": {
+                    "builder": "@cypress/schematic:cypress",
+                    "options": {
+                        "watch": true,
+                        "headless": false
+                    }
+                },
+                "e2e": {
+                    "builder": "@cypress/schematic:cypress",
+                    "options": {
+                        "devServerTarget": "ASH:serve",
+                        "watch": true,
+                        "headless": false
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "ASH:serve:production"
+                        }
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "src/**/*.ts",
+                            "src/**/*.html"
+                        ]
+                    }
                 }
             }
         }
     },
-    "defaultProject": "ASH"
+    "defaultProject": "ASH",
+    "cli": {
+        "defaultCollection": "@angular-eslint/schematics"
+    }
 }

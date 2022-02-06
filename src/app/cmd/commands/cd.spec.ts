@@ -5,8 +5,7 @@ import {
 } from "app/fs";
 import {StorageORM} from "app/orm";
 import {ExitCode} from "app/process";
-import {tests} from "app/utils";
-import {Cd} from ".";
+import * as utils from "app/utils";
 
 describe("Cd", () => {
     let env: Env;
@@ -34,18 +33,30 @@ describe("Cd", () => {
     });
 
     it("should move directory", async () => {
-        let out = await tests.executeCommand(`cd ${child.name}`, null, env);
+        let out = await utils.tests.executeCommand(
+            `cd ${child.name}`,
+            null,
+            env,
+        );
         expect(out.output).toContain(child.name);
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}`);
 
-        out = await tests.executeCommand(`cd ${child2.name}`, null, env);
+        out = await utils.tests.executeCommand(
+            `cd ${child2.name}`,
+            null,
+            env,
+        );
         expect(out.output).toContain(child.name);
         expect(out.output).toContain(child2.name);
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}/${child2.name}`);
 
-        out = await tests.executeCommand("cd ..", null, env);
+        out = await utils.tests.executeCommand(
+            "cd ..",
+            null,
+            env,
+        );
         expect(out.output).toContain(child.name);
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}`);
@@ -54,7 +65,11 @@ describe("Cd", () => {
     it("should not move directory if not found", async () => {
         const dirNotFound = "unknown_dir";
 
-        const out = await tests.executeCommand(`cd ${dirNotFound}`, null, env);
+        const out = await utils.tests.executeCommand(
+            `cd ${dirNotFound}`,
+            null,
+            env,
+        );
         expect(out.output).toContain(dirNotFound);
         expect(out.exitCode).toBe(ExitCode.NotFound);
         expect(env.getCwd()).toBe("/");
@@ -66,7 +81,11 @@ describe("Cd", () => {
             parent: child.id,
         });
 
-        const out = await tests.executeCommand(`cd /${child.name}/${file.name}`, null, env);
+        const out = await utils.tests.executeCommand(
+            `cd /${child.name}/${file.name}`,
+            null,
+            env,
+        );
         expect(out.output).toContain(child.name);
         expect(out.output).toContain(file.name);
         expect(out.exitCode).toBe(ExitCode.Unsupported);

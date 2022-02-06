@@ -1,4 +1,4 @@
-import {front} from "app/utils";
+import * as utils from "app/utils";
 import {AnsiColor} from ".";
 
 describe("AnsiColor", () => {
@@ -14,7 +14,7 @@ describe("AnsiColor", () => {
         const color = AnsiColor.FG.BLUE;
         const msg   = "test";
         const txt   = AnsiColor.parse(`${color}${msg}${AnsiColor.RESET}`);
-        const elt   = front.stringToHTML(txt, true);
+        const elt   = utils.front.stringToHTML(txt, true);
         expect(elt).toBeInstanceOf(HTMLSpanElement);
         expect(elt.classList).toContain(`fg--${color.className}`);
         // FIXME: Not the best way to test the color,

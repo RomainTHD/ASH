@@ -2,14 +2,16 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
+    HostListener,
     ViewChild,
 } from "@angular/core";
 import {EnvService} from "app/env";
 import {HistoryService} from "app/history";
 import {OutputService} from "app/output";
+import {Signal} from "app/process";
 import {getPromptText} from "app/prompt";
 import {RunnerService} from "app/runner";
-import {front} from "app/utils";
+import * as utils from "app/utils";
 
 /**
  * Prompt view model
@@ -134,9 +136,10 @@ export class PromptComponent implements AfterViewInit {
      * Enter key pressed, we add the command to the history and execute it
      */
     public onEnter(): void {
+        const cmd = this.prompt.cmd;
         this._output.emitPromptMessage(this.prompt.message);
-        this._history.pushCommand(this.prompt.cmd);
-        this._runner.run(this.prompt.cmd, this._env.getEnv());
+        this._history.pushCommand(cmd);
+        this._runner.run(cmd, this._env.getEnv());
         this.prompt = {
             cmd: "",
             message: getPromptText(this._env.getEnv()),
@@ -145,10 +148,28 @@ export class PromptComponent implements AfterViewInit {
     }
 
     /**
+     * Catch the Ctrl-C event, and emit it to the runner
+     * @param event Event
+     */
+    @HostListener("document:keydown.control.c", ["$event"])
+    onCtrlC(event: KeyboardEvent): void {
+        event.preventDefault();
+        this._runner.emitSignal(Signal.SIGINT);
+        this._output.emitPromptMessage(this.prompt.message);
+        this._output.emitNewCommand(`${this.prompt.cmd}^C`);
+        this.prompt = {
+            cmd: "",
+            message: getPromptText(this._env.getEnv()),
+        };
+        this._updateView();
+        this._output.emitCommandEnd();
+    }
+
+    /**
      * Tab key pressed, we autocomplete the command (WIP)
      */
     public onTab(): void {
-        this._runner.complete(this.prompt.cmd);
+        this._runner.autoComplete(this.prompt.cmd);
     }
 
     /**
@@ -185,7 +206,7 @@ export class PromptComponent implements AfterViewInit {
      * @returns Prompt message without HTML tags
      */
     public getVanillaPromptMessage(): string {
-        return front.stripHTML(this.prompt.message);
+        return utils.front.stripHTML(this.prompt.message);
     }
 
     /**

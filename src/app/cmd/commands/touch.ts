@@ -31,7 +31,7 @@ export class Touch extends Command {
             return ExitCode.MissingArgument;
         }
 
-        let pathArr   = filePathArg.split("/");
+        const pathArr = filePathArg.split("/");
         const name    = pathArr.pop() as string;
         const absPath = env.absolutePath(pathArr.join("/"));
 
