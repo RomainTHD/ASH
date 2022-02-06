@@ -4978,7 +4978,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Command": () => (/* binding */ Command)
 /* harmony export */ });
 /* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/process */ 8728);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ 1385);
+/* harmony import */ var app_process_process_builder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/process/process-builder */ 8230);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! . */ 1385);
+
 
 
 /**
@@ -4995,7 +4997,7 @@ let Command = /*#__PURE__*/(() => {
     static fromString(cmd) {
       cmd = cmd.trim(); // To stop TS complaining
 
-      const assoc = ___WEBPACK_IMPORTED_MODULE_1__.commands;
+      const assoc = ___WEBPACK_IMPORTED_MODULE_2__.commands;
       let classCommand = null;
       Object.entries(assoc).forEach(([_, currentClass]) => {
         void _; // For each command child class, if its command name is the same
@@ -5005,16 +5007,15 @@ let Command = /*#__PURE__*/(() => {
           classCommand = currentClass;
         }
       });
+      const builder = new app_process_process_builder__WEBPACK_IMPORTED_MODULE_1__.ProcessBuilder();
 
       if (classCommand !== null) {
-        // @ts-ignore
-        // Weird TS error, the variable type is marked as `never`, which is
-        //  clearly wrong, and then the `new` doesn't work since `Command`
-        //  is abstract
-        return new classCommand();
+        builder.setProcessClass(classCommand);
       } else {
-        return new ___WEBPACK_IMPORTED_MODULE_1__.commands.NotFound(cmd);
+        builder.setProcessClass(___WEBPACK_IMPORTED_MODULE_2__.commands.NotFound.setCommandName(cmd));
       }
+
+      return builder;
     }
 
   }
@@ -5023,6 +5024,16 @@ let Command = /*#__PURE__*/(() => {
    * Command name, like `cat` or `ls`
    */
   Command.command = null;
+  /**
+   * Command description
+   */
+
+  Command.description = null;
+  /**
+   * Command usage
+   */
+
+  Command.usage = null;
   return Command;
 })();
 
@@ -5054,34 +5065,34 @@ __webpack_require__.r(__webpack_exports__);
 
 let Cat = /*#__PURE__*/(() => {
   class Cat extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Prints the contents of a file";
-      this.usage = "cat <file>";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const filePathArg = args.others[0];
+        const filePathArg = _this.args.others[0];
 
         if (!filePathArg) {
-          emit("cat: missing file path");
+          _this.stderr.emit("cat: missing file path");
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
         }
 
-        const f = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(env.absolutePath(filePathArg));
+        const f = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(_this.env.absolutePath(filePathArg));
 
         if (!f) {
-          emit(`cat: '${filePathArg}': no such file or directory`);
+          _this.stderr.emit(`cat: '${filePathArg}': no such file or directory`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
         if (f.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_2__.InodeType.File) {
-          emit(`cat: '${filePathArg}': is not a file`);
+          _this.stderr.emit(`cat: '${filePathArg}': is not a file`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Unsupported;
         }
 
-        emit(f.content);
+        _this.stdout.emit(f.content);
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5089,6 +5100,8 @@ let Cat = /*#__PURE__*/(() => {
   }
 
   Cat.command = "cat";
+  Cat.description = "Prints the contents of a file";
+  Cat.usage = "cat <file>";
   return Cat;
 })();
 
@@ -5120,29 +5133,29 @@ __webpack_require__.r(__webpack_exports__);
 
 let Cd = /*#__PURE__*/(() => {
   class Cd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Change directory";
-      this.usage = "cd [path]";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const path = args.others[0] || "~";
-        const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(env.absolutePath(path));
+        const path = _this.args.others[0] || "~";
+        const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Inode.findFromPath(_this.env.absolutePath(path));
 
         if (dir === null) {
-          emit(`cd: '${path}': no such directory`);
+          _this.stderr.emit(`cd: '${path}': no such directory`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
         if (dir.inodeType !== app_fs__WEBPACK_IMPORTED_MODULE_2__.InodeType.Directory) {
-          emit(`cd: '${path}': not a directory`);
+          _this.stderr.emit(`cd: '${path}': not a directory`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Unsupported;
         }
 
-        env.setCwd(path);
-        emit(env.getCwd());
+        _this.env.setCwd(path);
+
+        _this.stdout.emit(_this.env.getCwd());
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5150,6 +5163,8 @@ let Cd = /*#__PURE__*/(() => {
   }
 
   Cd.command = "cd";
+  Cd.description = "Change directory";
+  Cd.usage = "cd [path]";
   return Cd;
 })();
 
@@ -5179,17 +5194,13 @@ __webpack_require__.r(__webpack_exports__);
 
 let Clear = /*#__PURE__*/(() => {
   class Clear extends app_cmd_command__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Clear the screen";
-      this.usage = "clear";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
         // FIXME: Ugly implementation
         for (let i = 0; i < 127; ++i) {
-          emit();
+          _this.stdout.emit();
         }
 
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
@@ -5199,6 +5210,8 @@ let Clear = /*#__PURE__*/(() => {
   }
 
   Clear.command = "clear";
+  Clear.description = "Clear the screen";
+  Clear.usage = "clear";
   return Clear;
 })();
 
@@ -5228,15 +5241,12 @@ __webpack_require__.r(__webpack_exports__);
 
 let Echo = /*#__PURE__*/(() => {
   class Echo extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Echo a message";
-      this.usage = "echo [text]";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        emit(args.others.join(" "), !args.flags["n"]);
+        _this.stdout.emit(_this.args.others.join(" "), !_this.args.flags["n"]);
+
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
       })();
     }
@@ -5244,6 +5254,8 @@ let Echo = /*#__PURE__*/(() => {
   }
 
   Echo.command = "echo";
+  Echo.description = "Echo a message";
+  Echo.usage = "echo [text]";
   return Echo;
 })();
 
@@ -5268,15 +5280,8 @@ __webpack_require__.r(__webpack_exports__);
 
 let False = /*#__PURE__*/(() => {
   class False extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Do nothing and fails";
-      this.usage = "false";
-    }
-
-    execute(..._) {
+    onExecution() {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        void _;
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Failure;
       })();
     }
@@ -5284,6 +5289,8 @@ let False = /*#__PURE__*/(() => {
   }
 
   False.command = "false";
+  False.description = "Do nothing and fails";
+  False.usage = "false";
   return False;
 })();
 
@@ -5303,6 +5310,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
 /* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
 /* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var app_process_process_builder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/process/process-builder */ 8230);
+
 
 
 
@@ -5314,26 +5323,25 @@ __webpack_require__.r(__webpack_exports__);
 
 let Help = /*#__PURE__*/(() => {
   class Help extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Show help for a command";
-      this.usage = "help [command]";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        if (!args.others[0]) {
+        if (!_this.args.others[0]) {
           const assoc = app_cmd__WEBPACK_IMPORTED_MODULE_1__.regularCommands;
           Object.keys(assoc).forEach(key => {
             // Like we did in `Command`, we're doing some kind of reflection
             //  to go through all commands
             const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(assoc[key].command);
-            emit(`${cmd.usage} - ${cmd.description}`);
+            const processClass = cmd.processClass;
+
+            _this.stdout.emit(`${processClass.usage} - ${processClass.description}`);
           });
           return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
         } else {
-          // Not sure about this one, but should work for now
-          return new app_cmd__WEBPACK_IMPORTED_MODULE_1__.Man().execute(args, env, emit);
+          // FIXME: Ugly way to do so, but should work for now
+          const process = new app_process_process_builder__WEBPACK_IMPORTED_MODULE_3__.ProcessBuilder().setProcessClass(app_cmd__WEBPACK_IMPORTED_MODULE_1__.Man).setArgs(_this.args).setEnv(_this.env).setStdout(_this.stdout).setStderr(_this.stderr).build();
+          return process.execute();
         }
       })();
     }
@@ -5341,6 +5349,8 @@ let Help = /*#__PURE__*/(() => {
   }
 
   Help.command = "help";
+  Help.description = "Show help for a command";
+  Help.usage = "help [command]";
   return Help;
 })();
 
@@ -5428,19 +5438,17 @@ __webpack_require__.r(__webpack_exports__);
 
 let Ls = /*#__PURE__*/(() => {
   class Ls extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "List files in the current directory";
-      this.usage = "ls [options] [path]";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const path = env.absolutePath(args.others[0] || ".");
+        const path = _this.env.absolutePath(_this.args.others[0] || ".");
+
         const cwd = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(path);
 
         if (!cwd) {
-          emit(`ls: cannot access '${path}': no such directory`);
+          _this.stderr.emit(`ls: cannot access '${path}': no such directory`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
@@ -5455,7 +5463,9 @@ let Ls = /*#__PURE__*/(() => {
           output += " ";
         });
         output += "]";
-        emit(output);
+
+        _this.stdout.emit(output);
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5463,6 +5473,8 @@ let Ls = /*#__PURE__*/(() => {
   }
 
   Ls.command = "ls";
+  Ls.description = "List files in the current directory";
+  Ls.usage = "ls [options] [path]";
   return Ls;
 })();
 
@@ -5489,33 +5501,37 @@ __webpack_require__.r(__webpack_exports__);
 
 let Man = /*#__PURE__*/(() => {
   class Man extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Informations about a command";
-      this.usage = "man <cmd>";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const cmd = args.others[0];
+        const cmd = _this.args.others[0];
 
         if (!cmd) {
-          emit("man: missing command name");
+          _this.stderr.emit("man: missing command name");
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
         }
 
         const commandObject = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(cmd);
+        const processClass = commandObject.processClass;
 
-        if (!commandObject || commandObject instanceof app_cmd__WEBPACK_IMPORTED_MODULE_1__.NotFound) {
-          emit(`man: no manual entry for '${cmd}'`);
+        if (!commandObject || processClass === app_cmd__WEBPACK_IMPORTED_MODULE_1__.NotFound) {
+          _this.stderr.emit(`man: no manual entry for '${cmd}'`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
-        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.BOLD}Manual for \`${cmd}\`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
-        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Usage:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
-        emit(commandObject.usage);
-        emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Description:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
-        emit(commandObject.description);
+        _this.stdout.emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.BOLD}Manual for \`${cmd}\`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+
+        _this.stdout.emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Usage:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+
+        _this.stdout.emit(processClass.usage);
+
+        _this.stdout.emit(`${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.UNDERLINE}Description:${app_output__WEBPACK_IMPORTED_MODULE_2__.AnsiColor.RESET}`);
+
+        _this.stdout.emit(processClass.description);
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5523,6 +5539,8 @@ let Man = /*#__PURE__*/(() => {
   }
 
   Man.command = "man";
+  Man.description = "Informations about a command";
+  Man.usage = "man <cmd>";
   return Man;
 })();
 
@@ -5554,28 +5572,28 @@ __webpack_require__.r(__webpack_exports__);
 
 let Mkdir = /*#__PURE__*/(() => {
   class Mkdir extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Create a directory";
-      this.usage = "mkdir <path>";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const dirPathArg = args.others[0];
+        const dirPathArg = _this.args.others[0];
 
         if (!dirPathArg) {
-          emit("mkdir: missing directory path");
+          _this.stderr.emit("mkdir: missing directory path");
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
         }
 
         const pathArr = dirPathArg.split("/");
         const name = pathArr.pop();
-        const absPath = env.absolutePath(pathArr.join("/"));
+
+        const absPath = _this.env.absolutePath(pathArr.join("/"));
+
         const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
 
         if (!dir) {
-          emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
+          _this.stderr.emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
@@ -5583,7 +5601,9 @@ let Mkdir = /*#__PURE__*/(() => {
           name,
           parent: dir.id
         });
-        emit(`${absPath}/${name}`);
+
+        _this.stdout.emit(`${absPath}/${name}`);
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5591,6 +5611,8 @@ let Mkdir = /*#__PURE__*/(() => {
   }
 
   Mkdir.command = "mkdir";
+  Mkdir.description = "Create a directory";
+  Mkdir.usage = "mkdir <path>";
   return Mkdir;
 })();
 
@@ -5620,15 +5642,12 @@ __webpack_require__.r(__webpack_exports__);
 
 let Pwd = /*#__PURE__*/(() => {
   class Pwd extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Prints the current working directory";
-      this.usage = "pwd";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        emit(env.getCwd());
+        _this.stdout.emit(_this.env.getCwd());
+
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
       })();
     }
@@ -5636,6 +5655,8 @@ let Pwd = /*#__PURE__*/(() => {
   }
 
   Pwd.command = "pwd";
+  Pwd.description = "Prints the current working directory";
+  Pwd.usage = "pwd";
   return Pwd;
 })();
 
@@ -5667,28 +5688,28 @@ __webpack_require__.r(__webpack_exports__);
 
 let Touch = /*#__PURE__*/(() => {
   class Touch extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Touch a file";
-      this.usage = "touch <file>";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const filePathArg = args.others[0];
+        const filePathArg = _this.args.others[0];
 
         if (!filePathArg) {
-          emit("touch: missing file path");
+          _this.stderr.emit("touch: missing file path");
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.MissingArgument;
         }
 
         const pathArr = filePathArg.split("/");
         const name = pathArr.pop();
-        const absPath = env.absolutePath(pathArr.join("/"));
+
+        const absPath = _this.env.absolutePath(pathArr.join("/"));
+
         const dir = app_fs__WEBPACK_IMPORTED_MODULE_2__.Directory.findFromPath(absPath);
 
         if (!dir) {
-          emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
+          _this.stderr.emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
+
           return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.NotFound;
         }
 
@@ -5696,7 +5717,9 @@ let Touch = /*#__PURE__*/(() => {
           name,
           parent: dir.id
         });
-        emit(absPath);
+
+        _this.stdout.emit(absPath);
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5704,6 +5727,8 @@ let Touch = /*#__PURE__*/(() => {
   }
 
   Touch.command = "touch";
+  Touch.description = "Touch a file";
+  Touch.usage = "touch <file>";
   return Touch;
 })();
 
@@ -5728,15 +5753,8 @@ __webpack_require__.r(__webpack_exports__);
 
 let True = /*#__PURE__*/(() => {
   class True extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Do nothing successfully";
-      this.usage = "true";
-    }
-
-    execute(..._) {
+    onExecution() {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        void _;
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Success;
       })();
     }
@@ -5744,6 +5762,8 @@ let True = /*#__PURE__*/(() => {
   }
 
   True.command = "true";
+  True.description = "Do nothing successfully";
+  True.usage = "true";
   return True;
 })();
 
@@ -5775,20 +5795,15 @@ __webpack_require__.r(__webpack_exports__);
 
 let Yes = /*#__PURE__*/(() => {
   class Yes extends app_cmd_command__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Output a string repeatedly until killed";
-      this.usage = "yes [string]";
-    }
-
-    execute(args, env, emit) {
+    onExecution() {
       var _this = this;
 
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        const msg = args.others[0] || "y";
+        const msg = _this.args.others[0] || "y";
 
         while (_this.canContinue()) {
-          emit(msg);
+          _this.stdout.emit(msg);
+
           yield app_utils__WEBPACK_IMPORTED_MODULE_3__.time.sleep(1);
         }
 
@@ -5799,6 +5814,8 @@ let Yes = /*#__PURE__*/(() => {
   }
 
   Yes.command = "yes";
+  Yes.description = "Output a string repeatedly until killed";
+  Yes.usage = "yes [string]";
   return Yes;
 })();
 
@@ -5897,18 +5914,26 @@ __webpack_require__.r(__webpack_exports__);
 
 let NotFound = /*#__PURE__*/(() => {
   class NotFound extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor(cmd = "__unknown") {
-      super();
-      this.description = "Command not found";
-      this.usage = "__unknown";
+    /**
+     * Hack to get the command name in the instance, while only sending a class
+     * to the builder class.
+     * FIXME: This is a hack, and should be removed, as this is not thread safe
+     * @param cmd Unknown command
+     * @returns NotFound class
+     */
+    static setCommandName(cmd) {
       this._cmd = cmd;
+      return this;
     }
 
-    execute(args, env, emit) {
+    onExecution() {
       var _this = this;
 
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-        emit(`${_this._cmd}: command not found`);
+        const cmd = _this.constructor._cmd;
+
+        _this.stderr.emit(`${cmd}: command not found`);
+
         return app_process__WEBPACK_IMPORTED_MODULE_2__.ExitCode.Failure;
       })();
     }
@@ -5916,6 +5941,16 @@ let NotFound = /*#__PURE__*/(() => {
   }
 
   NotFound.command = "__unknown";
+  NotFound.description = "Command not found";
+  NotFound.usage = "__unknown";
+  /**
+   * Command used to print `...: command not found`.
+   * This needs a default value, or we might encounter some undefined at some
+   * point. Ugly fix to an ugly problem.
+   * @private
+   */
+
+  NotFound._cmd = "__unknown";
   return NotFound;
 })();
 
@@ -5948,16 +5983,14 @@ __webpack_require__.r(__webpack_exports__);
 
 let Reset = /*#__PURE__*/(() => {
   class Reset extends app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command {
-    constructor() {
-      super(...arguments);
-      this.description = "Reset the app and erase all filesystem";
-      this.usage = "__reset";
-    }
+    onExecution() {
+      var _this = this;
 
-    execute(args, env, emit) {
       return (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
         app_orm__WEBPACK_IMPORTED_MODULE_2__.StorageORM.resetAll();
-        emit("OK");
+
+        _this.stddebug.emit("Filesystem erased");
+
         return app_process__WEBPACK_IMPORTED_MODULE_3__.ExitCode.Success;
       })();
     }
@@ -5965,6 +5998,8 @@ let Reset = /*#__PURE__*/(() => {
   }
 
   Reset.command = "__reset";
+  Reset.description = "Reset the app and erase all filesystem";
+  Reset.usage = "__reset";
   return Reset;
 })();
 
@@ -6776,9 +6811,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Entity": () => (/* binding */ Entity)
 /* harmony export */ });
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/utils */ 4905);
+
 /**
  * An entity used by the storage handler
  */
+
 let Entity = /*#__PURE__*/(() => {
   class Entity {
     constructor(id) {
@@ -6791,21 +6829,21 @@ let Entity = /*#__PURE__*/(() => {
 
     static create(template) {
       void template;
-      throw new Error("Not implemented");
+      throw new app_utils__WEBPACK_IMPORTED_MODULE_0__.errors.NotImplementerError();
     }
 
     static find(id) {
       void id;
-      throw new Error("Not implemented");
+      throw new app_utils__WEBPACK_IMPORTED_MODULE_0__.errors.NotImplementerError();
     }
 
     static findAll() {
-      throw new Error("Not implemented");
+      throw new app_utils__WEBPACK_IMPORTED_MODULE_0__.errors.NotImplementerError();
     }
 
     static fromJSON(json) {
       void json;
-      throw new Error("Not implemented");
+      throw new app_utils__WEBPACK_IMPORTED_MODULE_0__.errors.NotImplementerError();
     }
 
   }
@@ -7251,14 +7289,91 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Process": () => (/* reexport safe */ _process__WEBPACK_IMPORTED_MODULE_0__.Process),
 /* harmony export */   "ExitCode": () => (/* reexport safe */ _exit_code__WEBPACK_IMPORTED_MODULE_1__.ExitCode),
-/* harmony export */   "Signal": () => (/* reexport safe */ _signal__WEBPACK_IMPORTED_MODULE_2__.Signal)
+/* harmony export */   "Signal": () => (/* reexport safe */ _signal__WEBPACK_IMPORTED_MODULE_2__.Signal),
+/* harmony export */   "ProcessState": () => (/* reexport safe */ _process_state__WEBPACK_IMPORTED_MODULE_3__.ProcessState)
 /* harmony export */ });
 /* harmony import */ var _process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./process */ 8555);
 /* harmony import */ var _exit_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./exit-code */ 7567);
 /* harmony import */ var _signal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./signal */ 7186);
+/* harmony import */ var _process_state__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./process-state */ 6544);
 
 
 
+
+
+/***/ }),
+
+/***/ 8230:
+/*!********************************************!*\
+  !*** ./src/app/process/process-builder.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ProcessBuilder": () => (/* binding */ ProcessBuilder)
+/* harmony export */ });
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/utils */ 4905);
+
+/**
+ * Builder pattern for processes
+ * @see Process
+ */
+
+class ProcessBuilder {
+  constructor() {
+    this._args = null;
+    this._env = null;
+    this._stdout = null;
+    this._stderr = null;
+    this._processClass = null;
+  }
+
+  get processClass() {
+    if (this._processClass === null) {
+      throw new Error("processClass is not set");
+    }
+
+    return this._processClass;
+  }
+
+  setEnv(env) {
+    this._env = env;
+    return this;
+  }
+
+  setArgs(args) {
+    this._args = args;
+    return this;
+  }
+
+  setStdout(stdout) {
+    this._stdout = stdout;
+    return this;
+  }
+
+  setStderr(stderr) {
+    this._stderr = stderr;
+    return this;
+  }
+
+  setProcessClass(processClass) {
+    this._processClass = processClass;
+    return this;
+  }
+
+  build() {
+    if (this._args === null || this._env === null || this._stdout === null || this._stderr === null || this._processClass === null) {
+      throw new app_utils__WEBPACK_IMPORTED_MODULE_0__.errors.BuilderPatternError();
+    } // It will work, because we're only instantiating child classes
+    // @ts-ignore
+
+
+    return new this._processClass(this._args, this._env, this._stdout, this._stderr);
+  }
+
+}
 
 /***/ }),
 
@@ -7315,8 +7430,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Process": () => (/* binding */ Process)
 /* harmony export */ });
-/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/process */ 8728);
-/* harmony import */ var app_process_process_state__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/process/process-state */ 6544);
+/* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/process */ 8728);
 
 
 /**
@@ -7324,27 +7439,40 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class Process {
-  constructor() {
+  constructor(args, env, stdout, stderr) {
+    var _this = this;
+
+    /**
+     * Execute process
+     * @returns Exit code
+     */
+    this.execute = /*#__PURE__*/(0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+      _this._state = app_process__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running;
+      const exitCode = yield _this.onExecution();
+      _this._state = app_process__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Zombie;
+      return exitCode;
+    });
     /**
      * Emit a signal
      * @param signal Signal
      * @example `emitSignal(Signal.SIGINT)`
      */
+
     this.emitSignal = signal => {
       switch (signal) {
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGINT:
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGTERM:
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGQUIT:
-          this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Zombie;
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGINT:
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGTERM:
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGQUIT:
+          this._state = app_process__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Zombie;
           break;
 
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGKILL:
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGKILL:
           break;
 
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGUSR1:
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGUSR1:
           break;
 
-        case app_process__WEBPACK_IMPORTED_MODULE_0__.Signal.SIGUSR2:
+        case app_process__WEBPACK_IMPORTED_MODULE_1__.Signal.SIGUSR2:
           break;
 
         default:
@@ -7352,8 +7480,17 @@ class Process {
       }
     };
 
-    this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Created;
-    this._state = app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running; // FIXME: Needs to be refactored to allow setting the state flag
+    this._state = app_process__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Created;
+    this.args = args;
+    this.env = env;
+    this.stdout = stdout;
+    this.stderr = stderr;
+    this.stddebug = {
+      emit: (msg = "", newLine = true) => {
+        void newLine;
+        console.debug(msg);
+      }
+    };
   }
   /**
    * Process arguments
@@ -7412,7 +7549,7 @@ class Process {
 
 
   canContinue() {
-    return this._state === app_process_process_state__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running;
+    return this._state === app_process__WEBPACK_IMPORTED_MODULE_1__.ProcessState.Running;
   }
 
 }
@@ -7856,10 +7993,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "RunnerService": () => (/* binding */ RunnerService)
 /* harmony export */ });
 /* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! app/cmd */ 1385);
-/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/process */ 8728);
-/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/utils */ 4905);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/utils */ 4905);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 3668);
-/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/output */ 9548);
+
 
 
 
@@ -7883,17 +8021,26 @@ let RunnerService = /*#__PURE__*/(() => {
         return;
       }
 
-      const argsArr = app_utils__WEBPACK_IMPORTED_MODULE_2__.strings.splitSpace(cmd);
+      const argsArr = app_utils__WEBPACK_IMPORTED_MODULE_3__.strings.splitSpace(cmd);
       const path = argsArr.shift() || "";
-      const args = app_process__WEBPACK_IMPORTED_MODULE_1__.Process.processArgs(argsArr);
+      const args = app_process__WEBPACK_IMPORTED_MODULE_2__.Process.processArgs(argsArr);
+      const stdout = {
+        emit: (msg = "", newLine = true) => {
+          return this._output.emitOutput(newLine ? msg + "\n" : msg);
+        }
+      };
+      const stderr = {
+        emit: (msg = "", newLine = true) => {
+          msg = app_output__WEBPACK_IMPORTED_MODULE_1__.AnsiColor.FG.RED + msg + app_output__WEBPACK_IMPORTED_MODULE_1__.AnsiColor.RESET;
+          return this._output.emitOutput(newLine ? msg + "\n" : msg);
+        }
+      };
 
       this._output.emitNewCommand(cmd);
 
-      this._process = app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path);
+      this._process = app_cmd__WEBPACK_IMPORTED_MODULE_0__.Command.fromString(path).setStdout(stdout).setStderr(stderr).setEnv(env).setArgs(args).build();
 
-      this._process.execute(args, env, (msg = "", newLine = true) => {
-        return this._output.emitOutput(newLine ? msg + "\n" : msg);
-      }).then(() => {
+      this._process.execute().then(() => {
         this._output.emitCommandEnd();
 
         this._process = null;
@@ -7913,7 +8060,7 @@ let RunnerService = /*#__PURE__*/(() => {
   }
 
   RunnerService.ɵfac = function RunnerService_Factory(t) {
-    return new (t || RunnerService)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](app_output__WEBPACK_IMPORTED_MODULE_3__.OutputService));
+    return new (t || RunnerService)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](app_output__WEBPACK_IMPORTED_MODULE_1__.OutputService));
   };
 
   RunnerService.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({
@@ -7923,6 +8070,33 @@ let RunnerService = /*#__PURE__*/(() => {
   });
   return RunnerService;
 })();
+
+/***/ }),
+
+/***/ 3345:
+/*!*********************************!*\
+  !*** ./src/app/utils/errors.ts ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BuilderPatternError": () => (/* binding */ BuilderPatternError),
+/* harmony export */   "NotImplementerError": () => (/* binding */ NotImplementerError)
+/* harmony export */ });
+class BuilderPatternError extends Error {
+  constructor() {
+    super("Partial builder pattern error.");
+  }
+
+}
+class NotImplementerError extends Error {
+  constructor() {
+    super("Not implemented.");
+  }
+
+}
 
 /***/ }),
 
@@ -7980,15 +8154,18 @@ function stripHTML(str) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "front": () => (/* reexport module object */ _front__WEBPACK_IMPORTED_MODULE_0__),
-/* harmony export */   "strings": () => (/* reexport module object */ _strings__WEBPACK_IMPORTED_MODULE_1__),
-/* harmony export */   "tests": () => (/* reexport module object */ _tests__WEBPACK_IMPORTED_MODULE_2__),
-/* harmony export */   "time": () => (/* reexport module object */ _time__WEBPACK_IMPORTED_MODULE_3__)
+/* harmony export */   "errors": () => (/* reexport module object */ _errors__WEBPACK_IMPORTED_MODULE_0__),
+/* harmony export */   "front": () => (/* reexport module object */ _front__WEBPACK_IMPORTED_MODULE_1__),
+/* harmony export */   "strings": () => (/* reexport module object */ _strings__WEBPACK_IMPORTED_MODULE_2__),
+/* harmony export */   "tests": () => (/* reexport module object */ _tests__WEBPACK_IMPORTED_MODULE_3__),
+/* harmony export */   "time": () => (/* reexport module object */ _time__WEBPACK_IMPORTED_MODULE_4__)
 /* harmony export */ });
-/* harmony import */ var _front__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./front */ 997);
-/* harmony import */ var _strings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./strings */ 3200);
-/* harmony import */ var _tests__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tests */ 6403);
-/* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./time */ 9974);
+/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./errors */ 3345);
+/* harmony import */ var _front__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./front */ 997);
+/* harmony import */ var _strings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./strings */ 3200);
+/* harmony import */ var _tests__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tests */ 6403);
+/* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./time */ 9974);
+
 
 
 
@@ -8112,8 +8289,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 8239);
 /* harmony import */ var app_cmd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! app/cmd */ 1385);
 /* harmony import */ var app_env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! app/env */ 2227);
-/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/process */ 8728);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! . */ 4905);
+/* harmony import */ var app_output__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/output */ 9548);
+/* harmony import */ var app_process__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/process */ 8728);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! . */ 4905);
+
 
 
 
@@ -8125,6 +8304,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param args Arguments to pass to the command.
  * If empty, the arguments will be parsed from the command string
  * @param env Environment to pass to the command
+ * @param killAfter Number of milliseconds to wait before killing the process
  * @returns Exit code and command output
  */
 
@@ -8133,27 +8313,44 @@ function executeCommand(_x) {
 }
 
 function _executeCommand() {
-  _executeCommand = (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (cmdStr, args = null, env = null) {
-    const argsArr = ___WEBPACK_IMPORTED_MODULE_4__.strings.splitSpace(cmdStr);
+  _executeCommand = (0,_home_runner_work_ASH_ASH_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (cmdStr, args = null, env = null, killAfter = null) {
+    const argsArr = ___WEBPACK_IMPORTED_MODULE_5__.strings.splitSpace(cmdStr);
     const path = argsArr.shift() || "";
 
     if (!args) {
-      args = app_process__WEBPACK_IMPORTED_MODULE_3__.Process.processArgs(argsArr);
+      args = app_process__WEBPACK_IMPORTED_MODULE_4__.Process.processArgs(argsArr);
     }
 
     if (!env) {
       env = new app_env__WEBPACK_IMPORTED_MODULE_2__.Env();
     }
 
-    const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(path);
-    let output = "";
+    let stdout = "";
+    const stdoutStream = {
+      emit: (msg = "", newLine = true) => {
+        stdout += msg + (newLine ? "\n" : "");
+      }
+    };
+    let stderr = "";
+    const stderrStream = {
+      emit: (msg = "", newLine = true) => {
+        stderr += app_output__WEBPACK_IMPORTED_MODULE_3__.AnsiColor.FG.RED + msg + (newLine ? "\n" : "");
+      }
+    };
+    const cmd = app_cmd__WEBPACK_IMPORTED_MODULE_1__.Command.fromString(path).setArgs(args).setStdout(stdoutStream).setStderr(stderrStream).setEnv(env).build();
+    const promise = cmd.execute();
 
-    const emit = (msg = "") => output += msg;
+    if (killAfter !== null) {
+      // Interrupt process
+      yield ___WEBPACK_IMPORTED_MODULE_5__.time.sleep(killAfter);
+      cmd.emitSignal(app_process__WEBPACK_IMPORTED_MODULE_4__.Signal.SIGINT);
+    }
 
-    const exitCode = yield cmd.execute(args, env, emit);
+    const exitCode = yield promise;
     return {
       exitCode,
-      output
+      stdout,
+      stderr
     };
   });
   return _executeCommand.apply(this, arguments);
