@@ -12,5 +12,6 @@ describe("Reset", () => {
         const out = await utils.tests.executeCommand("__reset");
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(Directory.find(dir.id)).toBe(null);
+        expect(out.stderr).toBe("");
     });
 });

@@ -8,8 +8,9 @@ describe("Man", () => {
         const out = await utils.tests.executeCommand(`man ${cmd}`);
         expect(out.exitCode).toBe(ExitCode.Success);
         const processClass = Command.fromString(cmd).processClass as typeof Command;
-        expect(out.output).toContain(processClass.usage as string);
-        expect(out.output).toContain(processClass.description as string);
+        expect(out.stdout).toContain(processClass.usage as string);
+        expect(out.stdout).toContain(processClass.description as string);
+        expect(out.stderr).toBe("");
     });
 
     it("should not find any documentation", async () => {
@@ -17,7 +18,8 @@ describe("Man", () => {
         const out = await utils.tests.executeCommand(`man ${cmd}`);
         expect(out.exitCode).toBe(ExitCode.NotFound);
         const processClass = Command.fromString(cmd).processClass as typeof Command;
-        expect(out.output).not.toContain(processClass.usage as string);
-        expect(out.output).not.toContain(processClass.description as string);
+        expect(out.stdout).not.toContain(processClass.usage as string);
+        expect(out.stdout).not.toContain(processClass.description as string);
+        expect(out.stderr).toContain(cmd);
     });
 });

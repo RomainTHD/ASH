@@ -16,7 +16,7 @@ export class Ls extends Command {
         const path = this.env.absolutePath(this.args.others[0] || ".");
         const cwd  = Directory.findFromPath(path);
         if (!cwd) {
-            this.stdout.emit(`ls: cannot access '${path}': no such directory`);
+            this.stderr.emit(`ls: cannot access '${path}': no such directory`);
             return ExitCode.NotFound;
         }
 

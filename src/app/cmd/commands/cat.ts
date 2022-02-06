@@ -19,18 +19,18 @@ export class Cat extends Command {
     protected override async onExecution(): Promise<ExitCode> {
         const filePathArg = this.args.others[0];
         if (!filePathArg) {
-            this.stdout.emit("cat: missing file path");
+            this.stderr.emit("cat: missing file path");
             return ExitCode.MissingArgument;
         }
 
         const f = Inode.findFromPath(this.env.absolutePath(filePathArg));
         if (!f) {
-            this.stdout.emit(`cat: '${filePathArg}': no such file or directory`);
+            this.stderr.emit(`cat: '${filePathArg}': no such file or directory`);
             return ExitCode.NotFound;
         }
 
         if (f.inodeType !== InodeType.File) {
-            this.stdout.emit(`cat: '${filePathArg}': is not a file`);
+            this.stderr.emit(`cat: '${filePathArg}': is not a file`);
             return ExitCode.Unsupported;
         }
 

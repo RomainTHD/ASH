@@ -8,7 +8,9 @@ describe("Help", () => {
         const outHelp = await utils.tests.executeCommand(`help ${cmd}`);
         expect(outHelp.exitCode).toBe(ExitCode.Success);
         const outMan = await utils.tests.executeCommand(`man ${cmd}`);
-        expect(outHelp.output).toBe(outMan.output);
+        expect(outHelp.stdout).toBe(outMan.stdout);
+        expect(outHelp.stderr).toBe("");
+        expect(outMan.stderr).toBe("");
     });
 
     it("should list all commands", async () => {
@@ -16,7 +18,8 @@ describe("Help", () => {
         const out = await utils.tests.executeCommand(`help ${cmd}`);
         expect(out.exitCode).toBe(ExitCode.Success);
         const processClass = Command.fromString(cmd).processClass as typeof Command;
-        expect(out.output).toContain(processClass.usage as string);
-        expect(out.output).toContain(processClass.description as string);
+        expect(out.stdout).toContain(processClass.usage as string);
+        expect(out.stdout).toContain(processClass.description as string);
+        expect(out.stderr).toBe("");
     });
 });

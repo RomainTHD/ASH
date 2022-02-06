@@ -14,7 +14,7 @@ export class Man extends Command {
     protected override async onExecution(): Promise<ExitCode> {
         const cmd = this.args.others[0];
         if (!cmd) {
-            this.stdout.emit("man: missing command name");
+            this.stderr.emit("man: missing command name");
             return ExitCode.MissingArgument;
         }
 
@@ -22,7 +22,7 @@ export class Man extends Command {
         const processClass  = commandObject.processClass as typeof Command;
 
         if (!commandObject || processClass === NotFound) {
-            this.stdout.emit(`man: no manual entry for '${cmd}'`);
+            this.stderr.emit(`man: no manual entry for '${cmd}'`);
             return ExitCode.NotFound;
         }
 

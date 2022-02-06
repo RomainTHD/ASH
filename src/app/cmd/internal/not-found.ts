@@ -34,7 +34,7 @@ export class NotFound extends Command {
 
     protected override async onExecution(): Promise<ExitCode> {
         const cmd = (this.constructor as typeof NotFound)._cmd;
-        this.stdout.emit(`${cmd}: command not found`);
+        this.stderr.emit(`${cmd}: command not found`);
         return ExitCode.Failure;
     }
 }

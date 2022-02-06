@@ -7,14 +7,17 @@ describe("Echo", () => {
 
         let out = await utils.tests.executeCommand(`echo ${msg}`);
         expect(out.exitCode).toBe(ExitCode.Success);
-        expect(out.output).toBe(`${msg}\n`);
+        expect(out.stdout).toBe(`${msg}\n`);
+        expect(out.stderr).toBe("");
 
         out = await utils.tests.executeCommand(`echo -n ${msg}`);
         expect(out.exitCode).toBe(ExitCode.Success);
-        expect(out.output).toBe(msg);
+        expect(out.stdout).toBe(msg);
+        expect(out.stderr).toBe("");
 
         out = await utils.tests.executeCommand("echo");
         expect(out.exitCode).toBe(ExitCode.Success);
-        expect(out.output).toBe("\n");
+        expect(out.stdout).toBe("\n");
+        expect(out.stderr).toBe("");
     });
 });

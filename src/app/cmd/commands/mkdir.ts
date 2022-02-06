@@ -15,7 +15,7 @@ export class Mkdir extends Command {
     public override async onExecution(): Promise<ExitCode> {
         const dirPathArg = this.args.others[0];
         if (!dirPathArg) {
-            this.stdout.emit("mkdir: missing directory path");
+            this.stderr.emit("mkdir: missing directory path");
             return ExitCode.MissingArgument;
         }
 
@@ -25,7 +25,7 @@ export class Mkdir extends Command {
 
         const dir = Directory.findFromPath(absPath);
         if (!dir) {
-            this.stdout.emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
+            this.stderr.emit(`mkdir: cannot create directory '${dirPathArg}': no such directory`);
             return ExitCode.NotFound;
         }
 

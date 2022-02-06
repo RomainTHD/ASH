@@ -10,6 +10,7 @@ describe("NotFound", () => {
         const cmd = "command_that_will_not_be_found";
         const out = await utils.tests.executeCommand(cmd);
         expect(out.exitCode).toBe(ExitCode.Failure);
-        expect(out.output).toContain(cmd);
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toContain(cmd);
     });
 });

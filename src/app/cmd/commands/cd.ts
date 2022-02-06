@@ -19,12 +19,12 @@ export class Cd extends Command {
         const path = this.args.others[0] || "~";
         const dir  = Inode.findFromPath(this.env.absolutePath(path));
         if (dir === null) {
-            this.stdout.emit(`cd: '${path}': no such directory`);
+            this.stderr.emit(`cd: '${path}': no such directory`);
             return ExitCode.NotFound;
         }
 
         if (dir.inodeType !== InodeType.Directory) {
-            this.stdout.emit(`cd: '${path}': not a directory`);
+            this.stderr.emit(`cd: '${path}': not a directory`);
             return ExitCode.Unsupported;
         }
 

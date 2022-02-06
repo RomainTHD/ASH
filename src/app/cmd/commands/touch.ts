@@ -18,7 +18,7 @@ export class Touch extends Command {
     protected override async onExecution(): Promise<ExitCode> {
         const filePathArg = this.args.others[0];
         if (!filePathArg) {
-            this.stdout.emit("touch: missing file path");
+            this.stderr.emit("touch: missing file path");
             return ExitCode.MissingArgument;
         }
 
@@ -28,7 +28,7 @@ export class Touch extends Command {
 
         const dir = Directory.findFromPath(absPath);
         if (!dir) {
-            this.stdout.emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
+            this.stderr.emit(`touch: cannot touch file '${filePathArg}' : directory not found`);
             return ExitCode.NotFound;
         }
 

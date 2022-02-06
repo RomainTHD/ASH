@@ -38,7 +38,8 @@ describe("Cd", () => {
             null,
             env,
         );
-        expect(out.output).toContain(child.name);
+        expect(out.stdout).toContain(child.name);
+        expect(out.stderr).toBe("");
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}`);
 
@@ -47,8 +48,9 @@ describe("Cd", () => {
             null,
             env,
         );
-        expect(out.output).toContain(child.name);
-        expect(out.output).toContain(child2.name);
+        expect(out.stdout).toContain(child.name);
+        expect(out.stdout).toContain(child2.name);
+        expect(out.stderr).toBe("");
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}/${child2.name}`);
 
@@ -57,7 +59,8 @@ describe("Cd", () => {
             null,
             env,
         );
-        expect(out.output).toContain(child.name);
+        expect(out.stdout).toContain(child.name);
+        expect(out.stderr).toBe("");
         expect(out.exitCode).toBe(ExitCode.Success);
         expect(env.getCwd()).toBe(`/${child.name}`);
     });
@@ -70,7 +73,8 @@ describe("Cd", () => {
             null,
             env,
         );
-        expect(out.output).toContain(dirNotFound);
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toContain(dirNotFound);
         expect(out.exitCode).toBe(ExitCode.NotFound);
         expect(env.getCwd()).toBe("/");
     });
@@ -86,8 +90,9 @@ describe("Cd", () => {
             null,
             env,
         );
-        expect(out.output).toContain(child.name);
-        expect(out.output).toContain(file.name);
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toContain(child.name);
+        expect(out.stderr).toContain(file.name);
         expect(out.exitCode).toBe(ExitCode.Unsupported);
         expect(env.getCwd()).not.toBe(`/${child.name}/${file.name}`);
     });
