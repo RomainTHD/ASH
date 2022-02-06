@@ -1,11 +1,6 @@
 import {Command} from "app/cmd";
-import {Env} from "app/env";
 import {Directory} from "app/fs";
-import {
-    Arguments,
-    ExitCode,
-    ProcessEmit,
-} from "app/process";
+import {ExitCode} from "app/process";
 
 /**
  * @see description
@@ -14,18 +9,14 @@ import {
 export class Ls extends Command {
     public static override readonly command = "ls";
 
-    public override readonly description = "List files in the current directory";
-    public override readonly usage       = "ls [options] [path]";
+    public static override readonly description = "List files in the current directory";
+    public static override readonly usage       = "ls [options] [path]";
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
-        const path = env.absolutePath(args.others[0] || ".");
+    protected override async onExecution(): Promise<ExitCode> {
+        const path = this.env.absolutePath(this.args.others[0] || ".");
         const cwd  = Directory.findFromPath(path);
         if (!cwd) {
-            emit(`ls: cannot access '${path}': no such directory`);
+            this.stderr.emit(`ls: cannot access '${path}': no such directory`);
             return ExitCode.NotFound;
         }
 
@@ -41,7 +32,7 @@ export class Ls extends Command {
 
         output += "]";
 
-        emit(output);
+        this.stdout.emit(output);
         return ExitCode.Success;
     }
 }

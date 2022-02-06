@@ -1,7 +1,10 @@
 import {Injectable} from "@angular/core";
 import {Command} from "app/cmd";
 import {Env} from "app/env";
-import {OutputService} from "app/output";
+import {
+    AnsiColor,
+    OutputService,
+} from "app/output";
 import {
     Process,
     Signal,
@@ -32,15 +35,28 @@ export class RunnerService {
         const path    = (argsArr.shift() as string) || "";
         const args    = Process.processArgs(argsArr);
 
-        this._output.emitNewCommand(cmd);
-        this._process = Command.fromString(path);
-        this._process.execute(
-            args,
-            env,
-            (msg = "", newLine = true) => {
+        const stdout = {
+            emit: (msg = "", newLine = true) => {
                 return this._output.emitOutput(newLine ? msg + "\n" : msg);
             },
-        ).then(() => {
+        };
+
+        const stderr = {
+            emit: (msg = "", newLine = true) => {
+                msg = AnsiColor.FG.RED + msg + AnsiColor.RESET;
+                return this._output.emitOutput(newLine ? msg + "\n" : msg);
+            },
+        };
+
+        this._output.emitNewCommand(cmd);
+        this._process = Command.fromString(path)
+            .setStdout(stdout)
+            .setStderr(stderr)
+            .setEnv(env)
+            .setArgs(args)
+            .build();
+
+        this._process.execute().then(() => {
             this._output.emitCommandEnd();
             this._process = null;
         });

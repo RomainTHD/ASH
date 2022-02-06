@@ -1,10 +1,5 @@
 import {Command} from "app/cmd";
-import {Env} from "app/env";
-import {
-    Arguments,
-    ExitCode,
-    ProcessEmit,
-} from "app/process";
+import {ExitCode} from "app/process";
 
 /**
  * Internal command to handle not found commands
@@ -14,22 +9,32 @@ import {
 export class NotFound extends Command {
     public static override readonly command = "__unknown";
 
-    public override readonly description = "Command not found";
-    public override readonly usage       = "__unknown";
+    public static override readonly description = "Command not found";
+    public static override readonly usage       = "__unknown";
 
-    private readonly _cmd: string;
+    /**
+     * Command used to print `...: command not found`.
+     * This needs a default value, or we might encounter some undefined at some
+     * point. Ugly fix to an ugly problem.
+     * @private
+     */
+    private static _cmd = "__unknown";
 
-    public constructor(cmd = "__unknown") {
-        super();
+    /**
+     * Hack to get the command name in the instance, while only sending a class
+     * to the builder class.
+     * FIXME: This is a hack, and should be removed, as this is not thread safe
+     * @param cmd Unknown command
+     * @returns NotFound class
+     */
+    public static setCommandName(cmd: string): typeof NotFound {
         this._cmd = cmd;
+        return this;
     }
 
-    public override async execute(
-        args: Arguments,
-        env: Env,
-        emit: ProcessEmit,
-    ): Promise<ExitCode> {
-        emit(`${this._cmd}: command not found`);
+    protected override async onExecution(): Promise<ExitCode> {
+        const cmd = (this.constructor as typeof NotFound)._cmd;
+        this.stderr.emit(`${cmd}: command not found`);
         return ExitCode.Failure;
     }
 }

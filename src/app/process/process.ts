@@ -1,11 +1,13 @@
 import {Env} from "app/env";
 import {
     ExitCode,
+    ProcessState,
     Signal,
 } from "app/process";
-import {ProcessState} from "app/process/process-state";
 
-export type ProcessEmit = (msg?: string, newLine?: boolean) => void;
+export interface Stream {
+    emit: (msg?: string, newLine?: boolean) => void;
+}
 
 export interface Parameter {
     name: string,
@@ -47,15 +49,59 @@ export interface Arguments {
  */
 export abstract class Process {
     /**
+     * Arguments
+     * @protected
+     */
+    protected readonly args: Arguments;
+
+    /**
+     * Environment
+     * @protected
+     */
+    protected readonly env: Env;
+
+    /**
+     * Stdout
+     * @protected
+     */
+    protected readonly stdout: Stream;
+
+    /**
+     * Stderr
+     * @protected
+     */
+    protected readonly stderr: Stream;
+
+    /**
+     * Debug stream
+     * @protected
+     */
+    protected readonly stddebug: Stream;
+
+    /**
      * Process state
      * @private
      */
     private _state: ProcessState;
 
-    public constructor() {
+    public constructor(
+        args: Arguments,
+        env: Env,
+        stdout: Stream,
+        stderr: Stream,
+    ) {
         this._state = ProcessState.Created;
-        this._state = ProcessState.Running;
-        // FIXME: Needs to be refactored to allow setting the state flag
+        this.args   = args;
+        this.env    = env;
+        this.stdout = stdout;
+        this.stderr = stderr;
+
+        this.stddebug = {
+            emit: (msg = "", newLine = true) => {
+                void newLine;
+                console.debug(msg);
+            },
+        };
     }
 
     /**
@@ -115,12 +161,14 @@ export abstract class Process {
 
     /**
      * Execute process
-     * @param args Arguments
-     * @param env Environment
-     * @param emit Emit callback
      * @returns Exit code
      */
-    public abstract execute(args: Arguments, env: Env, emit: ProcessEmit): Promise<ExitCode>;
+    public readonly execute = async (): Promise<ExitCode> => {
+        this._state    = ProcessState.Running;
+        const exitCode = await this.onExecution();
+        this._state    = ProcessState.Zombie;
+        return exitCode;
+    };
 
     /**
      * Emit a signal
@@ -148,4 +196,6 @@ export abstract class Process {
                 break;
         }
     };
+
+    protected abstract onExecution(): Promise<ExitCode>;
 }

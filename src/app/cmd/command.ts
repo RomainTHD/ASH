@@ -1,4 +1,5 @@
 import {Process} from "app/process";
+import {ProcessBuilder} from "app/process/process-builder";
 import {commands} from ".";
 
 /**
@@ -13,19 +14,19 @@ export abstract class Command extends Process {
     /**
      * Command description
      */
-    public abstract description: string;
+    public static description: string | null = null;
 
     /**
      * Command usage
      */
-    public abstract usage: string;
+    public static usage: string | null = null;
 
     /**
      * String to command map
      * @param cmd Command
      * @returns Command instance
      */
-    public static fromString(cmd: string): Command {
+    public static fromString(cmd: string): ProcessBuilder {
         cmd = cmd.trim();
 
         // To stop TS complaining
@@ -41,14 +42,13 @@ export abstract class Command extends Process {
             }
         });
 
+        const builder = new ProcessBuilder();
         if (classCommand !== null) {
-            // @ts-ignore
-            // Weird TS error, the variable type is marked as `never`, which is
-            //  clearly wrong, and then the `new` doesn't work since `Command`
-            //  is abstract
-            return new classCommand();
+            builder.setProcessClass(classCommand);
         } else {
-            return new commands.NotFound(cmd);
+            builder.setProcessClass(commands.NotFound.setCommandName(cmd));
         }
+
+        return builder;
     }
 }

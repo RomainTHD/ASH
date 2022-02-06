@@ -21,14 +21,16 @@ describe("Cat", () => {
 
         const out = await utils.tests.executeCommand(`cat ${path}`);
         expect(out.exitCode).toBe(ExitCode.Success);
-        expect(out.output).toContain(content);
+        expect(out.stdout).toContain(content);
+        expect(out.stderr).toBe("");
     });
 
     it("should not read a nonexistent file", async () => {
         StorageORM.resetAll();
         const out = await utils.tests.executeCommand(`cat ${path}`);
         expect(out.exitCode).toBe(ExitCode.NotFound);
-        expect(out.output).not.toContain(content);
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toContain(path);
     });
 
     it("should not read a directory", async () => {
@@ -42,12 +44,14 @@ describe("Cat", () => {
         expect(true).toBeTruthy();
 
         expect(out.exitCode).toBe(ExitCode.Unsupported);
-        expect(out.output).not.toContain(content);
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toContain(path);
     });
 
     it("should not read anything", async () => {
         const out = await utils.tests.executeCommand("cat");
         expect(out.exitCode).toBe(ExitCode.MissingArgument);
-        expect(out.output).not.toBe("");
+        expect(out.stdout).toBe("");
+        expect(out.stderr).not.toBe("");
     });
 });

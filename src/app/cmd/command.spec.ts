@@ -10,7 +10,7 @@ describe("Command", () => {
             const currentClass = assoc[key];
             expect(currentClass.command).not.toBeNull();
             const cmd = Command.fromString(currentClass.command as string);
-            expect(cmd).toBeInstanceOf(currentClass);
+            expect(cmd.processClass).toBe(currentClass);
         });
     });
 });

@@ -1,4 +1,4 @@
-import {Command} from "app/cmd/command";
+import {Command} from "app/cmd";
 import {ExitCode} from "app/process";
 import * as utils from "app/utils";
 
@@ -8,15 +8,18 @@ describe("Help", () => {
         const outHelp = await utils.tests.executeCommand(`help ${cmd}`);
         expect(outHelp.exitCode).toBe(ExitCode.Success);
         const outMan = await utils.tests.executeCommand(`man ${cmd}`);
-        expect(outHelp.output).toBe(outMan.output);
+        expect(outHelp.stdout).toBe(outMan.stdout);
+        expect(outHelp.stderr).toBe("");
+        expect(outMan.stderr).toBe("");
     });
 
     it("should list all commands", async () => {
         const cmd = "ls";
         const out = await utils.tests.executeCommand(`help ${cmd}`);
         expect(out.exitCode).toBe(ExitCode.Success);
-        const cmdInstance = Command.fromString(cmd);
-        expect(out.output).toContain(cmdInstance.usage);
-        expect(out.output).toContain(cmdInstance.description);
+        const processClass = Command.fromString(cmd).processClass as typeof Command;
+        expect(out.stdout).toContain(processClass.usage as string);
+        expect(out.stdout).toContain(processClass.description as string);
+        expect(out.stderr).toBe("");
     });
 });

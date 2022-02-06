@@ -5,6 +5,7 @@ describe("False", () => {
     it("should return false", async () => {
         const out = await utils.tests.executeCommand("false");
         expect(out.exitCode).toBe(ExitCode.Failure);
-        expect(out.output).toBe("");
+        expect(out.stdout).toBe("");
+        expect(out.stderr).toBe("");
     });
 });
