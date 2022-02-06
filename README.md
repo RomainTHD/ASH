@@ -1,2 +1,3 @@
 # ASH
-Angular shell
+
+A shell emulator for web browsers using Angular
