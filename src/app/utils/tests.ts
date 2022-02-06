@@ -5,8 +5,15 @@ import {
     Arguments,
     ExitCode,
     Process,
+    Signal,
 } from "app/process";
 import * as utils from ".";
+
+interface _ExecuteCommandReturnValue {
+    exitCode: ExitCode;
+    stdout: string;
+    stderr: string;
+}
 
 /**
  * Execute a string command
@@ -14,13 +21,15 @@ import * as utils from ".";
  * @param args Arguments to pass to the command.
  * If empty, the arguments will be parsed from the command string
  * @param env Environment to pass to the command
+ * @param killAfter Number of milliseconds to wait before killing the process
  * @returns Exit code and command output
  */
 export async function executeCommand(
     cmdStr: string,
-    args: Arguments | null = null,
-    env: Env | null        = null,
-): Promise<{ exitCode: ExitCode, output: string }> {
+    args: Arguments | null   = null,
+    env: Env | null          = null,
+    killAfter: number | null = null,
+): Promise<_ExecuteCommandReturnValue> {
     const argsArr = utils.strings.splitSpace(cmdStr);
     const path    = (argsArr.shift() as string) || "";
 
@@ -32,26 +41,40 @@ export async function executeCommand(
         env = new Env();
     }
 
-    let output   = "";
-    const stdout = {
+    let stdout         = "";
+    const stdoutStream = {
         emit: (msg = "", newLine = true) => {
-            output += msg + (newLine ? "\n" : "");
+            stdout += msg + (newLine ? "\n" : "");
         },
     };
 
-    const stderr = {
+    let stderr         = "";
+    const stderrStream = {
         emit: (msg = "", newLine = true) => {
-            output += AnsiColor.FG.RED + msg + (newLine ? "\n" : "");
+            stderr += AnsiColor.FG.RED + msg + (newLine ? "\n" : "");
         },
     };
 
     const cmd = Command.fromString(path)
         .setArgs(args)
-        .setStdout(stdout)
-        .setStderr(stderr)
+        .setStdout(stdoutStream)
+        .setStderr(stderrStream)
         .setEnv(env)
         .build();
 
-    const exitCode = await cmd.execute();
-    return {exitCode, output};
+    const promise = cmd.execute();
+
+    if (killAfter !== null) {
+        // Interrupt process
+        await utils.time.sleep(killAfter);
+        cmd.emitSignal(Signal.SIGINT);
+    }
+
+    const exitCode = await promise;
+
+    return {
+        exitCode,
+        stdout,
+        stderr,
+    };
 }
