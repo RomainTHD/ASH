@@ -15,7 +15,7 @@ export class Reset extends Command {
 
     protected override async onExecution(): Promise<ExitCode> {
         StorageORM.resetAll();
-        this.stdout.emit("OK");
+        this.stddebug.emit("Filesystem erased");
         return ExitCode.Success;
     }
 }

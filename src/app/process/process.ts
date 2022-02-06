@@ -73,6 +73,12 @@ export abstract class Process {
     protected readonly stderr: Stream;
 
     /**
+     * Debug stream
+     * @protected
+     */
+    protected readonly stddebug: Stream;
+
+    /**
      * Process state
      * @private
      */
@@ -89,6 +95,13 @@ export abstract class Process {
         this.env    = env;
         this.stdout = stdout;
         this.stderr = stderr;
+
+        this.stddebug = {
+            emit: (msg = "", newLine = true) => {
+                void newLine;
+                console.debug(msg);
+            },
+        };
     }
 
     /**
